@@ -10,13 +10,6 @@
 
 /* 产品型号 */
 static productType st_typeProduct = {
-    'P',
-    'M',
-    0,
-    0,
-    0,
-    'S',
-    'x'
 };
 
 /* 固件地址存储 APP 版本信息 */
@@ -103,18 +96,6 @@ int8_t cProductInfoUpdate(void)
         return 1;
 
     strncpy(ptypeProduct->versionBuff, pcVersionAPPSoftGet(), 16);
-
-
-    ptypeProduct->series  = 'P';
-    ptypeProduct->modules = 'M'; 
-
-    ptypeProduct->headBuff[0] = ptypeProduct->series;
-    snprintf(&ptypeProduct->headBuff[1], 3, "%02d", ptypeProduct->power);
-    ptypeProduct->headBuff[3] = ptypeProduct->grade;
-    ptypeProduct->headBuff[4] = ptypeProduct->voltageLevel;
-    ptypeProduct->headBuff[5] = '-';
-    ptypeProduct->headBuff[6] = '\0';
-    ptypeProduct->headBuff[7] = 0;
 
     /* 判断是否还需要更新 */
     st_UpdateFlag = 1;
