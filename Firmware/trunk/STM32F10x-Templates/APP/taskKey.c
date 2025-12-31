@@ -13,7 +13,7 @@
 
 void vTaskKey(KeyTypeDef *ptypeKeyData)
 {
-    /* 鎸夐敭鐭寜鍚庡凡缁忔澗寮� */
+    /* 短按、并已经松开按键 */
     if(ptypeKeyData->state == (keyShort | keyCut))
     {
         if(ptypeKeyData->valueLoosen == KEY_0)
@@ -29,7 +29,7 @@ void vTaskKey(KeyTypeDef *ptypeKeyData)
             vBeepSoundFast(1);
         }
     }
-    /* 鎸夐敭闀挎寜浣嗘病鏈夋澗寮� */
+    /* 长按、并还没有松开按键 */
     else if(ptypeKeyData->state == (keyLong | keyAdd))
     {
         if(ptypeKeyData->valuePress == KEY_0)

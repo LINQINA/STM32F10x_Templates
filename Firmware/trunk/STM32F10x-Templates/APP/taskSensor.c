@@ -10,24 +10,27 @@
 
 #include "version.h"
 
-TaskHandle_t g_TaskSensorHand = NULL;   /* ä¼ æ„Ÿå™¨æ•°æ®å¤„ç†ä»»åŠ¡å¥æŸ„ */
+TaskHandle_t g_TaskSensorHand = NULL;   /* ´«¸ĞÆ÷Êı¾İ´¦ÀíÈÎÎñ¾ä±ú */
 
-/* ç³»ç»Ÿä¼ æ„Ÿå™¨ä¿¡æ¯ */
+/* ÏµÍ³ÍâÉèĞÅÏ¢ */
 SensorInfoType g_typeSensorInfo;
 
 void vTaskSensor(void *pvParameters)
 {
     TickType_t rtosTypeTickNow = xTaskGetTickCount();
-    g_typeSensorInfo.ptypeOTAInfo = ptypeOTAInfoGet();
-    g_typeSensorInfo.ptypeProduct = ptypeProductGet();
+    g_typeSensorInfo.ptypeOTAInfo           = ptypeOTAInfoGet();
+    g_typeSensorInfo.ptypeProduct           = ptypeProductGet();
     
     while(1)
     {
-        /* å®šæ—¶æ‰§è¡Œ */
+          /* ÖÜÆÚÖ´ĞĞ */
         vTaskDelayUntil(&rtosTypeTickNow, 5 / portTICK_RATE_MS);
 
-        /* ADCä¿¡æ¯é‡‡é›† */
+        /* ADCĞÅÏ¢¸üĞÂ */
         //vADCxScanLow();
+
+        /* ²úÆ·ĞÅÏ¢¸üĞÂ */
+        cProductInfoUpdate();
 
         vWatchdogReload();
     }

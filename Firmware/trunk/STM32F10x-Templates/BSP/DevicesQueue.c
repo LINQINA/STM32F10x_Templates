@@ -30,7 +30,7 @@ enumQueueState enumQueueInit(void)
         enumState = queueError;
 
     if(enumQueueCreate(&g_TypeQueueCanHostRead, "Can Host Read",    st_ucQueueCanHostReadBuff,  QUEUE_CAN_HOST_READ_LENGTH,queueModeLock) != queueNormal)
-        enumState = queueError;
+        enumState = queueError; 
 
     if(enumState != queueNormal)
         cLogPrintfError("enumQueueInit error.\r\n");
@@ -291,7 +291,7 @@ enumQueueState enumQueuePopByte(QueueType *pTypeQueue, uint8_t *pucData)
     return queueNormal;
 }
 
-/* 
+/*
  * Return:      是否出队成功状态
  * Parameters:  *pTypeQueue: 队列结构体指针; *pucData: 待出队字节数据指针
  * Description: 出队一个字节数据，并保留队列中的原数据
@@ -302,7 +302,7 @@ enumQueueState enumQueueViewByte(QueueType *pTypeQueue, uint8_t *pucData)
         return queueNull;
 
     if(pTypeQueue->pReadFrom == pTypeQueue->pWriteTo)
-      return queueEmpty; 
+      return queueEmpty;
 
     *pucData = *pTypeQueue->pReadFrom;
 

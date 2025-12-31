@@ -26,39 +26,39 @@
 static int8_t cOTAErrorSet(uint32_t uiError);
 static int8_t cOTAUpdateCrcAndWriteToFlash();
 
-int8_t g_cOTAInitFlag;                                                        /* åˆå§‹åŒ–å®Œæˆæ ‡å¿— */
+int8_t g_cOTAInitFlag;                                                        /* ³õÊ¼»¯Íê³É±êÖ¾ */
 
-uint16_t g_usOTAUpdatingFirmwareNo;                                           /* OTAå½“å‰æ›´æ–°å›ºä»¶ç¼–å· */
-uint32_t g_uiFirmwareLengthNow;                                               /* OTAå›ºä»¶ å·²å†™å…¥çš„é•¿åº¦ */
+uint16_t g_usOTAUpdatingFirmwareNo;                                           /* OTAµ±Ç°Éı¼¶ĞòºÅ */
+uint32_t g_uiFirmwareLengthNow;                                               /* OTA±¾»ú ÒÑĞ´ÈëµÄ³¤¶È */
 
-static OTAInfoType st_typeOTAInfo;                                            /* OTAåŸºæœ¬ä¿¡æ¯ */
-static OTAFirmwareTotalInfoType st_typeOTAFirmwareTotalInfo;                  /* OTAæ€»å›ºä»¶ä¿¡æ¯ */
-static FirmwarePortInfoType st_typeOTAFirmwareChildInfo[FILE_MAX_COUNT];      /* OTAå­å›ºä»¶ä¿¡æ¯ */
+static OTAInfoType st_typeOTAInfo;                                            /* OTAÉı¼¶ĞÅÏ¢ */
+static OTAFirmwareTotalInfoType st_typeOTAFirmwareTotalInfo;                  /* OTA×Ü¹Ì¼şĞÅÏ¢ */
+static FirmwarePortInfoType st_typeOTAFirmwareChildInfo[FILE_MAX_COUNT];      /* OTA×Ó¹Ì¼şĞÅÏ¢ */
 
 void vOTAInit(void)
 {
     uint32_t uiCrcValue;
     uint8_t cError;
 
-    /* è¯»å–ä¸€æ¬¡OTAInfoä¿¡æ¯ï¼Œæ›´æ–°æ ‡å¿— */
+    /* ¶ÁÈ¡Ò»´ÎOTAInfoÊı¾İ,²¢¸üĞÂ±êÖ¾ */
     cError = cOTAReafOTAInfoFromFlash();
 
-    uiCrcValue = uiCRC32(NULL, &st_typeOTAInfo, sizeof(OTAInfoType) - 4);
+    uiCrcValue = uiCRC32(NULL,&st_typeOTAInfo,sizeof(OTAInfoType)-4);
 
-    /* ä½¿ç”¨HEXè®°å½•æ•°æ®æˆ–å…¨ä¸ºFF */
-    if (st_typeOTAInfo.OTATotalInfoCrc == 0xFFFFFFFF)
+    /* Ê¹ÓÃHEXÉÕÂ¼ºó£¬Êı¾İ»áÈ«ÊÇFF */
+    if(st_typeOTAInfo.OTATotalInfoCrc == 0xFFFFFFFF)
     {
         memset(&st_typeOTAInfo, 0, sizeof(st_typeOTAInfo));
     }
-    /* ä»Bootå¯åŠ¨åæ£€æµ‹æ•°æ®ä¸å¤–éƒ¨ Flash è®°å½•çš„å›ºä»¶ä¿¡æ¯æ˜¯å¦ä¸€è‡´ */
-    else if (st_typeOTAInfo.OTATotalInfoCrc != uiCrcValue)
+    /* ´Ó¾ÉBootÉı¼¶¹ıÀ´¡¢³¢ÊÔ´ÓÍâ²¿ Flash »Ö¸´¹Ì¼şÊı¾İ */
+    else if(st_typeOTAInfo.OTATotalInfoCrc != uiCrcValue)
     {
-        /* ä¿®æ­£CRCï¼Œé¿å…ä¸€ç›´é‡å¤æ‰§è¡Œæ›´æ–° */
+        /* ¸üĞÂCRC,±ÜÃâ³öÏÖÒ»Ö±ÖØ¸´¸üĞÂµÄÇé¿ö */
         st_typeOTAInfo.OTATotalInfoCrc = uiCrcValue;
         cError |= cOTAUpdateCrcAndWriteToFlash();
 
-        /* æ‰§è¡Œæ¢å¤å›ºä»¶æ›´æ–°æµç¨‹ */
-        if (cError == 0)
+        /* Ö´ĞĞ»Ö¸´¹Ì¼şÊı¾İÁ÷³Ì */
+        if(cError == 0)
         {
             cOTAStateSet(OTA_STATE_START);
         }
@@ -73,19 +73,19 @@ uint32_t uiOTACheck()
     uint32_t uiError = 0;
     uint16_t usCrc = 0xFFFF;
 
-    /* è¯»å–å›ºä»¶å¤´ä¿¡æ¯ */
-    cSPIFlashReadDatas(SPI_FLASH_OTA_ADDR, &st_typeOTAFirmwareTotalInfo, sizeof(OTAFirmwareTotalInfoType));
+    /* ¶ÁÈ¡¹Ì¼şÍ·Êı¾İ  */
+    cSPIFlashReadDatas(SPI_FLASH_OTA_ADDR,&st_typeOTAFirmwareTotalInfo,sizeof(OTAFirmwareTotalInfoType));
 
-    /* æ ¡éªŒæ€»å›ºä»¶å¤´CRCæ˜¯å¦æ­£ç¡® */
-    if (st_typeOTAFirmwareTotalInfo.crc32Head != usCRC16_MODBUS(&usCrc, &st_typeOTAFirmwareTotalInfo, sizeof(st_typeOTAFirmwareTotalInfo) - 4))
+    /* Ğ£ÑéÕû°ü¹Ì¼şÍ·Êı¾İÊÇ·ñÕıÈ· */
+    if(st_typeOTAFirmwareTotalInfo.crc32Head != usCRC16_MODBUS(&usCrc,&st_typeOTAFirmwareTotalInfo,sizeof(st_typeOTAFirmwareTotalInfo)-4))
         uiError |= OTA_Error_CrcTotalHeaderError;
 
-    /* æ ¡éªŒå›ºä»¶å†…å®¹æ˜¯å¦æ­£ç¡® */
+    /* Ğ£ÑéÕû°üÊı¾İÊÇ·ñÕıÈ· */
     typeFirmwareOTA.address = SPI_FLASH_OTA_ADDR + sizeof(OTAFirmwareTotalInfoType);
     typeFirmwareOTA.length = st_typeOTAFirmwareTotalInfo.length;
     typeFirmwareOTA.registers = FIRMWARE_SOURCE_SPI_FLASH;
 
-    if (st_typeOTAFirmwareTotalInfo.crc32 != uiFirmwareCRCUpdate(&typeFirmwareOTA))
+    if(st_typeOTAFirmwareTotalInfo.crc32 != uiFirmwareCRCUpdate(&typeFirmwareOTA))
         uiError |= OTA_Error_CrcTotalFirmwareError;
 
     return uiError;
@@ -97,35 +97,35 @@ int8_t vOTADeinit()
     uint32_t uiTotalLength = 0;
     int8_t cError = 0;
 
-    /* åˆå§‹åŒ–OTAå­æ¨¡å—ä¿¡æ¯ */
-    for (uint8_t i = 0; i < st_typeOTAFirmwareTotalInfo.firmwareNumber; i++)
+    /* ³õÊ¼»¯OTA×ÓÄ£¿éÊı¾İ */
+    for(uint8_t i =0; i< st_typeOTAFirmwareTotalInfo.firmwareNumber; i++)
     {
-        cSPIFlashReadDatas(st_typeOTAFirmwareTotalInfo.FirmwareOTAPort[i].startAddr, &st_typeOTAFirmwareChildInfo[i], sizeof(FirmwarePortInfoType));
-        st_typeOTAInfo.Port[i].state = OTA_STATE_READY;                                                                                 /* å­å›ºä»¶çŠ¶æ€ åˆå§‹çŠ¶æ€ */
-        memcpy(st_typeOTAInfo.Port[i].OTAPortVersion, st_typeOTAFirmwareChildInfo[i].versionSoft, 8);                                   /* å­å›ºä»¶è½¯ä»¶ç‰ˆæœ¬ */
-        st_typeOTAInfo.Port[i].error = OTA_Error_NULL;                                                                                  /* å­å›ºä»¶é”™è¯¯ç  NULL */
-        st_typeOTAInfo.Port[i].type = st_typeOTAFirmwareChildInfo[i].type;                                                              /* å­å›ºä»¶ç±»å‹ */
-        st_typeOTAInfo.Port[i].number = st_typeOTAFirmwareChildInfo[i].number;                                                          /* å­å›ºä»¶ç¼–å· */
-        st_typeOTAInfo.Port[i].ReSendCount = st_typeOTAFirmwareTotalInfo.reSendCount;                                                   /* å­å›ºä»¶é‡å‘æ¬¡æ•° */
-        st_typeOTAInfo.Port[i].address = st_typeOTAFirmwareTotalInfo.FirmwareOTAPort[i].startAddr + sizeof(FirmwarePortInfoType);       /* å­å›ºä»¶èµ·å§‹åœ°å€ */
-        st_typeOTAInfo.Port[i].length = st_typeOTAFirmwareTotalInfo.FirmwareOTAPort[i].length - sizeof(FirmwarePortInfoType);           /* å­å›ºä»¶é•¿åº¦ */
+        cSPIFlashReadDatas(st_typeOTAFirmwareTotalInfo.FirmwareOTAPort[i].startAddr,&st_typeOTAFirmwareChildInfo[i],sizeof(FirmwarePortInfoType));
+        st_typeOTAInfo.Port[i].state = OTA_STATE_READY;                                                                                 /* ×Ó¹Ì¼ş×´Ì¬ ¾ÍĞ÷Ì¬*/
+        memcpy(st_typeOTAInfo.Port[i].OTAPortVersion,st_typeOTAFirmwareChildInfo[i].versionSoft,8);                                     /* ×Ó¹Ì¼şĞ¡°æ±¾ */
+        st_typeOTAInfo.Port[i].error = OTA_Error_NULL;                                                                                  /* ×Ó¹Ì¼ş´íÎó NULL */
+        st_typeOTAInfo.Port[i].type = st_typeOTAFirmwareChildInfo[i].type;                                                              /* ×Ó¹Ì¼şÀàĞÍ */
+        st_typeOTAInfo.Port[i].number = st_typeOTAFirmwareChildInfo[i].number;                                                          /* ×Ó¹Ì¼ş¹Ì¼ş²ÎÊı */
+        st_typeOTAInfo.Port[i].ReSendCount = st_typeOTAFirmwareTotalInfo.reSendCount;                                                   /* ×Ó¹Ì¼şÖØ´«´ÎÊı */
+        st_typeOTAInfo.Port[i].address = st_typeOTAFirmwareTotalInfo.FirmwareOTAPort[i].startAddr + sizeof(FirmwarePortInfoType);       /* ×Ó¹Ì¼şÆğÊ¼µØÖ· */
+        st_typeOTAInfo.Port[i].length = st_typeOTAFirmwareTotalInfo.FirmwareOTAPort[i].length - sizeof(FirmwarePortInfoType);           /* ×Ó¹Ì¼ş³¤¶È */
         st_typeOTAInfo.Port[i].writeLengthNow = 0;
-        st_typeOTAInfo.Port[i].crcValue = st_typeOTAFirmwareChildInfo[i].crcValue;                                                      /* å­å›ºä»¶CRCæ ¡éªŒå€¼ */
-        if (st_typeOTAInfo.Port[i].type != OTA_Type_PD)
+        st_typeOTAInfo.Port[i].crcValue = st_typeOTAFirmwareChildInfo[i].crcValue;                                                      /* ×Ó¹Ì¼şCRCĞ£ÑéÖµ */
+        if(st_typeOTAInfo.Port[i].type != OTA_Type_PD)
         {
             uiTotalLength += st_typeOTAInfo.Port[i].length;
         }
     }
 
-    /* åˆå§‹åŒ–OTAæ€»ä½“ä¿¡æ¯ */
+    /* ³õÊ¼»¯OTA±¾»úĞÅÏ¢ */
     st_typeOTAInfo.FirmwareLengthTotal = uiTotalLength;
-    st_typeOTAInfo.firmwareNumber = st_typeOTAFirmwareTotalInfo.firmwareNumber > FILE_MAX_COUNT ? FILE_MAX_COUNT : st_typeOTAFirmwareTotalInfo.firmwareNumber;
+    st_typeOTAInfo.firmwareNumber = st_typeOTAFirmwareTotalInfo.firmwareNumber > FILE_MAX_COUNT ? FILE_MAX_COUNT :st_typeOTAFirmwareTotalInfo.firmwareNumber;
     st_typeOTAInfo.error = OTA_Error_NULL;
     st_typeOTAInfo.OTARemainTime = 0;
-    st_typeOTAInfo.OTATotalInfoCrc = uiCRC32(NULL, &st_typeOTAFirmwareTotalInfo, sizeof(st_typeOTAFirmwareTotalInfo));
+    st_typeOTAInfo.OTATotalInfoCrc = uiCRC32(NULL,&st_typeOTAFirmwareTotalInfo,sizeof(st_typeOTAFirmwareTotalInfo));
     cError |= cOTAUpdateCrcAndWriteToFlash();
 
-    /* åˆå§‹åŒ–å½“å‰æ›´æ–°å›ºä»¶å·å’Œé•¿åº¦ */
+    /* ³õÊ¼»¯Ğ´Èë¹Ì¼şĞòºÅºÍ³¤¶È */
     g_usOTAUpdatingFirmwareNo = (st_typeOTAInfo.Port[0].type * 0x10) + st_typeOTAInfo.Port[0].number;
     g_uiFirmwareLengthNow = 0;
 
@@ -136,21 +136,21 @@ void vOTAStart()
 {
     SensorInfoType *ptypeSensorInfo = ptypeSensorInfoGet();
     uint32_t uiError = 0;
-    int8_t cError = 0;
+    int8_t cError  = 0;
 
-    if (ptypeSensorInfo->ptypeOTAInfo->state == OTA_STATE_START)
+    if(ptypeSensorInfo->ptypeOTAInfo->state == OTA_STATE_START)
     {
-        /* OTAæ•°æ®æ ¡éªŒ */
+        /* OTAÊı¾İĞ£Ñé */
         uiError |= uiOTACheck();
-        if (uiError != 0)
+        if(uiError != 0)
         {
             cOTAStateSet(OTA_STATE_FAIL);
             cOTAErrorSet(uiError);
-            return;
+            return; 
         }
 
-        /* OTAä¿¡æ¯åˆå§‹åŒ– */
-        if (vOTADeinit() != 0)
+        /* OTAĞÅÏ¢³õÊ¼»¯ */
+        if(vOTADeinit() != 0)
         {
             cOTAStateSet(OTA_STATE_FAIL);
             cOTAErrorSet(OTA_Error_OTADeinitError);
@@ -159,33 +159,34 @@ void vOTAStart()
 
         vTaskDelay(2000 / portTICK_RATE_MS);
 
-        /* æ‰§è¡Œåˆ†å¸ƒå¼æ›´æ–° */
+        /* Ö´ĞĞ·Ö°üÉı¼¶Á÷³Ì */
         cOTAStateSet(OTA_STATE_UPDATING);
     }
 }
 
-/* å­æ¨¡å—å›ºä»¶æ›´æ–°æ¥å£ï¼Œè‹¥æ–°å¢æˆ–ä¿®æ”¹OTAå­æ¨¡å—ï¼Œåªéœ€ä¿®æ”¹æ­¤å¤„è°ƒç”¨é€»è¾‘
-   Type: 0 PDã€1 BMSã€2 IVN
-   ModuleNo: Typeä¸‹çš„ä¸åŒæ¨¡å—ç¼–å·
-   Typeå’ŒModuleNoéœ€æŒ‰åè®®å®šä¹‰ä¸€è‡´ */
+/* ×ÓÄ£¿éÉı¼¶´úÂë,ºóĞøÌí¼Ó»òĞŞ¸ÄOTAÉı¼¶Ä£¿é,Ö»ĞèÒªĞŞ¸ÄÕâ²¿·Ö´úÂë¼´¿É,ÆäËûµÄ´úÂëÎŞĞè¸ü¸Ä 
+    Type: 0->PD¡¢1->BMS¡¢2->IVN
+    ModuleNo: TypeÏÂµÄ²»Í¬²ÎÊı
+    TypeÓëModuleNoĞèÒªÓëÉÏÎ»»ú¹µÍ¨²¢±£³ÖÒ»ÖÂ
+*/ 
 int8_t cOTAFirmwareUpdatePort(OTAFirmwarePortInfoType *ptypeOTAFirmwarePortInfo)
 {
     FirmwarePortInfoType typeFirmwareOTA = {0};
     int8_t cError = 0;
 
-    /* æ ¡éªŒå­å›ºä»¶CRCæ˜¯å¦æ­£ç¡® */
+    /* Ğ£Ñé×Ó¹Ì¼şCRCÊÇ·ñÕıÈ· */
     typeFirmwareOTA.address = ptypeOTAFirmwarePortInfo->address;
     typeFirmwareOTA.length = ptypeOTAFirmwarePortInfo->length;
     typeFirmwareOTA.registers = FIRMWARE_SOURCE_SPI_FLASH;
 
-    if (ptypeOTAFirmwarePortInfo->crcValue == uiFirmwareCRCUpdate(&typeFirmwareOTA))
-    {
-        /* åˆ†æ¨¡å—å¤„ç† */
-        switch (ptypeOTAFirmwarePortInfo->type)
+    if(ptypeOTAFirmwarePortInfo->crcValue == uiFirmwareCRCUpdate(&typeFirmwareOTA))
+    {   
+        /* ·Ö°üÏÂ·¢ */
+        switch(ptypeOTAFirmwarePortInfo->type)
         {
             case OTA_Type_PD:
                 cError = cOTAUpgradePD(ptypeOTAFirmwarePortInfo);
-                break;
+            break;
         }
     }
     else
@@ -195,87 +196,88 @@ int8_t cOTAFirmwareUpdatePort(OTAFirmwarePortInfoType *ptypeOTAFirmwarePortInfo)
 
     return cError;
 }
+
 void vOTAFirmwareUpdateAll(void)
 {
     SensorInfoType *ptypeSensorInfo = ptypeSensorInfoGet();
     int8_t cError = 0, cError2 = 0;
 
-    /* è½®æµåˆ†å‘æ›´æ–°å­å›ºä»¶ */
-    for (uint8_t i = 0; i < st_typeOTAInfo.firmwareNumber; i++)
+    /* ÒÀ´Î·Ö·¢¸÷¸ö×Ó¹Ì¼ş */
+    for(uint8_t i = 0; i < st_typeOTAInfo.firmwareNumber; i++)
     {
-        /* å¦‚æœå­å›ºä»¶ä¸ºæ›´æ–°çŠ¶æ€ï¼Œè¯´æ˜ä¹‹å‰æ–­ç”µæˆ–è€…é‡å¯è¿‡ï¼Œéœ€è¦æ£€æŸ¥é‡ä¼ æ¬¡æ•°ï¼Œå¦åˆ™ç›´æ¥åˆ¤å®šå¤±è´¥ */
-        if (st_typeOTAInfo.Port[i].state == OTA_STATE_UPDATING)
+        /* ¼ì²â×Ó¹Ì¼şÎªÕıÔÚÉı¼¶ÖĞ,ËµÃ÷ÊÇÉı¼¶¹ı³ÌÖĞ±»Ç¿ÖÆ¹Ø»úÁË,Èç¹û»¹ÓĞÖØ´«´ÎÊıÖ±½Ó½øÈëÉı¼¶Á÷³Ì¡¢Ã»ÓĞ´ÎÊıÔò¼ÇÂ¼Ê§°Ü */
+        if(st_typeOTAInfo.Port[i].state == OTA_STATE_UPDATING)
         {
-            if (st_typeOTAInfo.Port[i].ReSendCount > 0)
+            if(st_typeOTAInfo.Port[i].ReSendCount >0)
             {
                 goto __UPDATE_BEGIN;
             }
             else
             {
-                /* ä¿®æ”¹å­å›ºä»¶çŠ¶æ€ä¸ºå¤±è´¥ï¼Œå¹¶è®°å½•å¤±è´¥çš„é”™è¯¯ç  */
+                /* ¸Ã×Ó¹Ì¼ş×´Ì¬±»ĞŞ¸ÄÎªÊ§°Ü,²¢¼ÇÂ¼Ê§°ÜµÄ²½Öè */
                 st_typeOTAInfo.Port[i].state = OTA_STATE_FAIL;
                 st_typeOTAInfo.Port[i].error = cError;
                 cOTAUpdateCrcAndWriteToFlash();
             }
         }
 
-        /* å¦‚æœå­å›ºä»¶å¤„äºå°±ç»ªçŠ¶æ€ï¼Œä¸”é‡ä¼ æ¬¡æ•° > 0ï¼Œåˆ™å¼€å§‹æ›´æ–° */
-        if (st_typeOTAInfo.Port[i].state == OTA_STATE_READY &&
-            st_typeOTAInfo.Port[i].ReSendCount > 0)
+        /* ¼ì²â×Ó¹Ì¼şÊÇ·ñ´¦ÓÚ¾ÍĞ÷Ì¬,²¢ÇÒÉı¼¶´ÎÊı>0 */
+        if(st_typeOTAInfo.Port[i].state == OTA_STATE_READY &&
+            st_typeOTAInfo.Port[i].ReSendCount >0 )
         {
 __UPDATE_BEGIN:
-            /* è®¾ç½®å­å›ºä»¶ä¸ºæ›´æ–°çŠ¶æ€ï¼Œå¹¶å‡å°‘é‡ä¼ æ¬¡æ•° */
+            /* ×Ó¹Ì¼şÉèÖÃÎªÉı¼¶Ì¬¡¢Éı¼¶ÖØÊÔ´ÎÊı-1,²¢Ğ´Èëµ½Flash */
             st_typeOTAInfo.Port[i].state = OTA_STATE_UPDATING;
             st_typeOTAInfo.Port[i].ReSendCount--;
             cOTAUpdateCrcAndWriteToFlash();
 
-            /* æ‰§è¡Œå­å›ºä»¶æ›´æ–° */
+            /* Ö´ĞĞ×Ó¹Ì¼şÉı¼¶ */
             cError = cOTAFirmwareUpdatePort(&st_typeOTAInfo.Port[i]);
 
-            /* æ ¹æ®æ›´æ–°ç»“æœæ‰§è¡Œä¸åŒçš„æ“ä½œ */
-            if (cError == 0)
+            /* ¸ù¾İ×Ó¹Ì¼şµÄÉı¼¶½á¹ûÖ´ĞĞ²»Í¬µÄ²Ù×÷ */
+            if(cError == 0)
             {
-                /* å­å›ºä»¶æ›´æ–°æˆåŠŸ */
+                /* ×Ó¹Ì¼şÉı¼¶³É¹¦,×´Ì¬Ğ´Èë³É¹¦ */;
                 st_typeOTAInfo.Port[i].state = OTA_STATE_SUCCESS;
                 st_typeOTAInfo.Port[i].ReSendCount = 0;
                 cOTAUpdateCrcAndWriteToFlash();
-
-                if (st_typeOTAInfo.Port[i].type == OTA_Type_PD)
+                
+                if(st_typeOTAInfo.Port[i].type == OTA_Type_PD)
                     NVIC_SystemReset();
             }
             else
             {
-                /* å­å›ºä»¶æ›´æ–°å¤±è´¥ï¼Œå›é€€å†™å…¥é•¿åº¦ */
                 g_uiFirmwareLengthNow -= st_typeOTAInfo.Port[i].writeLengthNow;
                 st_typeOTAInfo.Port[i].writeLengthNow = 0;
-
-                /* å¦‚æœè¿˜æœ‰é‡ä¼ æ¬¡æ•°ï¼Œç»§ç»­å°è¯• */
-                if (st_typeOTAInfo.Port[i].ReSendCount > 0)
+                /* ×Ó¹Ì¼şÉı¼¶Ê§°Ü,ÅĞ¶ÏÓĞÎŞÖØÊÔ´ÎÊı,ÓĞÔòÖØÉı,ÎŞÔò¼ÇÂ¼Ê§°Ü */
+                if(st_typeOTAInfo.Port[i].ReSendCount > 0)
                 {
                     goto __UPDATE_BEGIN;
                 }
                 else
                 {
-                    /* æ ‡è®°æ›´æ–°å¤±è´¥å¹¶è®°å½•é”™è¯¯ç  */
+                    /* ¸Ã×Ó¹Ì¼ş×´Ì¬±»ĞŞ¸ÄÎªÊ§°Ü,²¢¼ÇÂ¼Ê§°ÜµÄ²½Öè */
                     st_typeOTAInfo.Port[i].state = OTA_STATE_FAIL;
                     st_typeOTAInfo.Port[i].error = cError;
                     cOTAUpdateCrcAndWriteToFlash();
                 }
             }
         }
-
-        /* å¦‚æœè¿™æ˜¯æœ€åä¸€ä¸ªå­å›ºä»¶ï¼Œæ£€æŸ¥æ•´ä½“OTAæ˜¯å¦æˆåŠŸ */
-        if (i == st_typeOTAInfo.firmwareNumber - 1)
+ 
+        /* Éı¼¶µ½×îºóÒ»¸ö×Ó¹Ì¼şÊ±,ÅĞ¶Ï±¾»úÊÇ·ñOTAÉı¼¶³É¹¦ */
+        if(i == st_typeOTAInfo.firmwareNumber -1)
         {
-            for (uint8_t j = 0; j < st_typeOTAInfo.firmwareNumber; j++)
+            /* ±éÀúËùÓĞ×Ó¹Ì¼şµÄOTA×´Ì¬ */
+            for(uint8_t j = 0; j< st_typeOTAInfo.firmwareNumber; j++)
             {
-                if (st_typeOTAInfo.Port[j].state != OTA_STATE_SUCCESS)
+                if(st_typeOTAInfo.Port[j].state != OTA_STATE_SUCCESS)
                 {
                     cError2 = 1;
                 }
             }
 
-            if (cError2 == 0)
+            /* Ğ´Èë±¾»úµÄ×îÖÕµÄÉı¼¶×´Ì¬ */
+            if(cError2 == 0)
             {
                 cOTAStateSet(OTA_STATE_SUCCESS);
             }
@@ -287,37 +289,36 @@ __UPDATE_BEGIN:
         }
     }
 
-    if (st_typeOTAInfo.state == OTA_STATE_SUCCESS)
+    if(st_typeOTAInfo.state == OTA_STATE_SUCCESS)
     {
         cOTAStateSet(OTA_STATE_DISABLE);
         NVIC_SystemReset();
     }
-    else if (st_typeOTAInfo.state == OTA_STATE_FAIL)
+    else if(st_typeOTAInfo.state == OTA_STATE_FAIL)
     {
         cOTAStateSet(OTA_STATE_DISABLE);
     }
 }
 
-/* å¤„ç† Modbus OTA æ•°æ®åŒ…ï¼Œå¹¶å†™å…¥ Flash */
-int8_t cOTAModbusPackAnalysis(ModBusRtuTypeDef *ptypeHandle)
+/* ÉÏÎ»»ú¹Ì¼ş°ü½ÓÊÕ½âÎö¡¢Ğ´Èë */
+int8_t cOTAModbusPackAnalysis(ModBusRtuTypeDef* ptypeHandle)
 {
     SensorInfoType *ptypeSensorInfo = ptypeSensorInfoGet();
     uint32_t uiAddr = 0, uiCRCValue = 0;
     int32_t iLength = 0;
     int8_t cError = 2;
 
-    /* æå– OTA æ•°æ®åŒ…ä¸­çš„åœ°å€ã€é•¿åº¦ã€CRC */
-    memcpy(&uiAddr, &ptypeHandle->data[5], 4);
-    memcpy(&iLength, &ptypeHandle->data[9], 4);
+    /* ½â°ü¸ñÊ½Çë²éÔÄOTAÉè¼ÆÎÄµµ */
+    memcpy(&uiAddr,     &ptypeHandle->data[5], 4);
+    memcpy(&iLength,    &ptypeHandle->data[9], 4);
     memcpy(&uiCRCValue, &ptypeHandle->data[13], 4);
+    /* ĞèÒª½øĞĞ´óĞ¡¶Ë×ª»» */
+    uiAddr      = uiSwapUint32(uiAddr);
+    iLength     = uiSwapUint32(iLength);
+    uiCRCValue  = uiSwapUint32(uiCRCValue);
 
-    /* å¤§å°ç«¯è½¬æ¢ */
-    uiAddr = uiSwapUint32(uiAddr);
-    iLength = uiSwapUint32(iLength);
-    uiCRCValue = uiSwapUint32(uiCRCValue);
-
-    /* æ ¡éªŒæ¯å¸§æ•°æ® */
-    if (uiCRCValue == usCRC16_MODBUS(NULL, &ptypeHandle->data[17], iLength))
+    /* Ã¿Ö¡Êı¾İ¶¼ĞèÒªĞ£Ñé */
+    if(uiCRCValue == usCRC16_MODBUS(NULL, &ptypeHandle->data[17], iLength))
     {
         cError = cSPIFlashWriteDatas(SPI_FLASH_OTA_ADDR + uiAddr, &ptypeHandle->data[17], iLength);
     }
@@ -328,29 +329,33 @@ int8_t cOTAModbusPackAnalysis(ModBusRtuTypeDef *ptypeHandle)
 int8_t cOTAStateSet(OTAStateEnum enumOTAState)
 {
     st_typeOTAInfo.state = enumOTAState;
+
     return cOTAUpdateCrcAndWriteToFlash();
 }
 
 int8_t cOTAErrorSet(uint32_t uiError)
 {
     st_typeOTAInfo.error = uiError;
+
     return cOTAUpdateCrcAndWriteToFlash();
 }
 
-/* æ›´æ–° OTA ä¿¡æ¯ CRC å¹¶å†™å…¥ Flash */
+/* OTA¸üĞÂCRC,²¢Ğ´Èëµ½Flash */
 int8_t cOTAUpdateCrcAndWriteToFlash()
 {
-    st_typeOTAInfo.OTATotalInfoCrc = uiCRC32(NULL, &st_typeOTAInfo, sizeof(OTAInfoType) - 4);
-    return cFlashWriteDatas(FLASH_OTA_DATA_ADDR, &st_typeOTAInfo, sizeof(OTAInfoType));
+    st_typeOTAInfo.OTATotalInfoCrc = uiCRC32(NULL,&st_typeOTAInfo,sizeof(OTAInfoType)-4);
+
+    return cFlashWriteDatas(FLASH_OTA_DATA_ADDR,&st_typeOTAInfo,sizeof(OTAInfoType));
 }
 
-/* ä»å†…éƒ¨ Flash è¯»å– OTA ä¿¡æ¯ */
+/* ¶ÁÈ¡ÄÚ²¿FlashÊı¾İ */
 int8_t cOTAReafOTAInfoFromFlash(void)
 {
-    return cFlashReadDatas(FLASH_OTA_DATA_ADDR, &st_typeOTAInfo, sizeof(OTAInfoType));
+    return cFlashReadDatas(FLASH_OTA_DATA_ADDR,&st_typeOTAInfo,sizeof(OTAInfoType));
 }
 
 OTAInfoType *ptypeOTAInfoGet(void)
 {
     return &st_typeOTAInfo;
 }
+

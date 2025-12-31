@@ -24,21 +24,22 @@
 #include "taskMessageSlave.h"
 #include "taskOTA.h"
 
-TaskHandle_t g_TaskSystemInitHand = NULL; /* ç³»ç»Ÿåˆå§‹åŒ–ä»»åŠ¡å¥æŸ„ */
+TaskHandle_t g_TaskSystemInitHand = NULL;  /* ÏµÍ³³õÊ¼»¯ÈÎÎñ¾ä±ú */
 extern volatile uint32_t uwTick;
 
-/* RS485 Bus æ€»çº¿äº’æ–¥ä¿¡å·é‡ */
+/* RS485 Bus ×ÜÏß»¥³âĞÅºÅÁ¿ */
 SemaphoreHandle_t g_xRS485BusSemaphore;
-/* UART Log æ€»çº¿äº’æ–¥ä¿¡å·é‡ */
+/* RS485 Bus ×ÜÏß»¥³âĞÅºÅÁ¿ */
 SemaphoreHandle_t g_xUartLogSemaphore;
-/* SPI Flash è¯»å†™äº’æ–¥ä¿¡å·é‡ */
+/* SPI Flash ¶Á¡¢Ğ´»¥³âĞÅºÅÁ¿ */
 SemaphoreHandle_t g_xSpiFlashSemaphore;
-/* IIC Flash è¯»å†™äº’æ–¥ä¿¡å·é‡ */
+/* IIC Flash ¶Á¡¢Ğ´»¥³âĞÅºÅÁ¿ */
 SemaphoreHandle_t g_xIICFlashSemaphore;
-/* èŠ¯ç‰‡å†…éƒ¨ Flash è¯»å†™äº’æ–¥ä¿¡å·é‡ */
+/* Ğ¾Æ¬ÄÚ²¿ Flash ¶Á¡¢Ğ´»¥³âĞÅºÅÁ¿ */
 SemaphoreHandle_t g_xChipFlashSemaphore;
-/* Can1 å‘é€æ¥æ”¶äº’æ–¥ä¿¡å·é‡ */
+/* Can1 ·¢ËÍÊı¾İ »¥³âĞÅºÅÁ¿ */
 SemaphoreHandle_t g_xCan1Semaphore;
+
 
 void vApplicationIdleHook(void)
 {
@@ -49,7 +50,7 @@ uint32_t HAL_GetTick(void)
 {
     if(xTaskGetSchedulerState() == taskSCHEDULER_RUNNING)
     {
-        /* ä½¿ç”¨ FreeRTOS ç³»ç»ŸèŠ‚æ‹ */
+        /* Ê¹ÓÃ FreeRTOS ÏµÍ³½ÚÅÄ */
         return xTaskGetTickCount();
     }
     else
@@ -67,7 +68,6 @@ void vUserSystemInit(void)
     vADCInit();
 
     cTimer3Init();
-
     cTimer7Init();
 
     vLedInit();
@@ -77,9 +77,8 @@ void vUserSystemInit(void)
     vKeyInit();
 
     vIICInit();
-
+    
     vSPI2Init();
-
     vSPIFlashInit();
 
     cSoftTimerInit();
@@ -89,23 +88,27 @@ void vUserSystemInit(void)
 
 void vTaskSystemInit(void *pvParameters)
 {
-    /* åˆ›å»ºå…¬å…±èµ„æºäº’æ–¥ä¿¡å·é‡ */
+    /* ´´½¨µİ¹é»¥³âĞÅºÅÁ¿ */
     g_xRS485BusSemaphore  = xSemaphoreCreateRecursiveMutex();
     g_xUartLogSemaphore   = xSemaphoreCreateRecursiveMutex();
     g_xSpiFlashSemaphore  = xSemaphoreCreateRecursiveMutex();
     g_xIICFlashSemaphore  = xSemaphoreCreateRecursiveMutex();
     g_xChipFlashSemaphore = xSemaphoreCreateRecursiveMutex();
     g_xCan1Semaphore      = xSemaphoreCreateRecursiveMutex();
+    
+    xTaskCreate(vTaskMonitor,           "Monitor",          256,    NULL, configMAX_PRIORITIES - 2,  &g_TaskMonitorHand);
 
-    xTaskCreate(vTaskMonitor,      "Monitor",       256, NULL, configMAX_PRIORITIES - 2,  &g_TaskMonitorHand);
-    xTaskCreate(vTaskControl,      "Control",       256, NULL, configMAX_PRIORITIES - 3,  &g_TaskControlHand);
-    xTaskCreate(vTaskSensor,       "Sensor",        256, NULL, configMAX_PRIORITIES - 4,  &g_TaskSensorHand);
-    xTaskCreate(vTaskOTA,          "OTA",           512, NULL, configMAX_PRIORITIES - 10, &g_TaskOTAHand);
-    xTaskCreate(vTaskMessageSlave, "Message Slave", 512, NULL, configMAX_PRIORITIES - 11, &g_TaskMessageSlaveHand);
+    xTaskCreate(vTaskControl,           "Control",          256,    NULL, configMAX_PRIORITIES - 3,  &g_TaskControlHand);
+
+    xTaskCreate(vTaskSensor,            "Sensor",           256,    NULL, configMAX_PRIORITIES - 4,  &g_TaskSensorHand);
+    
+    xTaskCreate(vTaskOTA,               "OTA",              512,    NULL, configMAX_PRIORITIES - 10, &g_TaskOTAHand);
+
+    xTaskCreate(vTaskMessageSlave,      "Message Slave",    512,    NULL, configMAX_PRIORITIES - 11, &g_TaskMessageSlaveHand);
 
     vTaskDelay(10 / portTICK_RATE_MS);
     vUserSystemInit();
 
-    /* åˆ é™¤è‡ªèº« */
-    vTaskDelete(NULL);
+    /* É¾³ı×Ô¼º */
+    vTaskDelete( NULL );
 }

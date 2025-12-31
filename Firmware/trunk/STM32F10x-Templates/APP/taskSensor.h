@@ -12,11 +12,13 @@
 #include "DriverOTA.h"
 
 typedef struct{
-    OTAInfoType         *ptypeOTAInfo;              /* OTAä¿¡æ¯ */
-    productType         *ptypeProduct;              /* ç‰ˆæœ¬ä¿¡æ¯ */
+    OTAInfoType         *ptypeOTAInfo;              /* OTAĞÅÏ¢ */
+    productType         *ptypeProduct;              /* °æ±¾ĞÅÏ¢ */
 }SensorInfoType;
 
-extern TaskHandle_t g_TaskSensorHand;   /* ä¼ æ„Ÿå™¨æ•°æ®å¤„ç†ä»»åŠ¡å¥æŸ„ */
+
+
+extern TaskHandle_t g_TaskSensorHand;   /* ´«¸ĞÆ÷Êı¾İ´¦ÀíÈÎÎñ¾ä±ú */
 
 void vTaskSensor(void *pvParameters);
 SensorInfoType *ptypeSensorInfoGet(void);

@@ -1,14 +1,15 @@
 #ifndef _DevicesCAN_H_
 #define _DevicesCAN_H_
 
+
 typedef struct
 {
-    uint32_t ff : 1;        /* 0: 标准帧; 1: 扩展帧 */
-    uint32_t ft : 1;        /* 帧类型: 数据帧 或 远程帧 */
-    uint32_t id : 29;       /* 帧 ID */
-    uint8_t length;         /* 数据长度 */
-    uint8_t datas[8];       /* 数据区 */
-} CanPackType;
+    uint32_t ff : 1;        /* 0:��׼֡; 1:��չ֡ */
+    uint32_t ft : 1;        /* type of frame, data or remote */
+    uint32_t id : 29;
+    uint8_t length;         /* ���ݳ��� */
+    uint8_t datas[8];
+}CanPackType;
 
 void vCan1Init(void);
 

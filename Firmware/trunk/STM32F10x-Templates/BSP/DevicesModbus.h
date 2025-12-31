@@ -1,9 +1,11 @@
 #ifndef _DevicesModbus_H_
 #define _DevicesModbus_H_
 
+
 #define MODBUS_ADDRESS_PD           0x10    /* 主机PD */
 #define MODBUS_ADDRESS_BMS          0x96    /* BMS */
 #define MODBUS_ADDRESS_INV0         0x01    /* 谐振INV */
+
 
 typedef enum {
     MODBUS_CODE_0x03 = 0x03,        /* 读取多个寄存器的值 */
@@ -34,7 +36,8 @@ typedef struct
     uint8_t rec[2];
 
     uint32_t timeIdle;              /* 空闲时间 */
-} ModBusRtuTypeDef;
+}ModBusRtuTypeDef;
+
 
 int8_t cModbusPackRTU_03(uint8_t ucSalaveAdd, uint16_t usRegisterAddr, uint16_t usLength, void *pvBuff);
 int8_t cModbusPackRTU_06(uint8_t ucSalaveAdd, uint16_t usRegisterAddr, uint16_t usValue, void *pvBuff);

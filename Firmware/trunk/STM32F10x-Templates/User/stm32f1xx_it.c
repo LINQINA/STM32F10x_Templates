@@ -3,13 +3,13 @@
   * @file    Templates/Src/stm32f1xx.c
   * @author  MCD Application Team
   * @brief   Main Interrupt Service Routines.
-  *          This file provides template for all exceptions handler and
+  *          This file provides template for all exceptions handler and 
   *          peripherals interrupt service routine.
   ******************************************************************************
   * @attention
   *
-  * h2center&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved./center/h2
+  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
   * the "License"; You may not use this file except in compliance with the
@@ -23,11 +23,13 @@
 #include "stm32f1xx_it.h"
 #include "stm32f1xx_hal.h"
 
+
 #include "DevicesUart.h"
 #include "DevicesQueue.h"
 #include "DevicesTimer.h"
 #include "DevicesADC.h"
 #include "DevicesCAN.h"
+
 
 extern volatile int64_t g_iTimeBase;
 
@@ -121,6 +123,7 @@ void DebugMon_Handler(void)
 {
 }
 
+
 /******************************************************************************/
 /*                 STM32F1xx Peripherals Interrupt Handlers                   */
 /*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
@@ -128,153 +131,132 @@ void DebugMon_Handler(void)
 /*  file (startup_stm32f1xx.s).                                               */
 /******************************************************************************/
 
-/**
-  * @brief TIM6 update interrupt handler
-  */
 void TIM6_IRQHandler(void)
 {
-    if (__HAL_TIM_GET_FLAG(&g_timer6_initpara, TIM_FLAG_UPDATE))
+    if(__HAL_TIM_GET_FLAG(&g_timer6_initpara,TIM_FLAG_UPDATE))
     {
-        __HAL_TIM_CLEAR_FLAG(&g_timer6_initpara, TIM_FLAG_UPDATE);
-
+        __HAL_TIM_CLEAR_FLAG(&g_timer6_initpara,TIM_FLAG_UPDATE);
+        
         g_iTimeBase += 63356;
     }
 }
 
-/**
-  * @brief TIM7 update interrupt handler
-  */
 void TIM7_IRQHandler(void)
 {
-    if (__HAL_TIM_GET_FLAG(&g_timer7_initpara, TIM_FLAG_UPDATE))
+    if(__HAL_TIM_GET_FLAG(&g_timer7_initpara,TIM_FLAG_UPDATE))
     {
-        __HAL_TIM_CLEAR_FLAG(&g_timer7_initpara, TIM_FLAG_UPDATE);
+        __HAL_TIM_CLEAR_FLAG(&g_timer7_initpara,TIM_FLAG_UPDATE);
 
         vADCxScanHigh();
     }
 }
 
-/**
-  * @brief USART1 DMA receive data callback
-  */
 void vUSART1ReceiveCallback(void)
 {
     static uint32_t uiMDANdtrOld = 0;
     uint32_t uiMDANdtrNow = 0;
 
-    while (uiMDANdtrOld != (uiMDANdtrNow = USART1_DMA_READ_LENGTH - __HAL_DMA_GET_COUNTER(&g_dma_usart1_rx)))
+    while(uiMDANdtrOld != (uiMDANdtrNow = USART1_DMA_READ_LENGTH - __HAL_DMA_GET_COUNTER(&g_dma_usart1_rx)))
     {
-        if (uiMDANdtrNow < uiMDANdtrOld)
+        if(uiMDANdtrNow < uiMDANdtrOld)
         {
-            /* å°†æ•°æ®è¯»å–åˆ° UART é˜Ÿåˆ— */
-            enumQueuePushDatas(&g_TypeQueueUart1Read,&g_USART1ReadDMABuff[uiMDANdtrOld],USART1_DMA_READ_LENGTH - uiMDANdtrOld);
+            /* °ÑÊý¾Ý¶ÁÈ¡µ½UART¶ÓÁÐ */
+            enumQueuePushDatas(&g_TypeQueueUart1Read, &g_USART1ReadDMABuff[uiMDANdtrOld], USART1_DMA_READ_LENGTH - uiMDANdtrOld);
 
             uiMDANdtrOld = 0;
         }
 
-        /* å°†æ•°æ®è¯»å–åˆ° UART é˜Ÿåˆ— */
-        enumQueuePushDatas(&g_TypeQueueUart1Read,&g_USART1ReadDMABuff[uiMDANdtrOld],uiMDANdtrNow - uiMDANdtrOld);
+        /* °ÑÊý¾Ý¶ÁÈ¡µ½UART¶ÓÁÐ */
+        enumQueuePushDatas(&g_TypeQueueUart1Read, &g_USART1ReadDMABuff[uiMDANdtrOld], uiMDANdtrNow - uiMDANdtrOld);
 
         uiMDANdtrOld = uiMDANdtrNow;
     }
 }
 
-/**
-  * @brief USART1 global interrupt handler
-  */
-void USART1_IRQHandler(void)
-{
-    // æ£€æŸ¥æ˜¯å¦æœ‰ç©ºé—²ä¸­æ–­æ ‡å¿—
-    if (__HAL_UART_GET_FLAG(&g_uart1_handle, UART_FLAG_IDLE))
-    {
-        // è°ƒç”¨æŽ¥æ”¶å›žè°ƒå‡½æ•°
-        vUSART1ReceiveCallback();
+void USART1_IRQHandler(void) 
+{ 
+    // ¼ì²éÊÇ·ñÓÐ¿ÕÏÐÖÐ¶Ï±êÖ¾
+    if (__HAL_UART_GET_FLAG(&g_uart1_handle, UART_FLAG_IDLE)) 
+    { 
+        // µ÷ÓÃ½ÓÊÕ»Øµ÷º¯Êý
+        vUSART1ReceiveCallback(); 
 
-        // æ¸…é™¤ç©ºé—²ä¸­æ–­æ ‡å¿—
-        __HAL_UART_CLEAR_IDLEFLAG(&g_uart1_handle);
-    }
-    // æ£€æŸ¥æ˜¯å¦æœ‰è¿‡è½½é”™è¯¯ä¸­æ–­æ ‡å¿—
-    else if (__HAL_UART_GET_FLAG(&g_uart1_handle, UART_FLAG_ORE))
-    {
+        // Çå³ý¿ÕÏÐÖÐ¶Ï±êÖ¾
+        __HAL_UART_CLEAR_IDLEFLAG(&g_uart1_handle); 
+    } 
+    // ¼ì²éÊÇ·ñÓÐ³¬ÏÞ´íÎóÖÐ¶Ï±êÖ¾
+    else if (__HAL_UART_GET_FLAG(&g_uart1_handle, UART_FLAG_ORE)) 
+    { 
         __HAL_UART_CLEAR_FLAG(&g_uart1_handle, UART_FLAG_ORE);
+        
         __HAL_UART_CLEAR_OREFLAG(&g_uart1_handle);
 
-        // é‡æ–°åˆå§‹åŒ– UART
-        vUart1Init();
-    }
-    // æ£€æŸ¥æ˜¯å¦æœ‰å™ªå£°é”™è¯¯ã€å¸§é”™è¯¯ã€å¥‡å¶æ ¡éªŒé”™è¯¯ä¸­æ–­æ ‡å¿—
-    else if ((__HAL_UART_GET_FLAG(&g_uart1_handle, UART_FLAG_NE)) ||
-             (__HAL_UART_GET_FLAG(&g_uart1_handle, UART_FLAG_FE)) ||
-             (__HAL_UART_GET_FLAG(&g_uart1_handle, UART_FLAG_PE)))
-    {
-        // æ¸…é™¤é”™è¯¯æ ‡å¿—
-        __HAL_UART_CLEAR_FLAG(&g_uart1_handle, UART_FLAG_NE);
-        __HAL_UART_CLEAR_FLAG(&g_uart1_handle, UART_FLAG_FE);
-        __HAL_UART_CLEAR_FLAG(&g_uart1_handle, UART_FLAG_PE);
-    }
+        // ÖØÐÂ³õÊ¼»¯UART
+        vUart1Init(); 
+    } 
+    // ¼ì²éÊÇ·ñÓÐÔëÉù´íÎó¡¢Ö¡´íÎó»òÆæÅ¼Ð£Ñé´íÎóÖÐ¶Ï±êÖ¾
+    else if ((__HAL_UART_GET_FLAG(&g_uart1_handle, UART_FLAG_NE)) || 
+             (__HAL_UART_GET_FLAG(&g_uart1_handle, UART_FLAG_FE)) || 
+             (__HAL_UART_GET_FLAG(&g_uart1_handle, UART_FLAG_PE))) 
+    { 
+        // Çå³ý¸÷ÖÖ´íÎó±êÖ¾
+        __HAL_UART_CLEAR_FLAG(&g_uart1_handle, UART_FLAG_NE); 
+        __HAL_UART_CLEAR_FLAG(&g_uart1_handle, UART_FLAG_FE); 
+        __HAL_UART_CLEAR_FLAG(&g_uart1_handle, UART_FLAG_PE); 
+    } 
 }
 
-/**
-  * @brief DMA1 Channel4 global interrupt handler (USART1 TX)
-  */
 void DMA1_Channel4_IRQHandler(void)
 {
-    if (__HAL_DMA_GET_FLAG(&g_dma_usart1_tx, DMA_FLAG_TC4))
+    if(__HAL_DMA_GET_FLAG(&g_dma_usart1_tx, DMA_FLAG_TC4))
     {
         __HAL_DMA_CLEAR_FLAG(&g_dma_usart1_tx, DMA_FLAG_GL4);
         __HAL_DMA_CLEAR_FLAG(&g_dma_usart1_tx, DMA_FLAG_TC4);
         __HAL_DMA_CLEAR_FLAG(&g_dma_usart1_tx, DMA_FLAG_HT4);
         __HAL_DMA_CLEAR_FLAG(&g_dma_usart1_tx, DMA_FLAG_TE4);
-
+        
         (&g_uart1_handle)->gState = HAL_UART_STATE_READY;
         (&g_dma_usart1_tx)->State = HAL_DMA_STATE_READY;
         __HAL_UNLOCK(&g_dma_usart1_tx);
     }
 }
 
-/**
-  * @brief DMA1 Channel5 global interrupt handler (USART1 RX)
-  */
 void DMA1_Channel5_IRQHandler(void)
 {
-    if (__HAL_DMA_GET_FLAG(&g_dma_usart1_rx, DMA_FLAG_HT5) != RESET)
+    if(__HAL_DMA_GET_FLAG(&g_dma_usart1_rx,DMA_FLAG_HT5) != RESET)
     {
         vUSART1ReceiveCallback();
-        __HAL_DMA_CLEAR_FLAG(&g_dma_usart1_rx, DMA_FLAG_HT5);
+        
+        __HAL_DMA_CLEAR_FLAG(&g_dma_usart1_rx,DMA_FLAG_HT5);
     }
-    else if (__HAL_DMA_GET_FLAG(&g_dma_usart1_rx, DMA_FLAG_TC5) != RESET)
+    else if(__HAL_DMA_GET_FLAG(&g_dma_usart1_rx,DMA_FLAG_TC5) != RESET)
     {
         vUSART1ReceiveCallback();
-        __HAL_DMA_CLEAR_FLAG(&g_dma_usart1_rx, DMA_FLAG_TC5);
+        
+        __HAL_DMA_CLEAR_FLAG(&g_dma_usart1_rx,DMA_FLAG_TC5);
     }
 }
 
-/**
-  * @brief DMA1 Channel1 global interrupt handler
-  */
 void DMA1_Channel1_IRQHandler(void)
 {
-    if (DMA1->ISR & (1 << 1))
+    if(DMA1->ISR & (1 << 1))
     {
-        do
-        {
-            DMA1->IFCR |= 1 << 1;
-        } while (0);
+        do{ DMA1->IFCR |= 1 << 1; }while(0);
     }
 }
 
-/**
-  * @brief CAN1 RX0 interrupt handler
-  */
 void CAN1_RX0_IRQHandler(void)
 {
-    CAN_RxHeaderTypeDef can1_rxheader;
+    CAN_RxHeaderTypeDef can1_rxheader;    /* CAN½ÓÊÕ½á¹¹Ìå */
     uint8_t rxData[8];
-
+    
+    // ¼ì²é FIFO0 ÏûÏ¢¹ÒÆðÖÐ¶Ï±êÖ¾ÊÇ·ñ±»ÖÃÎ»
     while (HAL_CAN_GetRxFifoFillLevel(&g_can1_handler, CAN_RX_FIFO0) > 0)
     {
+        // ½ÓÊÕ CAN ÏûÏ¢
         if (HAL_CAN_GetRxMessage(&g_can1_handler, CAN_RX_FIFO0, &can1_rxheader, rxData) == HAL_OK)
         {
+            // ±ê×¼Ö¡ (IDE = 0)
             if (can1_rxheader.IDE == CAN_ID_STD)
             {
                 enumQueuePushDatas(&g_TypeQueueCanHostRead, rxData, can1_rxheader.DLC);

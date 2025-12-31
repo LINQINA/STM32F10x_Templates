@@ -134,11 +134,11 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>-1</DriverSelection>
+            <DriverSelection>4096</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -275,7 +275,7 @@
               </OCR_RVCT3>
               <OCR_RVCT4>
                 <Type>1</Type>
-                <StartAddress>0x8000000</StartAddress>
+                <StartAddress>0x801a000</StartAddress>
                 <Size>0x80000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
@@ -339,7 +339,7 @@
               <MiscControls>-Wno-invalid-source-encoding</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Firmware\CMSIS\Device\ST\STM32F1xx\Include;..\Firmware\STM32F1xx_HAL_Driver\Inc;..\Firmware\CMSIS\Include;..\APP;..\BSP;..\User;..\Middlewares\FreeRTOS\Kernel\include;..\Middlewares\FreeRTOS\Kernel\portable\GCC\ARM_CM3;..\Modules\Bootloader;..\Modules\Log;..\Modules\Modbus;..\Modules\OTA</IncludePath>
+              <IncludePath>..\Firmware\CMSIS\Device\ST\STM32F1xx\Include;..\Firmware\STM32F1xx_HAL_Driver\Inc;..\Firmware\CMSIS\Include;..\APP;..\BSP;..\User;..\Middlewares\FreeRTOS\Kernel\include;..\Middlewares\FreeRTOS\Kernel\portable\GCC\ARM_CM3;..\Modules\Log;..\Modules\Modbus;..\Modules\Bootloader;..\Modules\OTA</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -687,9 +687,29 @@
           <GroupName>APP</GroupName>
           <Files>
             <File>
+              <FileName>taskSystem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\taskSystem.c</FilePath>
+            </File>
+            <File>
+              <FileName>taskMonitor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\taskMonitor.c</FilePath>
+            </File>
+            <File>
+              <FileName>taskSensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\taskSensor.c</FilePath>
+            </File>
+            <File>
               <FileName>taskControl.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\taskControl.c</FilePath>
+            </File>
+            <File>
+              <FileName>taskSoftTimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\taskSoftTimer.c</FilePath>
             </File>
             <File>
               <FileName>taskKey.c</FileName>
@@ -702,29 +722,9 @@
               <FilePath>..\APP\taskMessageSlave.c</FilePath>
             </File>
             <File>
-              <FileName>taskMonitor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\APP\taskMonitor.c</FilePath>
-            </File>
-            <File>
               <FileName>taskOTA.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\taskOTA.c</FilePath>
-            </File>
-            <File>
-              <FileName>taskSensor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\APP\taskSensor.c</FilePath>
-            </File>
-            <File>
-              <FileName>taskSoftTimer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\APP\taskSoftTimer.c</FilePath>
-            </File>
-            <File>
-              <FileName>taskSystem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\APP\taskSystem.c</FilePath>
             </File>
           </Files>
         </Group>

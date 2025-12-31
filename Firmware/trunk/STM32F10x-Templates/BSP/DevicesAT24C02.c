@@ -31,10 +31,11 @@ int8_t cAT24C02WriteDatas(uint8_t ucAddress,uint8_t *pucDatas,uint16_t usLength)
 
     while(usLength > 0)
     {
+        /* 页对齐 */
         usLengthTemp = usLength > (PAGE_SIZE - ucAddress % PAGE_SIZE) ? (PAGE_SIZE - ucAddress % PAGE_SIZE) : usLength;
 
         cError = iI2CWriteDatas(AT24C02_WRITE_ADDRESS, ucAddress, pucDatas, usLengthTemp);
-
+        
         if(cError != 0)
             break;
 
@@ -42,6 +43,7 @@ int8_t cAT24C02WriteDatas(uint8_t ucAddress,uint8_t *pucDatas,uint16_t usLength)
         pucDatas += usLengthTemp;
         usLength -= usLengthTemp;
 
+        /* 官方手册推荐等待5ms,写10ms更稳健一点 */
         vRtosDelayMs(10);
     }
 
@@ -59,6 +61,7 @@ int8_t cAT24C02ReadDatas(uint8_t ucAddress,uint8_t *pucDatas,uint16_t usLength)
 
     while (usLength > 0)
     {
+        /* 页对齐 */
         usLengthTemp = usLength > (PAGE_SIZE - ucAddress % PAGE_SIZE) ? (PAGE_SIZE - ucAddress % PAGE_SIZE) : usLength;
 
         cError = iI2CReadDatas(AT24C02_READ_ADDRESS, ucAddress, pucDatas, usLengthTemp);

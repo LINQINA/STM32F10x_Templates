@@ -14,57 +14,57 @@
 
 #include "taskSystem.h"
 
-CAN_HandleTypeDef   g_can1_handler;     /* CANæ§åˆ¶å¥æŸ„ */
-CAN_TxHeaderTypeDef g_can1_txheader;    /* CANå‘é€ç»“æ„ä½“ */
+CAN_HandleTypeDef   g_can1_handler;     /* CAN¿ØÖÆ¾ä±ú */
+CAN_TxHeaderTypeDef g_can1_txheader;    /* CAN·¢ËÍ½á¹¹Ìå */
 
-/* CANåˆå§‹åŒ–å‡½æ•° */
-void vCan1Init(void)
+/* CAN³õÊ¼»¯º¯Êı */
+void vCan1Init(void) 
 {
-    /* åˆå§‹åŒ–CANç›¸å…³æ—¶é’Ÿ */
+    /* ³õÊ¼»¯CANÍâÉèÊ±ÖÓ */
     __HAL_RCC_CAN1_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
 
-    /* é…ç½®CANå¼•è„š: RX (PA11), TX (PA12) */
+    /* ÅäÖÃCANÒı½Å: RX (PA11), TX (PA12) */
     GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = GPIO_PIN_11;
+    GPIO_InitStruct.Pin = GPIO_PIN_11; 
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP; 
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_12;
+    GPIO_InitStruct.Pin = GPIO_PIN_12; 
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     g_can1_handler.Instance  = CAN1;
-    g_can1_handler.Init.Mode = CAN_MODE_NORMAL;        /* æ­£å¸¸æ¨¡å¼ */
+    g_can1_handler.Init.Mode = CAN_MODE_NORMAL;        /* ¹¤×÷Ä£Ê½ÉèÖÃ Õı³£ */
 
-    /* ä½æ—¶åºé…ç½® */
-    g_can1_handler.Init.Prescaler        = 4;            /* åˆ†é¢‘ç³»æ•° */
-    g_can1_handler.Init.TimeSeg1         = CAN_BS1_9TQ;  /* æ—¶é—´æ®µ1 */
-    g_can1_handler.Init.TimeSeg2         = CAN_BS2_8TQ;  /* æ—¶é—´æ®µ2 */
-    g_can1_handler.Init.SyncJumpWidth    = CAN_SJW_1TQ;  /* åŒæ­¥è·³è½¬å®½åº¦ */
+    /* ²¨ÌØÂÊÏà¹Ø,¹«Ê½: 36M / 4 * (9 + 8 + 1) = 500K */
+    g_can1_handler.Init.Prescaler        = 4;            /* ·ÖÆµÏµÊı */
+    g_can1_handler.Init.TimeSeg1         = CAN_BS1_9TQ;  /* Ê±¼ä¶Î1 */
+    g_can1_handler.Init.TimeSeg2         = CAN_BS2_8TQ;  /* Ê±¼ä¶Î2 */
+    g_can1_handler.Init.SyncJumpWidth    = CAN_SJW_1TQ;  /* ÖØĞÂÍ¬²½ÌøÔ¾¿í¶È */
 
-    /* CANå·¥ä½œå‚æ•°é…ç½® */
-    g_can1_handler.Init.AutoBusOff           = DISABLE;  /* ç¦æ­¢è‡ªåŠ¨ç¦»çº¿ç®¡ç† */
-    g_can1_handler.Init.AutoRetransmission   = DISABLE;  /* ç¦æ­¢è‡ªåŠ¨é‡å‘ */
-    g_can1_handler.Init.AutoWakeUp           = DISABLE;  /* ç¦æ­¢è‡ªåŠ¨å”¤é†’ */
-    g_can1_handler.Init.ReceiveFifoLocked    = DISABLE;  /* ç¦æ­¢æ¥æ”¶FIFOé”å®š */
-    g_can1_handler.Init.TimeTriggeredMode    = DISABLE;  /* ç¦æ­¢æ—¶é—´è§¦å‘é€šä¿¡æ¨¡å¼ */
-    g_can1_handler.Init.TransmitFifoPriority = DISABLE;  /* ç¦æ­¢å‘é€FIFOä¼˜å…ˆçº§ */
+    /* CAN¹¦ÄÜÉèÖÃ */
+    g_can1_handler.Init.AutoBusOff           = DISABLE;  /* ½ûÖ¹×Ô¶¯ÀëÏß¹ÜÀí */
+    g_can1_handler.Init.AutoRetransmission   = DISABLE;  /* ½ûÖ¹×Ô¶¯ÖØ·¢ */
+    g_can1_handler.Init.AutoWakeUp           = DISABLE;  /* ½ûÖ¹×Ô¶¯»½ĞÑ */
+    g_can1_handler.Init.ReceiveFifoLocked    = DISABLE;  /* ½ûÖ¹½ÓÊÕFIFOËø¶¨ */
+    g_can1_handler.Init.TimeTriggeredMode    = DISABLE;  /* ½ûÖ¹Ê±¼ä´¥·¢Í¨ĞÅÄ£Ê½ */
+    g_can1_handler.Init.TransmitFifoPriority = DISABLE;  /* ½ûÖ¹·¢ËÍFIFOÓÅÏÈ¼¶ */
 
     HAL_CAN_Init(&g_can1_handler);
 
     CAN_FilterTypeDef can_filterconfig;
-    /* é…ç½®ä¸ºæ¥æ”¶æŒ‡å®šIDåˆ—è¡¨æ¨¡å¼è¿‡æ»¤ */
-    can_filterconfig.FilterMode = CAN_FILTERMODE_IDLIST;      /* åˆ—è¡¨æ¨¡å¼ */
-    can_filterconfig.FilterScale = CAN_FILTERSCALE_32BIT;     /* ä½¿ç”¨ 32 ä½è¿‡æ»¤å™¨ */
+    /* ¹ıÂËÆ÷ÊÇ½ÓÊÕËùÓĞ±¨ÎÄ£¬²»É¸Ñ¡ */   
+    can_filterconfig.FilterMode = CAN_FILTERMODE_IDLIST;      /* ÁĞ±íÄ£Ê½ */
+    can_filterconfig.FilterScale = CAN_FILTERSCALE_32BIT;     /* Ê¹ÓÃ 32 Î»¹ıÂËÆ÷ */
 
-    // è®¾ç½®æ¥æ”¶çš„IDåˆ—è¡¨
-    can_filterconfig.FilterIdHigh = (0x350 << 5);             /* æ ‡å‡†å¸§ ID å·¦ç§» 5 ä½å­˜å…¥é«˜ 16 ä½ */
-    can_filterconfig.FilterIdLow = 0x0000;                    /* ä½ 16 ä½ */
-    can_filterconfig.FilterMaskIdHigh = 0x0000;               /* åˆ—è¡¨æ¨¡å¼ä¸éœ€è¦ï¼Œä¿æŒé»˜è®¤å€¼ */
-    can_filterconfig.FilterMaskIdLow = 0x0000;                /* åˆ—è¡¨æ¨¡å¼ä¸éœ€è¦ï¼Œä¿æŒé»˜è®¤å€¼ */
+    /* ÅäÖÃ¾ßÌåµÄ¹ıÂËÆ÷ÁĞ±í,¾ßÌå²Î¿¼ÊÖ²á */
+    can_filterconfig.FilterIdHigh = (0x350 << 5);             /* ±ê×¼Ö¡ ID ×óÒÆ 5 Î»£¨¸ß 16 Î»£©*/
+    can_filterconfig.FilterIdLow = 0x0000;                    /* µÍ 16 Î»ÇåÁã */
+    can_filterconfig.FilterMaskIdHigh = 0x0000;               /* ÁĞ±íÄ£Ê½²»ĞèÒªÑÚÂë£¬±£ÁôÄ¬ÈÏÖµ */
+    can_filterconfig.FilterMaskIdLow = 0x0000;                /* ÁĞ±íÄ£Ê½²»ĞèÒªÑÚÂë£¬±£ÁôÄ¬ÈÏÖµ */
 
     can_filterconfig.FilterBank = 0;
     can_filterconfig.FilterFIFOAssignment = CAN_FilterFIFO0;
@@ -72,11 +72,11 @@ void vCan1Init(void)
     can_filterconfig.SlaveStartFilterBank = 14;
     HAL_CAN_ConfigFilter(&g_can1_handler, &can_filterconfig);
 
-    /* é…ç½®CANä¸­æ–­ */
-    HAL_NVIC_SetPriority(USB_LP_CAN1_RX0_IRQn, 7, 0); /* è®¾ç½®ä¼˜å…ˆçº§ */
-    HAL_NVIC_EnableIRQ(USB_LP_CAN1_RX0_IRQn);         /* ä½¿èƒ½ä¸­æ–­ */
+     /* ÆôÓÃCANÖĞ¶Ï */
+    HAL_NVIC_SetPriority(USB_LP_CAN1_RX0_IRQn, 7, 0); /* ÉèÖÃÓÅÏÈ¼¶ */
+    HAL_NVIC_EnableIRQ(USB_LP_CAN1_RX0_IRQn); /* ÆôÓÃÖĞ¶Ï */
 
-    /* å¯åŠ¨CANæ¥æ”¶ä¸­æ–­ */
+    /* ÆôÓÃCAN½ÓÊÕÖĞ¶Ï */
     if (HAL_CAN_ActivateNotification(&g_can1_handler, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK) {
     }
 
@@ -92,22 +92,22 @@ int8_t cCanSendDatas(uint32_t can_periph, uint32_t uiID, void *pvDatas, int32_t 
     if(pvDatas == NULL)
         return 1;
 
-    /* è·å–CANä¿¡å·é‡ */
+    /* »ñÈ¡»¥³âĞÅºÅÁ¿ */
     xSemaphoreTakeRecursive(g_xCan1Semaphore, portMAX_DELAY);
 
     uiTxMail = CAN_TX_MAILBOX0;
 
     g_can1_txheader.ExtId = uiID;
-    g_can1_txheader.DLC = (iLength > 8) ? 8 : iLength;
+    g_can1_txheader.DLC = (iLength > 8 ) ? 8 : iLength;
     g_can1_txheader.IDE = CAN_ID_EXT;
     g_can1_txheader.RTR = CAN_RTR_DATA;
-
+    
     while(HAL_CAN_GetTxMailboxesFreeLevel(&g_can1_handler) != 3)
-        vTaskDelay(50 / portTICK_RATE_MS);
+       vTaskDelay(50 / portTICK_RATE_MS);
 
     HAL_CAN_AddTxMessage(&g_can1_handler, &g_can1_txheader, pvDatas, &uiTxMail);
 
-    /* é‡Šæ”¾CANä¿¡å·é‡ */
+    /* ÊÍ·Å»¥³âĞÅºÅÁ¿ */
     xSemaphoreGiveRecursive(g_xCan1Semaphore);
 
     return cError;
@@ -123,11 +123,11 @@ int8_t cCanReceiveDatas(uint32_t can_periph, void *pvDatas, int32_t iLength)
     if((can_periph != (uint32_t)CAN1) || (pvDatas == NULL) || (iLength < 1))
         return 0;
 
-    /* åˆ¤æ–­é˜Ÿåˆ—ä¸­æ˜¯å¦æœ‰è¶³å¤Ÿæ•°æ® */
+    /* ÅĞ¶Ï¶ÓÁĞÄÚÊÇ·ñÓĞ×ã¹»µÄÊı¾İ */
     if(iQueueGetLengthOfOccupy(&g_TypeQueueCanHostRead) < iLength)
         return 3;
 
-    /* ä»é˜Ÿåˆ—ä¸­è¯»å–æ•°æ® */
+    /* ´Ó¶ÓÁĞÄÚ»ñÈ¡Êı¾İ */
     if(enumQueuePopDatas(&g_TypeQueueCanHostRead, pvDatas, iLength) != queueNormal)
         return 4;
 
@@ -141,14 +141,14 @@ int32_t iCanReceiveAllDatas(uint32_t can_periph, void *pvDatas, int32_t iLengthL
     if((can_periph != (uint32_t)CAN1) || (pvDatas == NULL) || (iLengthLimit < 1))
         return 0;
 
-    /* è·å–é˜Ÿåˆ—ä¸­æœ‰æ•ˆæ•°æ®çš„é•¿åº¦ */
+    /* ¶ÁÈ¡¶ÓÁĞÄÚÓĞĞ§Êı¾İµÄ³¤¶È */
     if((iLength = iQueueGetLengthOfOccupy(&g_TypeQueueCanHostRead)) < 1)
         return 0;
 
-    /* é™åˆ¶è¯»å–é•¿åº¦ */
+    /* ÏŞÖÆ¶ÁÈ¡³¤¶È */
     iLength = iLength > iLengthLimit ? iLengthLimit : iLength;
 
-    /* ä»é˜Ÿåˆ—ä¸­è¯»å–æ•°æ® */
+    /* ´Ó¶ÓÁĞÄÚ»ñÈ¡Êı¾İ */
     if(enumQueuePopDatas(&g_TypeQueueCanHostRead, pvDatas, iLength) != queueNormal)
         return 0;
 
@@ -168,6 +168,6 @@ int8_t cCanReceiveClear(uint32_t can_periph)
     if(can_periph != (uint32_t)CAN1)
         return 1;
 
-    /* è®¾ç½®é˜Ÿåˆ—çŠ¶æ€ä¸ºç©º */
+    /* ÉèÖÃ¶ÓÁĞ×´Ì¬Îª¿Õ */
     return enumQueueSetState(&g_TypeQueueCanHostRead, queueEmpty);
 }

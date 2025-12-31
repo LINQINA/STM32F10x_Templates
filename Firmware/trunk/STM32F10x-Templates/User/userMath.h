@@ -6,22 +6,22 @@
                         typeof(a) _a = (a);     \
                         typeof(b) _b = (b);     \
                         (void) (&_a == &_b);    \
-                        (_a > _b) ? _a : _b; }) 
- 
+                        (_a > _b) ? _a : _b; })
+
 #define MIN(a, b)   ({                          \
                         typeof(a) _a = (a);     \
                         typeof(b) _b = (b);     \
                         (void) (&_a == &_b);    \
-                        (_a < _b) ? _a : _b; }) 
- 
+                        (_a < _b) ? _a : _b; })
+
 #define ABS(a, b)   ({                          \
                         typeof(a) _a = (a);     \
                         typeof(b) _b = (b);     \
                         (void) (&_a == &_b);    \
                         (_a > _b) ? (_a - _b) : (_b - _a); })
- 
-#define FABS(a, b)   ((a > b) ? (a - b) : (b - a)) 
- 
+
+#define FABS(a, b)   ((a > b) ? (a - b) : (b - a))
+
 #define AVERAGE(a, b)   ({                      \
                         typeof(a) _a = (a);     \
                         typeof(b) _b = (b);     \

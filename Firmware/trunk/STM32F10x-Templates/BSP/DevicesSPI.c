@@ -9,43 +9,44 @@ SPI_HandleTypeDef spi2_init_struct;
 
 void vSPI2Init(void)
 {
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
+   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-    /* å¼€å¯æ—¶é’Ÿ */
+
+    /* ´ò¿ªÊ±ÖÓ */
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_SPI2_CLK_ENABLE();
 
-    /* é…ç½®ç‰‡é€‰ CS å¼•è„šï¼ˆPB12ï¼‰ä¸ºæ¨æŒ½è¾“å‡º */
+    /* ÅäÖÃÆ¬Ñ¡ CS Òı½Å£¨PB12£©ÎªÍÆÍìÊä³ö */
     GPIO_InitStruct.Pin = SPI2_CS_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(SPI2_CS_PORT, &GPIO_InitStruct);
-    SET_SPI2_NSS_HIGH(); // é»˜è®¤æ‹‰é«˜
+    SET_SPI2_NSS_HIGH(); // Ä¬ÈÏÀ­¸ß
 
-    /* é…ç½® SPI2 çš„ SCKï¼ˆPB13ï¼‰å’Œ MOSIï¼ˆPB15ï¼‰ä¸ºå¤ç”¨æ¨æŒ½è¾“å‡º */
+    /* ÅäÖÃ SPI2 µÄ SCK£¨PB13£©ºÍ MOSI£¨PB15£©Îª¸´ÓÃÍÆÍìÊä³ö */
     GPIO_InitStruct.Pin = SPI2_SCK_PIN | SPI2_MOSI_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(SPI2_SCK_PORT, &GPIO_InitStruct);
 
-    /* é…ç½® MISOï¼ˆPB14ï¼‰ä¸ºè¾“å…¥æ¨¡å¼ */
+    /* ÅäÖÃ MISO£¨PB14£©ÎªÊäÈëÄ£Ê½ */
     GPIO_InitStruct.Pin = SPI2_MISO_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(SPI2_MISO_PORT, &GPIO_InitStruct);
 
-    /* SPI2 åˆå§‹åŒ–é…ç½® */
+    /* SPI2 ÅäÖÃ */
     spi2_init_struct.Instance = SPI2;
-    spi2_init_struct.Init.Mode = SPI_MODE_MASTER;                            /* ä¸»æœºæ¨¡å¼ */
-    spi2_init_struct.Init.Direction = SPI_DIRECTION_2LINES;                  /* å…¨åŒå·¥æ¨¡å¼ */
-    spi2_init_struct.Init.DataSize = SPI_DATASIZE_8BIT;                       /* å­—èŠ‚æ ¼å¼ä¼ è¾“ */
-    spi2_init_struct.Init.CLKPolarity = SPI_POLARITY_HIGH;                   /* ç©ºé—²æ—¶é’Ÿä¸ºé«˜ç”µå¹³ */
-    spi2_init_struct.Init.CLKPhase = SPI_PHASE_2EDGE;                        /* ç¬¬äºŒä¸ªæ—¶é’Ÿæ²¿é‡‡æ · */
-    spi2_init_struct.Init.NSS = SPI_NSS_SOFT;                                /* è½¯ä»¶ç®¡ç†ç‰‡é€‰ */
-    spi2_init_struct.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;      /* åˆ†é¢‘ç³»æ•° 16 */
-    spi2_init_struct.Init.FirstBit = SPI_FIRSTBIT_MSB;                       /* é«˜ä½åœ¨å‰ */
-    spi2_init_struct.Init.TIMode = SPI_TIMODE_DISABLE;                       /* ç¦ç”¨ TI æ¨¡å¼ */
-    spi2_init_struct.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;       /* ç¦ç”¨ CRC è®¡ç®— */
+    spi2_init_struct.Init.Mode = SPI_MODE_MASTER;                            /* Ö÷»ú  */
+    spi2_init_struct.Init.Direction = SPI_DIRECTION_2LINES;                  /* È«Ë«¹¤Ä£Ê½ */
+    spi2_init_struct.Init.DataSize = SPI_DATASIZE_8BIT;                      /* ×Ö½ÚĞÎÊ½·¢ËÍ */
+    spi2_init_struct.Init.CLKPolarity = SPI_POLARITY_HIGH;                   /* ¿ÕÏĞµçÆ½Îª¸ß */
+    spi2_init_struct.Init.CLKPhase = SPI_PHASE_2EDGE;                        /* µÚ¶ş¸öµçÆ½ÎªÓĞĞ§µçÆ½ */
+    spi2_init_struct.Init.NSS = SPI_NSS_SOFT;                                /* ÉèÖÃÎªÈí¼ş´¥·¢ */
+    spi2_init_struct.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;      /* ÉèÖÃ 16 ·ÖÆµ */
+    spi2_init_struct.Init.FirstBit = SPI_FIRSTBIT_MSB;                       /* ¸ß×Ö½Ú´«ËÍ */
+    spi2_init_struct.Init.TIMode = SPI_TIMODE_DISABLE;                       /* ½ûÓÃTIÄ£Ê½ */
+    spi2_init_struct.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;       /* ½ûÓÃCRC¼ÆËã */
     spi2_init_struct.Init.CRCPolynomial = 10;
 
     HAL_SPI_Init(&spi2_init_struct);
@@ -54,9 +55,9 @@ void vSPI2Init(void)
 uint8_t ucSPIWriteReadByte(SPI_HandleTypeDef *hspi, uint8_t ucByte)
 {
     uint8_t ucReadByte = 0;
-
+    
     HAL_SPI_TransmitReceive(hspi, &ucByte, &ucReadByte, 1, HAL_MAX_DELAY);
-
+    
     return ucReadByte;
 }
 

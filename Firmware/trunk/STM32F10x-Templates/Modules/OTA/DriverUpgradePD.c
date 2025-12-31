@@ -28,8 +28,8 @@ int8_t cOTAUpgradePD(OTAFirmwarePortInfoType *ptypeOTAFirmwarePortInfo)
     cError |= cSPIFlashReadDatas(ptypeOTAFirmwarePortInfo->address + 0x820, ucVersionBuff, 8);
     cError |= cSPIFlashReadDatas(ptypeOTAFirmwarePortInfo->address + 0x860, ucTypeBuff, 4);
 
-    /* å›ºä»¶ç±»åž‹æ ¡éªŒï¼Œåˆ¤æ–­æºå›ºä»¶æ˜¯å¦æ¥è‡ª STM32 */
-    if (memcmp(ucTypeBuff, "MySTM32", 4) != 0)
+    /* ¹Ì¼þÀàÐÍÃû£¬ÅÐ¶ÏÔ´¹Ì¼þÊÇ·ñÀ´Ô´´íÎó */
+    if(memcmp(ucTypeBuff, "MySTM32", 4) != 0)
         return 2;
 
     st_typeFirmwareOTA.address = ptypeOTAFirmwarePortInfo->address;
@@ -37,31 +37,31 @@ int8_t cOTAUpgradePD(OTAFirmwarePortInfoType *ptypeOTAFirmwarePortInfo)
     st_typeFirmwareOTA.crcValue = ptypeOTAFirmwarePortInfo->crcValue;
     st_typeFirmwareOTA.registers |= FIRMWARE_SOURCE_SPI_FLASH;
 
-    switch (ptypeOTAFirmwarePortInfo->number)
+    switch(ptypeOTAFirmwarePortInfo->number)
     {
-        /* æ›´æ–°å¹¶å­˜å‚¨ APP åŒºåŸŸ */
-        case 0:
+        /* ¸üÐÂ¡¢´æ´¢µ½ APP ÇøÓò */
+        case 0 :
             ptypeFirmwarePortSou = &ptypeFirmwareInfo->appOut;
             ptypeFirmwarePortTar = &ptypeFirmwareInfo->app;
-            break;
+        break;
 
-        /* æ›´æ–°å¹¶å­˜å‚¨ Bootloader åŒºåŸŸ */
-        case 1:
+        /* ¸üÐÂ¡¢´æ´¢µ½ Bootloader ÇøÓò */
+        case 1 : 
             ptypeFirmwarePortSou = &ptypeFirmwareInfo->bootloaderOut;
             ptypeFirmwarePortTar = &ptypeFirmwareInfo->bootloader;
-            break;
+        break;
 
-        /* æ›´æ–°å¹¶å­˜å‚¨ Boot åŒºåŸŸ */
-        case 2:
+        /* ¸üÐÂ¡¢´æ´¢µ½ Boot ÇøÓò */
+        case 2 : 
             ptypeFirmwarePortSou = &ptypeFirmwareInfo->bootOut;
             ptypeFirmwarePortTar = &ptypeFirmwareInfo->boot;
-            break;
+        break;
 
-        default: return 3;
+        default : return 3;
     }
 
-    /* æ‰§è¡Œæ›´æ–°å¹¶å­˜å‚¨ */
-    if ((cError = cFirmwareUpdate(ptypeFirmwarePortSou, &st_typeFirmwareOTA)) == 0)
+    /* ¸üÐÂ¡¢²¢´æ´¢²ÎÊý */
+    if((cError = cFirmwareUpdate(ptypeFirmwarePortSou, &st_typeFirmwareOTA)) == 0)
     {
         ptypeFirmwarePortSou->length = ptypeOTAFirmwarePortInfo->length;
         ptypeFirmwarePortSou->crcValue = ptypeOTAFirmwarePortInfo->crcValue;

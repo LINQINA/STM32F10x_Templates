@@ -4,7 +4,9 @@
 #include "string.h"
 
 #include "DevicesFlash.h"
+
 #include "DriverLogPrintf.h"
+
 #include "taskSystem.h"
 
 int8_t cFlashWriteDatas(uint32_t uiAddress, const void *pvBuff, int32_t iLength)
@@ -14,47 +16,47 @@ int8_t cFlashWriteDatas(uint32_t uiAddress, const void *pvBuff, int32_t iLength)
     uint16_t *pusDataAddress = (uint16_t *)pvBuff;
     int8_t cError = 0, cCnt = 0;
 
-    if ((iLength < 1) || ((uiAddress + iLength) > FLASH_USER_MAX_ADDR))
+    if((iLength < 1) || ((uiAddress + iLength) > FLASH_USER_MAX_ADDR))
     {
         cLogPrintfError("cFlashWriteDatas uiAddress: %08X iLength: %d >= FLASH_USER_MAX_ADDR.\r\n", uiAddress, iLength);
         return 1;
     }
 
-    /* Áî≥ËØ∑‰∫íÊñ•ÈîÅ */
+    /* º”ª•≥‚À¯ */
     xSemaphoreTakeRecursive(g_xChipFlashSemaphore, portMAX_DELAY);
 
-    /* Ëß£ÈîÅFlash */
+    /* Ω‚À¯Flash */
     HAL_FLASH_Unlock();
 
-    /* Ê∏ÖÈô§Ê†áÂøó‰Ωç */
+    /* «Â≥˝±Í÷æŒª */
     __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR);
 
-    while (iLength > 0)
+    while(iLength > 0)
     {
-        /* È°µÊì¶Èô§ */
-        if ((uiAddress % FLASH_USER_PAGE_SIZE) == 0)
+        /* “≥≤¡≥˝ */
+        if((uiAddress % FLASH_USER_PAGE_SIZE) == 0)
         {
             stEraseInit.TypeErase = FLASH_TYPEERASE_PAGES;
             stEraseInit.PageAddress = uiAddress;
             stEraseInit.NbPages = 1;
 
             cCnt = 8;
-            while ((HAL_FLASHEx_Erase(&stEraseInit, &uiPageError) != HAL_OK) && (--cCnt))
+            while((HAL_FLASHEx_Erase(&stEraseInit, &uiPageError) != HAL_OK) && (--cCnt))
             {
                 __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR);
             }
 
-            if (cCnt == 0)
+            if(cCnt == 0)
             {
                 cLogPrintfError("cFlashWriteDatas HAL_FLASHEx_Erase addr: 0x%08X error.\r\n", (unsigned int)uiAddress);
                 cError |= 2;
                 break;
             }
         }
-
-        /* ÂÜôÊï∞ÊçÆ */
-        if ((*(volatile uint16_t*)uiAddress != *pusDataAddress) &&
-            (HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, uiAddress, *pusDataAddress) != HAL_OK))
+        
+        /* –¥»Î∞Î◊÷ */
+        if((*(volatile uint16_t*)uiAddress != *pusDataAddress) &&
+           (HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, uiAddress, *pusDataAddress) != HAL_OK))
         {
             cLogPrintfError("cFlashWriteDatas HAL_FLASH_Program addr: 0x%08X error!\r\n", (unsigned int)uiAddress);
             cError |= 4;
@@ -76,7 +78,7 @@ int8_t cFlashWriteDatas(uint32_t uiAddress, const void *pvBuff, int32_t iLength)
 
 int8_t cFlashReadDatas(uint32_t uiAddress, void *pvBuff, int32_t iLength)
 {
-    if ((iLength < 1) || ((uiAddress + iLength) > FLASH_USER_MAX_ADDR))
+    if((iLength < 1) || ((uiAddress + iLength) > FLASH_USER_MAX_ADDR))
     {
         cLogPrintfError("cFlashReadDatas uiAddress: %08X iLength: %d >= FLASH_USER_MAX_ADDR.\r\n", uiAddress, iLength);
         return 1;

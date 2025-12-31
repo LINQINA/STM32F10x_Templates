@@ -8,49 +8,51 @@
 #include "DriverLogPrintf.h"
 #include "DriverBootloader.h"
 
-/* å›ºä»¶ä¿¡æ¯ */
+
+/* ¸÷¹Ì¼ş²ÎÊı */
 static FirmwareInfoType st_typeFirmwareInfo;
 
 #define FIRMWARE_BUFF_LENGTH 256
-/* åœ¨ Flash ä¸­è¯»å†™å›ºä»¶æ—¶ä½¿ç”¨çš„ç¼“å†²åŒº */
+/* ´ÓFlash¶ÁĞ´Êı¾İÓÃµÄ»º´æ */
 uint8_t st_ucFirmwareBuff[FIRMWARE_BUFF_LENGTH] = {0};
 
-/* ä¸€äº›å›ºå®šçš„é»˜è®¤å‚æ•° */
+/* Ò»Ğ©³ö³§µÄ¹Ì¶¨²ÎÊı */
 void vFirmwareFactoryInit(void)
 {
-    /* å†…éƒ¨ Flash å­˜å‚¨åœ°å€ */
+    /* ÄÚ²¿Flash·ÖÇøµØÖ· */
     st_typeFirmwareInfo.boot.address            = FLASH_BOOT_ADDR;
     st_typeFirmwareInfo.boot.registers          &= ~FIRMWARE_SOURCE_SPI_FLASH;
-
+    
     st_typeFirmwareInfo.bootloader.address      = FLASH_BOOTLOADER_ADDR;
     st_typeFirmwareInfo.bootloader.registers    &= ~FIRMWARE_SOURCE_SPI_FLASH;
-
+    
     st_typeFirmwareInfo.app.address             = FLASH_APP_ADDR;
     st_typeFirmwareInfo.app.registers           &= ~FIRMWARE_SOURCE_SPI_FLASH;
 
-    /* å¤–éƒ¨ Flash æ›´æ–°å­˜å‚¨åœ°å€ */
+
+    /* Íâ²¿Flash updata·ÖÇøµØÖ· */
     st_typeFirmwareInfo.bootOut.address         = SPI_FLASH_BOOT_BACK_ADDR;
     st_typeFirmwareInfo.bootOut.registers       |= FIRMWARE_SOURCE_SPI_FLASH;
-
+    
     st_typeFirmwareInfo.bootloaderOut.address   = SPI_FLASH_BOOTLOADER_BACK_ADDR;
     st_typeFirmwareInfo.bootloaderOut.registers |= FIRMWARE_SOURCE_SPI_FLASH;
-
+    
     st_typeFirmwareInfo.appOut.address          = SPI_FLASH_APP_BACK_ADDR;
     st_typeFirmwareInfo.appOut.registers        |= FIRMWARE_SOURCE_SPI_FLASH;
 }
 
-/* ä» Flash è¯»å–ä¿¡æ¯å¹¶åˆå§‹åŒ– */
+/* ´ÓFlash¶ÁÈ¡²ÎÊı£¬²¢³õÊ¼»¯ */
 void vFirmwareInit(void)
 {
     cFlashReadDatas(FLASH_SYSTEM_DATA_ADDR, &st_typeFirmwareInfo, sizeof(st_typeFirmwareInfo));
-    if (st_typeFirmwareInfo.crc == FIRMWARE_UNLOCK_CRC)
+    if(st_typeFirmwareInfo.crc == FIRMWARE_UNLOCK_CRC)
     {
         return;
     }
 
-    if (st_typeFirmwareInfo.length < 1024)
+    if(st_typeFirmwareInfo.length < 1024)
     {
-        if (st_typeFirmwareInfo.crc == usCRC16_MODBUS(NULL, &st_typeFirmwareInfo.boot, st_typeFirmwareInfo.length))
+        if(st_typeFirmwareInfo.crc == usCRC16_MODBUS(NULL, &st_typeFirmwareInfo.boot, st_typeFirmwareInfo.length))
         {
             return;
         }
@@ -59,7 +61,7 @@ void vFirmwareInit(void)
     vFirmwareFactoryInit();
 }
 
-/* å°†å›ºä»¶ä¿¡æ¯å†™å…¥ Flash */
+/* °Ñ²ÎÊıĞ´Èëµ½Flash */
 int8_t cFirmwareWrite(void)
 {
     int8_t cError = 0;
@@ -67,8 +69,8 @@ int8_t cFirmwareWrite(void)
     st_typeFirmwareInfo.length = sizeof(st_typeFirmwareInfo) - sizeof(uint32_t) * 4;
     st_typeFirmwareInfo.crc = usCRC16_MODBUS(NULL, &st_typeFirmwareInfo.boot, st_typeFirmwareInfo.length);
 
-    /* åˆ¤æ–­ä¸ä¸€è‡´æ‰è¿›è¡Œå†™å…¥ï¼Œé¿å…é‡å¤åˆ·æ–° */
-    if (memcmp((void *)FLASH_SYSTEM_DATA_ADDR, &st_typeFirmwareInfo, sizeof(st_typeFirmwareInfo)) != 0)
+    /* ÅĞ¶Ï²»Ò»ÖÂÔÙ½øĞĞĞ´Èë£¬±ÜÃâÖØ¸´Ë¢ĞÂ */
+    if(memcmp((void *)FLASH_SYSTEM_DATA_ADDR, &st_typeFirmwareInfo, sizeof(st_typeFirmwareInfo)) != 0)
     {
         cError = cFlashWriteDatas(FLASH_SYSTEM_DATA_ADDR, &st_typeFirmwareInfo, sizeof(st_typeFirmwareInfo));
     }
@@ -76,7 +78,7 @@ int8_t cFirmwareWrite(void)
     return cError;
 }
 
-/* æ¸…ç©ºå›ºä»¶ä¿¡æ¯å¹¶å†™å…¥ Flash */
+/* °Ñ²ÎÊıĞ´Èëµ½Flash */
 int8_t cFirmwareClear(void)
 {
     int8_t cError = 0;
@@ -101,26 +103,26 @@ uint32_t uiFirmwareCRCUpdate(FirmwarePortInfoType *pHandle)
     uint16_t usCRCValue = 0xFFFF;
     int8_t cError = 0;
 
-    if (pHandle == NULL)
+    if(pHandle == NULL)
         return 1;
 
-    if (pHandle->length > (1024 * 1024))
+    if(pHandle->length > (1024 * 1024))
         return 2;
 
     uiAdddrNow = pHandle->address;
     iLength = pHandle->length;
 
-    /* CRC è®¡ç®— */
-    while (iLength > 0)
+    /* CRC¼ÆËã */
+    while(iLength > 0)
     {
         iLengthNow = (iLength > sizeof(st_ucFirmwareBuff)) ? sizeof(st_ucFirmwareBuff) : iLength;
 
-        if (pHandle->registers & FIRMWARE_SOURCE_SPI_FLASH)
+        if(pHandle->registers & FIRMWARE_SOURCE_SPI_FLASH)
             cError |= cSPIFlashReadDatas(uiAdddrNow, st_ucFirmwareBuff, iLengthNow);
         else
             cError |= cFlashReadDatas(uiAdddrNow, st_ucFirmwareBuff, iLengthNow);
 
-        if (cError != 0)
+        if(cError != 0)
         {
             break;
         }
@@ -140,18 +142,18 @@ int8_t cFirmwareUpdate(FirmwarePortInfoType *pTarget, FirmwarePortInfoType *pSou
     int32_t iLength = 0, iLengthNow = 0;
     int8_t cError = 0;
 
-    if ((pSource == NULL) || (pTarget == NULL))
+    if((pSource == NULL) || (pTarget == NULL))
         return 1;
 
-    /* CRC æ ¡éªŒï¼Œåˆ¤æ–­æºå›ºä»¶æ˜¯å¦æœ‰æ•ˆ */
-    if ((uiCRCValue = uiFirmwareCRCUpdate(pSource)) != pSource->crcValue)
+    /* CRCĞ£Ñé£¬ÅĞ¶ÏÔ´¹Ì¼şÊÇ·ñÍêÕû */
+    if((uiCRCValue = uiFirmwareCRCUpdate(pSource)) != pSource->crcValue)
     {
         cLogPrintfNormal("Source CRC:%08X CRC:%08X error.\r\n", uiCRCValue, pSource->crcValue);
         return 3;
     }
 
-    /* CRC æ¯”è¾ƒï¼Œåˆ¤æ–­æ˜¯å¦å’Œç›®æ ‡å›ºä»¶ä¸€è‡´ï¼Œå¦‚æœä¸€è‡´ç›´æ¥é€€å‡ºè¡¨ç¤ºæˆåŠŸ */
-    if (uiFirmwareCRCUpdate(pTarget) == pSource->crcValue)
+    /* CRC±È½Ï£¬ÅĞ¶ÏÊÇ·ñÊÇÒ»ÑùµÄ¹Ì¼ş£¬Èç¹ûÊÇÒ»ÑùµÄ¹Ì¼ş£¬¾ÍÖ±½ÓÍË³ö±íÊ¾³É¹¦ */
+    if(uiFirmwareCRCUpdate(pTarget) == pSource->crcValue)
         return 0;
 
     uiSourceAdddrNow = pSource->address;
@@ -160,22 +162,22 @@ int8_t cFirmwareUpdate(FirmwarePortInfoType *pTarget, FirmwarePortInfoType *pSou
 
     cLogPrintfNormal("update source addr: 0x%08X, target addr: 0x%08X, file size: %d\r\n", pSource->address, pTarget->address, (int)(pSource->length));
 
-    /* å¼€å§‹æ›´æ–° */
-    while (iLength > 0)
+    /* Éı¼¶¸²¸Ç */
+    while(iLength > 0)
     {
         iLengthNow = (iLength > sizeof(st_ucFirmwareBuff)) ? sizeof(st_ucFirmwareBuff) : iLength;
 
-        if (pSource->registers & FIRMWARE_SOURCE_SPI_FLASH)
+        if(pSource->registers & FIRMWARE_SOURCE_SPI_FLASH)
             cError |= cSPIFlashReadDatas(uiSourceAdddrNow, st_ucFirmwareBuff, iLengthNow);
         else
             cError |= cFlashReadDatas(uiSourceAdddrNow, st_ucFirmwareBuff, iLengthNow);
 
-        if (pTarget->registers & FIRMWARE_SOURCE_SPI_FLASH)
+        if(pTarget->registers & FIRMWARE_SOURCE_SPI_FLASH)
             cError |= cSPIFlashWriteDatas(uiTargetAdddrNow, st_ucFirmwareBuff, iLengthNow);
         else
             cError |= cFlashWriteDatas(uiTargetAdddrNow, st_ucFirmwareBuff, iLengthNow);
 
-        if (cError != 0)
+        if(cError != 0)
         {
             return 4;
         }
@@ -187,18 +189,18 @@ int8_t cFirmwareUpdate(FirmwarePortInfoType *pTarget, FirmwarePortInfoType *pSou
         cLogPrintfNormal("update: %.2f%%\r\n", ((pSource->length - iLength) / (float)pSource->length) * 100.0f);
     }
 
-    /* CRC å†æ¯”è¾ƒï¼Œç¡®è®¤æ˜¯å¦æ›´æ–°æˆåŠŸ */
+    /* CRC±È½Ï£¬ÒÔÅĞ¶ÏÊÇ·ñÒÑ¾­¸üĞÂ³É¹¦ */
     pTarget->length = pSource->length;
-    if (uiFirmwareCRCUpdate(pTarget) != pSource->crcValue)
+    if(uiFirmwareCRCUpdate(pTarget) != pSource->crcValue)
     {
-        cLogPrintfNormal("å›ºä»¶æ›´æ–°åç›®æ ‡å›ºä»¶ CRC æ ¡éªŒå¤±è´¥.\r\n");
+        cLogPrintfNormal("¹Ì¼ş¿½±´ºó£¬Ğ£ÑéÄ¿±êÇøÓòĞÂ¹Ì¼şCRCÊ§°Ü.\r\n");
         return 5;
     }
 
     return 0;
 }
 
-/* è·³è½¬åˆ°æŒ‡å®šåœ°å€æ‰§è¡Œ */
+/* Ìø×ªµ½Ö¸¶¨Î»ÖÃÖ´ĞĞ */
 int8_t cFirmwareJumpTo(uint32_t uiAddress)
 {
     typedef void (*pFunction)(void);
@@ -206,20 +208,20 @@ int8_t cFirmwareJumpTo(uint32_t uiAddress)
     volatile static pFunction typeJumpToAPPlication = 0;
 
     uiHeapData = *(volatile uint32_t*)uiAddress;
-    /* åˆ¤æ–­ç”¨æˆ·ç¨‹åºæ˜¯å¦å­˜åœ¨ */
-    if ((SRAM_BASE < uiHeapData) && (uiHeapData <= (SRAM_BASE + 1024 * 64)))
+    /* Test if user code is programmed starting from address "ApplicationAddress" */
+    if((SRAM_BASE < uiHeapData) && (uiHeapData <= (SRAM_BASE + 1024 * 64)))
     {
-        /* è·³è½¬åˆ°åº”ç”¨ç¨‹åº */
+        /* Jump to application */
         uiJumpAddress = *(volatile uint32_t*) (uiAddress + 4);
         typeJumpToAPPlication = (pFunction) uiJumpAddress;
 
-        /* æ¢å¤ç³»ç»Ÿæ—¶é’Ÿåˆ°åˆå§‹çŠ¶æ€ */
+        /* »Ö¸´ÏµÍ³Ê±ÖÓµ½³õÊ¼»¯×´Ì¬ */
         HAL_DeInit();
 
-        /* è®¾ç½®ä¸»å †æ ˆæŒ‡é’ˆï¼ˆMSPï¼‰ */
+        /* ÉèÖÃÖ÷¶ÑÕ»Ö¸Õë£¨MSP£©*/
         __set_MSP(uiHeapData);
 
-        /* è·³è½¬åˆ°ç”¨æˆ·ç¨‹åº */
+        /* Ìø×ªµ½ÓÃ»§³ÌĞò */
         typeJumpToAPPlication();
     }
 
@@ -228,10 +230,10 @@ int8_t cFirmwareJumpTo(uint32_t uiAddress)
 
 int8_t cFirmwareJump(FirmwarePortInfoType *pHandle)
 {
-    /* CRC æ ¡éªŒï¼Œåˆ¤æ–­æºå›ºä»¶æ˜¯å¦æœ‰æ•ˆ */
-    if ((pHandle->crcValue == FIRMWARE_UNLOCK_CRC) || (uiFirmwareCRCUpdate(pHandle) == pHandle->crcValue))
+    /* CRCĞ£Ñé£¬ÅĞ¶ÏÔ´¹Ì¼şÊÇ·ñÍêÕû */
+    if((pHandle->crcValue == FIRMWARE_UNLOCK_CRC) || (uiFirmwareCRCUpdate(pHandle) == pHandle->crcValue))
     {
-        /* æœ‰æ•ˆåˆ™è·³è½¬åˆ°ç›®æ ‡åœ°å€æ‰§è¡Œ */
+        /* ³ÌĞòÌø×ªµ½Ä¿±êµØÖ·Ö´ĞĞ */
         cFirmwareJumpTo(pHandle->address);
     }
 
@@ -240,12 +242,12 @@ int8_t cFirmwareJump(FirmwarePortInfoType *pHandle)
 
 int8_t cFirmwareJumpBoot(void)
 {
-    if ((st_typeFirmwareInfo.boot.registers & FIRMWARE_UPDATE) == 0)
+    if((st_typeFirmwareInfo.boot.registers & FIRMWARE_UPDATE) == 0)
     {
-        /* å°è¯•ç›´æ¥è·³è½¬ */
+        /* ½øĞĞ³ÌĞòÌø×ª */
         cFirmwareJump(&st_typeFirmwareInfo.boot);
 
-        /* è·³è½¬å¤±è´¥åˆ™ç½®æ ‡å¿—ï¼Œè¡¨ç¤ºéœ€è¦æ›´æ–° */
+        /* ³ÌĞòÌø×ªÊ§°Ü£¬ÖÃÎ»¸üĞÂ±êÖ¾£¬ÒÔÌáÊ¾ºóĞø¸üĞÂ */
         st_typeFirmwareInfo.bootloaderOut.registers |= FIRMWARE_UPDATE;
     }
 
@@ -254,12 +256,12 @@ int8_t cFirmwareJumpBoot(void)
 
 int8_t cFirmwareJumpBootloader(void)
 {
-    if ((st_typeFirmwareInfo.bootloaderOut.registers & FIRMWARE_UPDATE) == 0)
+    if((st_typeFirmwareInfo.bootloaderOut.registers & FIRMWARE_UPDATE) == 0)
     {
-        /* å°è¯•ç›´æ¥è·³è½¬ */
+        /* ½øĞĞ³ÌĞòÌø×ª */
         cFirmwareJump(&st_typeFirmwareInfo.bootloader);
 
-        /* è·³è½¬å¤±è´¥åˆ™ç½®æ ‡å¿—ï¼Œè¡¨ç¤ºéœ€è¦æ›´æ–° */
+        /* ³ÌĞòÌø×ªÊ§°Ü£¬ÖÃÎ»¸üĞÂ±êÖ¾£¬ÒÔÌáÊ¾ºóĞø¸üĞÂ */
         st_typeFirmwareInfo.bootloaderOut.registers |= FIRMWARE_UPDATE;
     }
 
@@ -268,12 +270,12 @@ int8_t cFirmwareJumpBootloader(void)
 
 int8_t cFirmwareJumpAPP(void)
 {
-    if ((st_typeFirmwareInfo.appOut.registers & FIRMWARE_UPDATE) == 0)
+    if((st_typeFirmwareInfo.appOut.registers & FIRMWARE_UPDATE) == 0)
     {
-        /* å°è¯•ç›´æ¥è·³è½¬ */
+        /* ½øĞĞ³ÌĞòÌø×ª */
         cFirmwareJump(&st_typeFirmwareInfo.app);
 
-        /* è·³è½¬å¤±è´¥åˆ™ç½®æ ‡å¿—ï¼Œè¡¨ç¤ºéœ€è¦æ›´æ–° */
+        /* ³ÌĞòÌø×ªÊ§°Ü£¬ÖÃÎ»¸üĞÂ±êÖ¾£¬ÒÔÌáÊ¾ºóĞø¸üĞÂ */
         st_typeFirmwareInfo.appOut.registers |= FIRMWARE_UPDATE;
     }
 
@@ -285,16 +287,16 @@ int8_t cFirmwareUpdateBoot(void)
     uint32_t uiAddr = 0;
     int8_t cError = 1;
 
-    if ((st_typeFirmwareInfo.bootOut.registers & FIRMWARE_UPDATE) != 0)
+    if((st_typeFirmwareInfo.bootOut.registers & FIRMWARE_UPDATE) != 0)
     {
         st_typeFirmwareInfo.bootOut.registers &= ~FIRMWARE_UPDATE;
 
-        cLogPrintfNormal("\n\rBoot å¼€å§‹æ›´æ–°.\r\n");
+        cLogPrintfNormal("\n\rBoot ¸üĞÂÖĞ.\r\n");
 
-        /* ä»å¤–éƒ¨å­˜å‚¨æ›´æ–°åˆ° boot */
-        if (cFirmwareUpdate(&st_typeFirmwareInfo.boot, &st_typeFirmwareInfo.bootOut) == 0)
+        /* °ÑÍâ²¿±¸·İÇøÓò¸üĞÂµ½ boot */
+        if(cFirmwareUpdate(&st_typeFirmwareInfo.boot, &st_typeFirmwareInfo.bootOut) == 0)
         {
-            /* ä¿ç•™ç›®æ ‡å›ºä»¶åŸæœ¬çš„å­˜å‚¨åœ°å€ */
+            /* ¸üĞÂÄ¿±ê¹Ì¼ş²ÎÊı£¨°æ±¾ºÅ£© */
             uiAddr = st_typeFirmwareInfo.boot.address;
             st_typeFirmwareInfo.boot = st_typeFirmwareInfo.bootOut;
             st_typeFirmwareInfo.boot.address = uiAddr;
@@ -303,7 +305,7 @@ int8_t cFirmwareUpdateBoot(void)
             cError = 0;
         }
 
-        cLogPrintfNormal("Boot æ›´æ–°%s.\r\n", ((cError == 0) ? "æˆåŠŸ" : "å¤±è´¥"));
+        cLogPrintfNormal("Boot ¸üĞÂ%s.\r\n", ((cError == 0) ? "³É¹¦" : "Ê§°Ü"));
     }
 
     return cError;
@@ -314,16 +316,16 @@ int8_t cFirmwareUpdateBootloader(void)
     uint32_t uiAddr = 0;
     int8_t cError = 1;
 
-    if ((st_typeFirmwareInfo.bootloaderOut.registers & FIRMWARE_UPDATE) != 0)
+    if((st_typeFirmwareInfo.bootloaderOut.registers & FIRMWARE_UPDATE) != 0)
     {
         st_typeFirmwareInfo.bootloaderOut.registers &= ~FIRMWARE_UPDATE;
 
-        cLogPrintfNormal("\n\rBootloader å¼€å§‹æ›´æ–°.\r\n");
+        cLogPrintfNormal("\n\rBootloader ¸üĞÂÖĞ.\r\n");
 
-        /* ä»å¤–éƒ¨å­˜å‚¨æ›´æ–°åˆ° bootloader */
-        if (cFirmwareUpdate(&st_typeFirmwareInfo.bootloader, &st_typeFirmwareInfo.bootloaderOut) == 0)
+        /* °ÑÍâ²¿±¸·İÇøÓò¸üĞÂµ½ bootloader */
+        if(cFirmwareUpdate(&st_typeFirmwareInfo.bootloader, &st_typeFirmwareInfo.bootloaderOut) == 0)
         {
-            /* ä¿ç•™ç›®æ ‡å›ºä»¶åŸæœ¬çš„å­˜å‚¨åœ°å€ */
+            /* ¸üĞÂÄ¿±ê¹Ì¼ş²ÎÊı£¨°æ±¾ºÅ£© */
             uiAddr = st_typeFirmwareInfo.bootloader.address;
             st_typeFirmwareInfo.bootloader = st_typeFirmwareInfo.bootloaderOut;
             st_typeFirmwareInfo.bootloader.address = uiAddr;
@@ -332,7 +334,7 @@ int8_t cFirmwareUpdateBootloader(void)
             cError = 0;
         }
 
-        cLogPrintfNormal("Bootloader æ›´æ–°%s.\r\n", ((cError == 0) ? "æˆåŠŸ" : "å¤±è´¥"));
+        cLogPrintfNormal("Bootloader ¸üĞÂ%s.\r\n", ((cError == 0) ? "³É¹¦" : "Ê§°Ü"));
     }
 
     return cError;
@@ -343,16 +345,16 @@ int8_t cFirmwareUpdateAPP(void)
     uint32_t uiAddr = 0;
     int8_t cError = 1;
 
-    if ((st_typeFirmwareInfo.appOut.registers & FIRMWARE_UPDATE) != 0)
+    if((st_typeFirmwareInfo.appOut.registers & FIRMWARE_UPDATE) != 0)
     {
         st_typeFirmwareInfo.appOut.registers &= ~FIRMWARE_UPDATE;
 
-        cLogPrintfNormal("\n\rAPP å¼€å§‹æ›´æ–°.\r\n");
+        cLogPrintfNormal("\n\rAPP ¸üĞÂÖĞ.\r\n");
 
-        /* ä»å¤–éƒ¨å­˜å‚¨æ›´æ–°åˆ° app */
-        if (cFirmwareUpdate(&st_typeFirmwareInfo.app, &st_typeFirmwareInfo.appOut) == 0)
+        /* °ÑÍâ²¿±¸·İÇøÓò¸üĞÂµ½ app */
+        if(cFirmwareUpdate(&st_typeFirmwareInfo.app, &st_typeFirmwareInfo.appOut) == 0)
         {
-            /* ä¿ç•™ç›®æ ‡å›ºä»¶åŸæœ¬çš„å­˜å‚¨åœ°å€ */
+            /* ¸üĞÂÄ¿±ê¹Ì¼ş²ÎÊı£¨°æ±¾ºÅ£© */
             uiAddr = st_typeFirmwareInfo.app.address;
             st_typeFirmwareInfo.app = st_typeFirmwareInfo.appOut;
             st_typeFirmwareInfo.app.address = uiAddr;
@@ -361,7 +363,7 @@ int8_t cFirmwareUpdateAPP(void)
             cError = 0;
         }
 
-        cLogPrintfNormal("APP æ›´æ–°%s.\r\n", ((cError == 0) ? "æˆåŠŸ" : "å¤±è´¥"));
+        cLogPrintfNormal("APP ¸üĞÂ%s.\r\n", ((cError == 0) ? "³É¹¦" : "Ê§°Ü"));
     }
 
     return cError;

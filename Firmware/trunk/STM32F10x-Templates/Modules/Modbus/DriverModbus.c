@@ -24,44 +24,46 @@
 
 #include "version.h"
 
-/* Modbus 结构体 */
+
+/* 解析结构体，用来缓存 */
 static ModBusRtuTypeDef st_typeModBusRtuHandle;
 
-/* PD 端 Modbus 寄存器缓冲区 */
+/* PD 的Modbus寄存器 */
 uint16_t st_usRegisterBuff[MODBUS_PD_REGISTER_TOTAL_NUMBER] = {0};
 
-/* 刷新 Modbus 寄存器数据 */
+/* 刷新 Modbus 寄存器的值 */
 int8_t cModbusPDRegisterUpdate(void)
 {
     productType *ptypeProduct = ptypeProductGet();
-
+    
     char ucSoftware[16] = "00.00.01";
     char ucHardware[16] = "00.00.01";
     char ucUid[16] = "00.00.01";
-
+    
     /* Version */
     memcpy(&st_usRegisterBuff[Modbus_Register_Addr_Software], ptypeProduct->versionBuff, 8);
     memcpy(&st_usRegisterBuff[Modbus_Register_Addr_Hardware], ucHardware, 16);
     /* UID */
     memcpy(&st_usRegisterBuff[Modbus_Register_Addr_UID], ucUid, 32);
 
-    /* 通道A */
+
+    /* 通道A参数 */
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Voltage] = 1;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Current] = 2;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_ActivePower] = 3;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_PhasePosition] = 4;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Frequency] = 5;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_ElecQuantity] = 6;
-
-    /* 通道B */
+    
+    /* 通道B参数 */
     st_usRegisterBuff[Modbus_Register_Addr_ChannelB_Voltage] = 1;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelB_Current] = 2;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelB_ActivePower] = 3;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelB_PhasePosition] = 4;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelB_Frequency] = 5;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelB_ElecQuantity] = 6;
-
-    /* HLW8110 数据 */
+    
+    /* HLW8110参数 */
     st_usRegisterBuff[Modbus_Register_Addr_HLW8110_Voltage] = 1;
     st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelA_Current] = 2;
     st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelA_ActivePower] = 3;
@@ -74,32 +76,34 @@ int8_t cModbusPDRegisterUpdate(void)
     st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelB_ElecQuantity] = 10;
     st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelB_ElecQuantity_Backup] = 11;
     st_usRegisterBuff[Modbus_Register_Addr_HLW8110_Frequency] = 12;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_CurrentChannel] = 0; // 0 表示通道A
+    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_CurrentChannel] = 0; //0代表通道A
 
     return 0;
 }
 
+/* 生效 Modbus 寄存器的值 */
 int8_t cModbusPDRegisterEffect(uint16_t usRegisterAddr, uint16_t usValue)
 {
     int8_t cError = 0;
-
+    
     switch(usRegisterAddr)
     {
-        case Modbus_Register_Addr_Firmware_State:
+        case Modbus_Register_Addr_Firmware_State        :
             if(usValue == 1)
             {
                 cOTAStateSet(OTA_STATE_START);
             }
         break;
+    
     }
 
     return cError;
 }
 
-/* Modbus 发送数据 */
+/* Modbus发送数据 */
 int8_t cModbusSendDatas(uint32_t uiChannel, uint16_t usDeviceAddr, void *pvBuff, int32_t iLength, int32_t iFrontTime)
 {
-    /* 申请信号量 */
+    /* 获取递归互斥信号量 */
     switch(uiChannel)
     {
         case (uint32_t)UART_LOG               : xSemaphoreTakeRecursive(g_xUartLogSemaphore, portMAX_DELAY); break;
@@ -108,7 +112,7 @@ int8_t cModbusSendDatas(uint32_t uiChannel, uint16_t usDeviceAddr, void *pvBuff,
         default : return 1;
     }
 
-    /* 某些设备发送前需要延时 */
+    /* 有些设备，它需要总线保持一段时间的空闲电平，才能接收到数据 */
     vRtosDelayMs(iFrontTime);
 
     /* 发送数据 */
@@ -120,7 +124,7 @@ int8_t cModbusSendDatas(uint32_t uiChannel, uint16_t usDeviceAddr, void *pvBuff,
         default : break;
     }
 
-    /* 释放信号量 */
+    /* 释放递归互斥信号量 */
     switch(uiChannel)
     {
         case (uint32_t)UART_LOG               : xSemaphoreGiveRecursive(g_xUartLogSemaphore); break;
@@ -165,7 +169,7 @@ int32_t iModbusReceiveLengthGet(uint32_t uiChannel)
     }
 }
 
-/* 接收缓冲区清除 */
+/* 清空 接收缓存 */
 int8_t cModbusReceiveClear(uint32_t uiChannel)
 {
     switch(uiChannel)
@@ -177,7 +181,7 @@ int8_t cModbusReceiveClear(uint32_t uiChannel)
     }
 }
 
-/* 写多个寄存器 */
+/* 设置 多个 寄存器的值 */
 int8_t cModbusDatasSet(uint32_t uiChannel, uint16_t usDeviceAddr, uint16_t usRegisterAddr, uint16_t *pusRegisters, int32_t iLength, ModBusRtuTypeDef *ptypeModbusReply, int32_t iTimeOut, int32_t iFrontTime, int32_t iBehindTime)
 {
     SoftTimerTypeDef typeSoftTimerTimeOut = {0};
@@ -190,52 +194,55 @@ int8_t cModbusDatasSet(uint32_t uiChannel, uint16_t usDeviceAddr, uint16_t usReg
     if((iLength < 1) || (uiChannel != (uint32_t)UART_BUS))
         return 2;
 
-    /* 申请信号量 */
+    /* 获取递归互斥信号量 */
     xSemaphoreTakeRecursive(g_xRS485BusSemaphore, portMAX_DELAY);
 
-    /* 清除接收缓冲区 */
+    /* 清空 Modbus 接收缓存 */
     cModbusReceiveClear(uiChannel);
 
-    /* 打包 Modbus 请求帧 */
+    /* 打包成 Modbus 格式 */
     cModbusPackRTU_10(usDeviceAddr, usRegisterAddr, iLength, pusRegisters, (uint8_t *)ptypeModbusReply);
 
-    /* 某些设备需要发送前延时；发送 Modbus 请求 */
+    /* 有些从设备程序有问题，在总线上帧间隔至少需要x ms才能稳定接收到数据 */
+    /* 通过 Modbus 总线发送打包好的数据 */
     cModbusSendDatas(uiChannel, usDeviceAddr, ptypeModbusReply, 9 + (iLength * 2), iFrontTime);
 
-    /* 设置超时 */
+    /* 超时设置 */
     cSoftTimerSetMs(&typeSoftTimerTimeOut, iTimeOut, softTimerOpen);
 
-    /* 清空接收数据结构 */
+    /* 清空以前遗留数据 */
     memset(ptypeModbusReply, 0, sizeof(ModBusRtuTypeDef));
-    /* 循环等待接收数据 */
+    /* 等待接收数据 */
     while((cError = cModbusReceiveDatas(uiChannel, ptypeModbusReply, iLengthRead)) != 0)
     {
-        /* 超时判断 */
+        /* 超时检查 */
         if(enumSoftTimerGetState(&typeSoftTimerTimeOut) == softTimerOver)
         {
             break;
         }
 
-        /* 轮询等待，避免长阻塞占用MCU */
+        /* 需要添加操作系统 延时函数，以释放MCU运算资源的占有 */
         vRtosDelayMs(2);
     }
 
-    /* 发送后延时 */
+
+    /* 有些从设备回复数据后，会继续占用总线一段时间 */
     vRtosDelayMs(iBehindTime);
 
-    /* 处理接收数据 */
+
+    /* 设定时间内，收到预期长度的数据 */
     if(cError == 0)
     {
-        /* 继续读取FIFO剩余数据 */
+        /* 再获取全部数据 */
         iLengthRead += iModbusReceiveAllDatas(uiChannel, (((uint8_t *)ptypeModbusReply) + iLengthRead), sizeof(ptypeModbusReply->data) - iLengthRead);
 
-        /* 解析应答 */
+        /* 数据解析成功 */
         if(enumModbusReplyUnpackDatas(ptypeModbusReply, ptypeModbusReply, iLengthRead) == MODBUS_UNPACK_SUCCEED)
         {
-            /* 异常应答 */
+            /* 非错误码回复 */
             if((ptypeModbusReply->func & 0x80) != 0)
             {
-                /* 异常码 */
+                /* 错误码 */
                 cError = ptypeModbusReply->data[0];
             }
         }
@@ -245,13 +252,13 @@ int8_t cModbusDatasSet(uint32_t uiChannel, uint16_t usDeviceAddr, uint16_t usReg
         }
     }
 
-    /* 释放信号量 */
+    /* 释放递归互斥信号量 */
     xSemaphoreGiveRecursive(g_xRS485BusSemaphore);
 
     return cError;
 }
 
-/* 读多个寄存器 */
+/* 获取 多个 寄存器的值 */
 int8_t cModbusDatasGet(uint32_t uiChannel, uint16_t usDeviceAddr, uint16_t usRegisterAddr, uint16_t *pusRegisters, int32_t iLength, ModBusRtuTypeDef *ptypeModbusReply, int32_t iTimeOut, int32_t iFrontTime, int32_t iBehindTime)
 {
     SoftTimerTypeDef typeSoftTimerTimeOut = {0};
@@ -264,56 +271,60 @@ int8_t cModbusDatasGet(uint32_t uiChannel, uint16_t usDeviceAddr, uint16_t usReg
     if((iLength < 1) || (uiChannel != (uint32_t)UART_BUS))
         return 2;
 
-    /* 申请信号量 */
+    /* 获取递归互斥信号量 */
     xSemaphoreTakeRecursive(g_xRS485BusSemaphore, portMAX_DELAY);
 
-    /* 清除 Modbus 接收缓冲 */
+    /* 清空 Modbus 接收缓存 */
     cModbusReceiveClear(uiChannel);
 
-    /* 打包 Modbus 读请求 */
+    /* 打包成 Modbus 格式 */
     cModbusPackRTU_03(usDeviceAddr, usRegisterAddr, iLength, (uint8_t *)ptypeModbusReply);
 
-    /* 某些设备发送前需要延时；发送 Modbus 请求 */
+    /* 有些从设备程序有问题，在总线上帧间隔至少需要x ms才能稳定接收到数据 */
+    /* 通过 Modbus 总线发送打包好的数据 */
     cModbusSendDatas(uiChannel, usDeviceAddr, ptypeModbusReply, 8, iFrontTime);
 
     iLengthRead = 3 + iLength * 2 + 2;
 
-    /* 设置超时 */
+    /* 超时设置 */
     cSoftTimerSetMs(&typeSoftTimerTimeOut, iTimeOut + iLengthRead * 1.5f, softTimerOpen);
 
-    /* 置空接收结构体 */
+    /* 清空以前遗留数据 */
     memset(ptypeModbusReply, 0, sizeof(ModBusRtuTypeDef));
-    /* 期望读取：1字节地址 + 1字节功能码 + 1字节数据长度 + n字节数据 + 2字节CRC */
+    /* 等待接收数据（长度：1字节设备地址 + 1字节功能码 + 1字节的字节长度 + n个寄存器的值 + 2字节CRC） */
     while((cError = cModbusReceiveDatas(uiChannel, ptypeModbusReply, iLengthRead)) != 0)
     {
-        /* 超时判断 */
+        /* 超时检查 */
         if(enumSoftTimerGetState(&typeSoftTimerTimeOut) == softTimerOver)
         {
             break;
         }
 
-        /* 轮询等待，避免长阻塞占用MCU */
+        /* 需要添加操作系统 延时函数，以释放MCU运算资源的占有 */
         vRtosDelayMs(2);
     }
 
-    /* 某些设备请求后需要后延时 */
+
+    /* 有些从设备回复数据后，会继续占用总线一段时间 */
     vRtosDelayMs(iBehindTime);
 
-    /* 处理接收数据 */
+
+    /* 设定时间内，收到预期长度的数据 */
     if(cError == 0)
     {
+        /* 再获取全部数据 */
         iLengthRead += iModbusReceiveAllDatas(uiChannel, ((uint8_t *)ptypeModbusReply) + iLengthRead, sizeof(ptypeModbusReply->data) - iLengthRead);
 
-        /* 解析应答 */
+        /* 数据解析成功 */
         if(enumModbusReplyUnpackDatas(ptypeModbusReply, ptypeModbusReply, iLengthRead) == MODBUS_UNPACK_SUCCEED)
         {
-            /* 异常应答 */
+            /* 误码回复 */
             if((ptypeModbusReply->func & 0x80) != 0)
             {
-                /* 异常码 */
+                /* 错误码 */
                 cError = ptypeModbusReply->data[0];
             }
-            /* 正常应答 */
+            /* 非误码回复 */
             else
             {
                 memcpy(pusRegisters, &(ptypeModbusReply->data[1]), iLength * 2);
@@ -325,13 +336,13 @@ int8_t cModbusDatasGet(uint32_t uiChannel, uint16_t usDeviceAddr, uint16_t usReg
         }
     }
 
-    /* 释放信号量 */
+    /* 释放递归互斥信号量 */
     xSemaphoreGiveRecursive(g_xRS485BusSemaphore);
 
     return cError;
 }
 
-/* 透传 BUS 请求 */
+/* 透传数据到 BUS 总线 */
 int8_t cModbusSeriaNet(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
 {
     SoftTimerTypeDef typeSoftTimerTimeOut = {0};
@@ -339,16 +350,16 @@ int8_t cModbusSeriaNet(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
     uint16_t usRegisterNumber = 0;
     int8_t cError = 0;
 
-    /* 申请信号量 */
+    /* 获取递归互斥信号量 */
     xSemaphoreTakeRecursive(g_xRS485BusSemaphore, portMAX_DELAY);
 
-    /* 清除 Modbus 接收缓冲 */
+    /* 清空 Modbus 接收缓存 */
     cModbusReceiveClear((uint32_t)UART_BUS);
 
-    /* 发送 Modbus 请求帧 */
+    /* 通过 Modbus 总线发送打包好的数据 */
     cModbusSendDatas((uint32_t)UART_BUS, ptypeHandle->slaveAddress, ptypeHandle, ptypeHandle->length + 2, iTimeHoldup);
 
-    /* 判断功能码以计算期望长度（BMS/INV等设备） */
+    /* 判断透传后，会接收到BMS、INV的数据长度 */
     switch(ptypeHandle->func)
     {
         case MODBUS_CODE_0x03 :
@@ -362,41 +373,41 @@ int8_t cModbusSeriaNet(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
         default : iLengthRead = 0; break;
     }
 
-    /* 超时估计：9600 等较慢设备保留 100ms 余量 */
+    /* 计算接收时间（波特率9600），至少给其它接收设备100ms的响应时间 */
     iTimeHoldup = 100 + iLengthRead * 1.5f;
 
-    /* 设置超时 */
+    /* 超时设置 */
     cSoftTimerSetMs(&typeSoftTimerTimeOut, iTimeHoldup, softTimerOpen);
 
-    /* 循环接收 */
+    /* 等待接收数据 */
     while((cError = cModbusReceiveDatas((uint32_t)UART_BUS, ptypeHandle, iLengthRead)) != 0)
     {
-        /* 超时判断 */
+        /* 超时检查 */
         if(enumSoftTimerGetState(&typeSoftTimerTimeOut) == softTimerOver)
         {
             break;
         }
 
-        /* 轮询等待，避免长阻塞占用MCU */
+        /* 需要添加操作系统 延时函数，以释放MCU运算资源的占有 */
         vRtosDelayMs(2);
     }
 
-    /* 根据接收是否成功设置长度 */
+    /* 没有接收到预期长度的数据，可能是回复了错误码 */
     iLengthRead = (cError == 0) ? iLengthRead : 0;
 
-    /* 继续从FIFO读满剩余数据 */
+    /* 如果接收FIFO内还有数据，需要把数据也全部读取出来 */
     iLengthRead += iModbusReceiveAllDatas((uint32_t)UART_BUS, ((uint8_t *)ptypeHandle) + iLengthRead, sizeof(ptypeHandle->data) - iLengthRead);
 
-    /* 回显到上行口 */
+    /* 向上位机透传 */
     cModbusSendDatas(uiChannel, 0, ptypeHandle, iLengthRead, 0);
 
-    /* 释放信号量 */
+    /* 释放递归互斥信号量 */
     xSemaphoreGiveRecursive(g_xRS485BusSemaphore);
 
     return cError;
 }
 
-/* Modbus 消息解析 */
+/* 解析给 本机 的数据 */
 int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
 {
 //    LogConfigType *ptypeLogConfigInfo = ptypeLogConfigInfoGet();
@@ -408,32 +419,32 @@ int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
     if(ptypeHandle == NULL)
         return 1;
 
-    /* 解析寄存器起始地址 */
+    /* 寄存器起始地址 */
     usAddr = ptypeHandle->data[0];
     usAddr = (usAddr << 8) | ptypeHandle->data[1];
 
-    /* 解析寄存器数量/值 */
+    /* 寄存器的数量，或者寄存器的值 */
     usValue = ptypeHandle->data[2];
     usValue = (usValue << 8) | ptypeHandle->data[3];
 
-    /* 有效地址范围判断 */
+    /* 有效地址范围检测 */
     usAddrStop = (ptypeHandle->func == MODBUS_CODE_0x06) ? usAddr : (usAddr + usValue);
     if((usAddr >= MODBUS_PD_REGISTER_BASE_ADDR) && (usAddrStop < (MODBUS_PD_REGISTER_BASE_ADDR + MODBUS_PD_REGISTER_TOTAL_NUMBER)))
     {
-        /* 计算相对地址 */
+        /* 相对地址 */
         usAddrRelative = usAddr - MODBUS_PD_REGISTER_BASE_ADDR;
 
         switch(ptypeHandle->func)
         {
             case MODBUS_CODE_0x03:
-//                /* log 路径/文件相关寄存器读取（若有） */
+//                /* log路径、数据帧寄存器，需要特殊处理 */
 //                if((usAddr == Modbus_Register_Addr_File_Size)   ||
 //                   (usAddr == Modbus_Register_Addr_File_Path)   ||
 //                   (usAddr == Modbus_Register_Addr_File_Data))
 //                {
 //                    cModbusLogRegisterRead(usAddr, usValue);
 //                }
-//                /* 默认：读取PD寄存器 */
+//                /* 普通寄存器 */
 //                else
                 {
                     cModbusPDRegisterUpdate();
@@ -447,7 +458,7 @@ int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
             case MODBUS_CODE_0x06:
                 st_usRegisterBuff[usAddrRelative] = usValue;
 
-                /* 生效：写单寄存器的副作用处理 */
+                /* 生效对应寄存器的动作 */
                 cError = cModbusPDRegisterEffect(usAddrRelative, usValue);
 
                 cModbusPackReplyRTU_06(ptypeHandle->slaveAddress, usAddrRelative, usValue, (uint8_t *)ptypeHandle);
@@ -455,17 +466,17 @@ int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
                 break;
 
             case MODBUS_CODE_0x10:
-                /* OTA 固件块写入解析 */
+                /* OTA 固件分包帧，需要特殊处理 */
                 if(usAddr == Modbus_Register_Addr_Firmware_Pack)
                 {
                     cError = cOTAModbusPackAnalysis(ptypeHandle);
                 }
-//                /* Log 数据写入（若启用） */
+//                /* Log 帧，需要特殊处理 */
 //                else if(usAddr == Modbus_Register_Addr_File_Path)
 //                {
-//                    cError = cModbusLogRegisterWrite(usAddr, &ptypeHandledata[5], usValue);
+//                    cError = cModbusLogRegisterWrite(usAddr, &ptypeHandle->data[5], usValue);
 //                }
-//                /* 默认：写入寄存器数组 */
+//                /* 标准帧 */
                 else
                 {
                     pucBuff = &ptypeHandle->data[5];
@@ -475,7 +486,7 @@ int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
                         st_usRegisterBuff[usAddrRelative] = *pucBuff++;
                         st_usRegisterBuff[usAddrRelative] = (st_usRegisterBuff[usAddrRelative] << 8) | *pucBuff++;
 
-                        /* 生效：写寄存器后的副作用处理 */
+                        /* 生效对应寄存器的动作 */
                         cModbusPDRegisterEffect(usAddrRelative, st_usRegisterBuff[usAddrRelative]);
 
                         usAddrRelative++;
@@ -495,7 +506,7 @@ int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
                 break;
 
             default :
-                /* 不支持的功能码 */
+                /* 返回错误码 */
                 cModbusPackReplyRTU_ErrorCode(ptypeHandle->slaveAddress, ptypeHandle->func, 1, (uint8_t *)ptypeHandle);
                 iLength = 5;
                 break;
@@ -503,25 +514,25 @@ int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
     }
     else
     {
-        /* 访问寄存器超出允许范围 */
+        /* 返回错误码（寄存器地址超出范围） */
         cModbusPackReplyRTU_ErrorCode(ptypeHandle->slaveAddress, ptypeHandle->func, 1, (uint8_t *)ptypeHandle);
         iLength = 5;
     }
 
-    /* 发送回复帧 */
+    /* 回复上位机 */
     cModbusSendDatas(uiChannel, 0, ptypeHandle, iLength, 0);
 
     return cError;
 }
 
-/* 解包 Modbus 数据 */
+/* 解包收到的 Modbus 数据 */
 int8_t cModbusUnpack(uint32_t uiChannel, uint8_t *pucBuff, int32_t iLength)
 {
 //    SensorInfoType *ptypeSensorInfo = ptypeSensorInfoGet();
     uint32_t uiTime = (uint32_t)(lTimeGetStamp() / 1000ll);
     int8_t cError = 1;
 
-    /* 超过空闲时间重置状态机 */
+    /* 空闲超时，重新开启解析 */
     if((uiTime - st_typeModBusRtuHandle.timeIdle) > 500)
     {
         st_typeModBusRtuHandle.state = MODBUS_UNPACK_ADDRESS;
@@ -531,29 +542,29 @@ int8_t cModbusUnpack(uint32_t uiChannel, uint8_t *pucBuff, int32_t iLength)
 
     while((iLength--) > 0)
     {
-        /* 判断解包状态 */
+        /* 判断是否解析成功 */
         if(enumModbusUnpack(&st_typeModBusRtuHandle, *pucBuff++) == MODBUS_UNPACK_SUCCEED)
         {
-            /* PD 端请求：本机处理 */
+            /* 发给 本机 的数据（解析） */
             if(st_typeModBusRtuHandle.slaveAddress == MODBUS_ADDRESS_PD)
             {
                 cError = cModbusMessageAnalysis(uiChannel, &st_typeModBusRtuHandle);
             }
-            /* 其它从设备：透传到总线 */
+            /* 发给 其它设备 的数据（透传） */
             else
             {
-//                /* 若处于 OTA 状态则不透传 */
-//                if((ptypeSensorInfoptypeSystemInfostate & SYSTEM_ACTION_OTA) != 0)
+//                /* OTA时，不进行数据透传 */
+//                if((ptypeSensorInfo->ptypeSystemInfo->state & SYSTEM_ACTION_OTA) != 0)
 //                    break;
-//
-//                /* 若为 INV0 等设备，复位网络空闲定时器 */
+
+//                /* 跟逆变器通信时，必须要先开启逆变器的使能 */
 //                if((st_typeModBusRtuHandle.slaveAddress == MODBUS_ADDRESS_INV0) )
 //                {
-//                    /* 重置网络空闲软定时器 */
+//                    /* 通信空闲超时、重新计时 */
 //                    cSoftTimerReset(&g_typeSoftTimerINVNetworkIdle);
 //                }
 
-                /* 将收到的 Modbus 请求透传到总线设备 */
+                /* 透传至其它的Modbus设备，走标准Modbus协议就行 */
                 cError = cModbusSeriaNet(uiChannel, &st_typeModBusRtuHandle);
             }
         }

@@ -25,10 +25,13 @@ int main(void)
 
     HAL_Init();
 
+    /* 使能AFIO */
     __HAL_RCC_AFIO_CLK_ENABLE();
 
+    /* 中断优先级分组改为4 */
     HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-
+    
+    /* 初始化各时钟频率 */
     vSystemClockInit();
     cTimer6Init();
     vUart1Init();
@@ -40,16 +43,18 @@ int main(void)
     cLogPrintfSystem("Bootloader software date: %s\r\n", pcVersionBootloaderDateGet());
     cLogPrintfSystem("APP software version: %s\r\n", pcVersionAPPSoftGet());
     cLogPrintfSystem("APP software date: %s\r\n\n", pcVersionAPPDateGet());
-
-    cLogPrintfSystem("SYSCLK = %u Hz\r\n", HAL_RCC_GetSysClockFreq());
-    cLogPrintfSystem("HCLK   = %u Hz\r\n", HAL_RCC_GetHCLKFreq());
-    cLogPrintfSystem("PCLK1  = %u Hz\r\n", HAL_RCC_GetPCLK1Freq());
-    cLogPrintfSystem("PCLK2  = %u Hz\r\n", HAL_RCC_GetPCLK2Freq());
-    cLogPrintfSystem("SystemCoreClock  = %u Hz\r\n", SystemCoreClock);
-
+    
+    cLogPrintfSystem("SYSCLK = %u Hz\r\n", HAL_RCC_GetSysClockFreq());    /* 系统时钟频率 */
+    cLogPrintfSystem("HCLK   = %u Hz\r\n", HAL_RCC_GetHCLKFreq());        /* AHB 总线时钟（CPU 核心时钟） */
+    cLogPrintfSystem("PCLK1  = %u Hz\r\n", HAL_RCC_GetPCLK1Freq());       /* APB1 总线时钟 */
+    cLogPrintfSystem("PCLK2  = %u Hz\r\n", HAL_RCC_GetPCLK2Freq());       /* APB2 总线时钟 */
+    cLogPrintfSystem("SystemCoreClock  = %u Hz\r\n", SystemCoreClock);    /* APB2 总线时钟 */
+    
+    /* 创建第1个用户任务 */
     xTaskCreate(vTaskSystemInit, "System Init", 512, NULL, configMAX_PRIORITIES - 1, &g_TaskSystemInitHand);
-
+    /* 启动 RTOS 运行 */
     vTaskStartScheduler();
 
     while(1);
+
 }

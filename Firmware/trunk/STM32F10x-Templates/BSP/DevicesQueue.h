@@ -6,7 +6,7 @@
 
 #define QUEUE_UART0_READ_LENGTH     (512)
 #define QUEUE_UART1_READ_LENGTH     (512)
-#define QUEUE_CAN_HOST_READ_LENGTH  (512)
+#define QUEUE_CAN_HOST_READ_LENGTH  (512) 
 
 
 /* 使x对n字节对齐 */
@@ -21,7 +21,7 @@ typedef enum {
     queueFull,
 }enumQueueState;
 
-typedef enum { 
+typedef enum {
     queueModeNormal = 0,    /* 覆盖模式 */
     queueModeLock,          /* 锁定模式 */
 }enumQueueMode;
@@ -50,8 +50,8 @@ extern QueueType g_TypeQueueUart1Read;
 extern QueueType g_TypeQueueUart2Read;
 /* USART3 */
 extern QueueType g_TypeQueueUart3Read;
-/* Can */
-extern QueueType g_TypeQueueCanHostRead;
+/* Can */ 
+extern QueueType g_TypeQueueCanHostRead; 
 
 /* 透传 */
 extern QueueType g_TypeQueueSeriaNet;

@@ -37,7 +37,7 @@ int8_t cTimer6Init(void)
 
     HAL_TIM_Base_Init(&g_timer6_initpara);
 
-    HAL_TIM_Base_Start_IT(&g_timer6_initpara);
+    HAL_TIM_Base_Start_IT(&g_timer6_initpara); 
     HAL_NVIC_SetPriority(TIM6_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(TIM6_IRQn);
 
@@ -57,7 +57,7 @@ int8_t cTimer7Init(void)
 
     HAL_TIM_Base_Init(&g_timer7_initpara);
 
-    HAL_TIM_Base_Start_IT(&g_timer7_initpara);
+    HAL_TIM_Base_Start_IT(&g_timer7_initpara); 
     HAL_NVIC_SetPriority(TIM7_IRQn, 3, 0);
     HAL_NVIC_EnableIRQ(TIM7_IRQn);
 

@@ -1,71 +1,72 @@
 #ifndef _DriverModbus_H_
 #define _DriverModbus_H_
 
-/* PD ç«¯ Modbus å¯„å­˜å™¨åŸºåœ°å€ */
+/* PD µÄModbus¼Ä´æÆ÷»ùµØÖ· */
 #define MODBUS_PD_REGISTER_BASE_ADDR    0x0000
-/* PD ç«¯ Modbus å¯„å­˜å™¨æ€»æ•° */
+/* PD µÄModbus¼Ä´æÆ÷ÊıÁ¿ */
 #define MODBUS_PD_REGISTER_TOTAL_NUMBER 2048
 
 #include "DevicesModbus.h"
 
 typedef enum {
-    /* ç³»ç»Ÿä¿¡æ¯ */
-    Modbus_Register_Addr_Software   = 0x0000,   /* è½¯ä»¶ç‰ˆæœ¬ */
-    Modbus_Register_Addr_Hardware   = 0x0008,   /* ç¡¬ä»¶ç‰ˆæœ¬ */
-    Modbus_Register_Addr_UID        = 0x0010,   /* è®¾å¤‡UID */
+       /* ÏµÍ³ĞÅÏ¢ */
+    Modbus_Register_Addr_Software   = 0x0000,   /* Èí¼ş°æ±¾ */
+    Modbus_Register_Addr_Hardware   = 0x0008,   /* Ó²¼ş°æ±¾ */
+    Modbus_Register_Addr_UID        = 0x0010,   /* Éè±¸UID */
 
-    /* å›ºä»¶ */
-    Modbus_Register_Addr_Firmware_Software          = 0x0040,   /* å›ºä»¶è½¯ä»¶ç‰ˆæœ¬ */
-    Modbus_Register_Addr_Firmware_Hardware          = 0x0048,   /* å›ºä»¶ç¡¬ä»¶ç‰ˆæœ¬ */
-    Modbus_Register_Addr_Firmware_Length            = 0x0050,   /* å›ºä»¶é•¿åº¦ */
-    Modbus_Register_Addr_Firmware_CRC               = 0x0052,   /* å›ºä»¶CRCæ ¡éªŒå€¼ */
-    Modbus_Register_Addr_Firmware_State             = 0x0054,   /* å›ºä»¶çƒ§å†™çŠ¶æ€ */
-    Modbus_Register_Addr_Firmware_Pack              = 0x0055,   /* å›ºä»¶çƒ§å†™æ•°æ®åŒ… */
+    /* Éı¼¶ */
+    Modbus_Register_Addr_Firmware_Software          = 0x0040,   /* Éı¼¶¹Ì¼şµÄÈí¼ş°æ±¾ */
+    Modbus_Register_Addr_Firmware_Hardware          = 0x0048,   /* Éı¼¶¹Ì¼şµÄÓ²¼ş°æ±¾ */
+    Modbus_Register_Addr_Firmware_Length            = 0x0050,   /* Éı¼¶¹Ì¼şµÄ³¤¶È */
+    Modbus_Register_Addr_Firmware_CRC               = 0x0052,   /* Éı¼¶¹Ì¼şµÄĞ£ÑéÖµ */
+    Modbus_Register_Addr_Firmware_State             = 0x0054,   /* Éı¼¶¹Ì¼şÊ±µÄ×´Ì¬ */
+    Modbus_Register_Addr_Firmware_Pack              = 0x0055,   /* Éı¼¶¹Ì¼şÊ±µÄÊı¾İ´ò°ü */
 
-    /* é€šé“å‚æ•°A */
-    Modbus_Register_Addr_ChannelA_SystemStatus   = 0x0080,  /* é€šé“Aç³»ç»ŸçŠ¶æ€ */
-    Modbus_Register_Addr_ChannelA_ErrorCode      = 0x0081,  /* é€šé“Aé”™è¯¯ç  */
-    Modbus_Register_Addr_ChannelA_Temperature    = 0x0082,  /* é€šé“Aæ¸©åº¦ */
-    Modbus_Register_Addr_ChannelA_Switch         = 0x0083,  /* é€šé“Aå¼€å…³çŠ¶æ€ */
-    Modbus_Register_Addr_ChannelA_Voltage        = 0x0084,  /* é€šé“Aç”µå‹ */
-    Modbus_Register_Addr_ChannelA_Current        = 0x0085,  /* é€šé“Aç”µæµ */
-    Modbus_Register_Addr_ChannelA_ActivePower    = 0x0086,  /* é€šé“Aæœ‰åŠŸåŠŸç‡ */
-    Modbus_Register_Addr_ChannelA_ReactivePower  = 0x0087,  /* é€šé“Aæ— åŠŸåŠŸç‡ */
-    Modbus_Register_Addr_ChannelA_ApparentPower  = 0x0088,  /* é€šé“Aè§†åœ¨åŠŸç‡ */
-    Modbus_Register_Addr_ChannelA_PowerFactor    = 0x0089,  /* é€šé“AåŠŸç‡å› æ•° */
-    Modbus_Register_Addr_ChannelA_PhasePosition  = 0x008A,  /* é€šé“Aç›¸ä½ */
-    Modbus_Register_Addr_ChannelA_Frequency      = 0x008B,  /* é€šé“Aé¢‘ç‡ */
-    Modbus_Register_Addr_ChannelA_ElecQuantity   = 0x008C,  /* é€šé“Aç”µé‡ */
+    /* Í¨ÓÃ²ÎÊıA */
+    Modbus_Register_Addr_ChannelA_SystemStatus   = 0x0080,  /* Í¨µÀAÏµÍ³×´Ì¬ */
+    Modbus_Register_Addr_ChannelA_ErrorCode      = 0x0081,  /* Í¨µÀA´íÎóÂë */
+    Modbus_Register_Addr_ChannelA_Temperature    = 0x0082,  /* Í¨µÀAÎÂ¶È */
+    Modbus_Register_Addr_ChannelA_Switch         = 0x0083,  /* Í¨µÀAÊä³ö¿ª¹Ø */
+    Modbus_Register_Addr_ChannelA_Voltage        = 0x0084,  /* Í¨µÀAµçÑ¹ */
+    Modbus_Register_Addr_ChannelA_Current        = 0x0085,  /* Í¨µÀAµçÁ÷ */
+    Modbus_Register_Addr_ChannelA_ActivePower    = 0x0086,  /* Í¨µÀAÓĞ¹¦¹¦ÂÊ */
+    Modbus_Register_Addr_ChannelA_ReactivePower  = 0x0087,  /* Í¨µÀAÎŞ¹¦¹¦ÂÊ */
+    Modbus_Register_Addr_ChannelA_ApparentPower  = 0x0088,  /* Í¨µÀAÊÓÔÚ¹¦ÂÊ */
+    Modbus_Register_Addr_ChannelA_PowerFactor    = 0x0089,  /* Í¨µÀA¹¦ÂÊÒòËØ */
+    Modbus_Register_Addr_ChannelA_PhasePosition  = 0x008A,  /* Í¨µÀAÏàÎ» */
+    Modbus_Register_Addr_ChannelA_Frequency      = 0x008B,  /* Í¨µÀAÆµÂÊ */
+    Modbus_Register_Addr_ChannelA_ElecQuantity   = 0x008C,  /* Í¨µÀAµçÁ¿ */
+    
+    /* Í¨ÓÃ²ÎÊıB */
+    Modbus_Register_Addr_ChannelB_SystemStatus   = 0x0090,  /* Í¨µÀBÏµÍ³×´Ì¬ */
+    Modbus_Register_Addr_ChannelB_ErrorCode      = 0x0091,  /* Í¨µÀB´íÎóÂë */
+    Modbus_Register_Addr_ChannelB_Temperature    = 0x0092,  /* Í¨µÀB´íÎóÂë */
+    Modbus_Register_Addr_ChannelB_Switch         = 0x0093,  /* Í¨µÀBÊä³ö¿ª¹Ø */
+    Modbus_Register_Addr_ChannelB_Voltage        = 0x0094,  /* Í¨µÀBµçÑ¹ */
+    Modbus_Register_Addr_ChannelB_Current        = 0x0095,  /* Í¨µÀBµçÁ÷ */
+    Modbus_Register_Addr_ChannelB_ActivePower    = 0x0096,  /* Í¨µÀBÓĞ¹¦¹¦ÂÊ */
+    Modbus_Register_Addr_ChannelB_ReactivePower  = 0x0097,  /* Í¨µÀBÎŞ¹¦¹¦ÂÊ */
+    Modbus_Register_Addr_ChannelB_ApparentPower  = 0x0098,  /* Í¨µÀBÊÓÔÚ¹¦ÂÊ */
+    Modbus_Register_Addr_ChannelB_PowerFactor    = 0x0099,  /* Í¨µÀB¹¦ÂÊÒòËØ */
+    Modbus_Register_Addr_ChannelB_PhasePosition  = 0x009A,  /* Í¨µÀBÏàÎ» */
+    Modbus_Register_Addr_ChannelB_Frequency      = 0x009B,  /* Í¨µÀBÆµÂÊ */
+    Modbus_Register_Addr_ChannelB_ElecQuantity   = 0x009C,  /* Í¨µÀBµçÁ¿ */
+    
+    /* HLW8110Ğ¾Æ¬²ÎÊı */
+    Modbus_Register_Addr_HLW8110_Voltage                      = 0x0100,   /* µçÑ¹ÓĞĞ§Öµ */
+    Modbus_Register_Addr_HLW8110_ChannelA_Current             = 0x0101,   /* AÍ¨µÀµçÁ÷ */
+    Modbus_Register_Addr_HLW8110_ChannelA_ActivePower         = 0x0102,   /* AÍ¨µÀÓĞ¹¦¹¦ÂÊ */
+    Modbus_Register_Addr_HLW8110_ChannelA_ElecQuantity        = 0x0103,   /* AÍ¨µÀÓĞ¹¦µçÁ¿ */
+    Modbus_Register_Addr_HLW8110_ChannelA_ElecQuantity_Backup = 0x0104,   /* AÍ¨µÀµçÁ¿±¸·İ */
+    Modbus_Register_Addr_HLW8110_PowerFactory                 = 0x0105,   /* ¹¦ÂÊÒòËØ */
+    Modbus_Register_Addr_HLW8110_PhaseAngle                   = 0x0106,   /* Ïà½Ç */
+    Modbus_Register_Addr_HLW8110_ChannelB_Current             = 0x0107,   /* BÍ¨µÀµçÁ÷ */
+    Modbus_Register_Addr_HLW8110_ChannelB_ActivePower         = 0x0108,   /* BÍ¨µÀÓĞ¹¦¹¦ÂÊ */
+    Modbus_Register_Addr_HLW8110_ChannelB_ElecQuantity        = 0x0109,   /* BÍ¨µÀÓĞ¹¦µçÁ¿ */
+    Modbus_Register_Addr_HLW8110_ChannelB_ElecQuantity_Backup = 0x010A,   /* BÍ¨µÀµçÁ¿±¸·İ */
+    Modbus_Register_Addr_HLW8110_Frequency                    = 0x010B,   /* ÊĞµçÏßĞÔÆµÂÊ */
+    Modbus_Register_Addr_HLW8110_CurrentChannel               = 0x010C,   /* µçÁ¿¼Æµ±Ç°Í¨µÀ */
 
-    /* é€šé“å‚æ•°B */
-    Modbus_Register_Addr_ChannelB_SystemStatus   = 0x0090,  /* é€šé“Bç³»ç»ŸçŠ¶æ€ */
-    Modbus_Register_Addr_ChannelB_ErrorCode      = 0x0091,  /* é€šé“Bé”™è¯¯ç  */
-    Modbus_Register_Addr_ChannelB_Temperature    = 0x0092,  /* é€šé“Bæ¸©åº¦ */
-    Modbus_Register_Addr_ChannelB_Switch         = 0x0093,  /* é€šé“Bå¼€å…³çŠ¶æ€ */
-    Modbus_Register_Addr_ChannelB_Voltage        = 0x0094,  /* é€šé“Bç”µå‹ */
-    Modbus_Register_Addr_ChannelB_Current        = 0x0095,  /* é€šé“Bç”µæµ */
-    Modbus_Register_Addr_ChannelB_ActivePower    = 0x0096,  /* é€šé“Bæœ‰åŠŸåŠŸç‡ */
-    Modbus_Register_Addr_ChannelB_ReactivePower  = 0x0097,  /* é€šé“Bæ— åŠŸåŠŸç‡ */
-    Modbus_Register_Addr_ChannelB_ApparentPower  = 0x0098,  /* é€šé“Bè§†åœ¨åŠŸç‡ */
-    Modbus_Register_Addr_ChannelB_PowerFactor    = 0x0099,  /* é€šé“BåŠŸç‡å› æ•° */
-    Modbus_Register_Addr_ChannelB_PhasePosition  = 0x009A,  /* é€šé“Bç›¸ä½ */
-    Modbus_Register_Addr_ChannelB_Frequency      = 0x009B,  /* é€šé“Bé¢‘ç‡ */
-    Modbus_Register_Addr_ChannelB_ElecQuantity   = 0x009C,  /* é€šé“Bç”µé‡ */
-
-    /* HLW8110 èŠ¯ç‰‡æ•°æ® */
-    Modbus_Register_Addr_HLW8110_Voltage                      = 0x0100,   /* ç”µå‹æœ‰æ•ˆå€¼ */
-    Modbus_Register_Addr_HLW8110_ChannelA_Current             = 0x0101,   /* Aé€šé“ç”µæµ */
-    Modbus_Register_Addr_HLW8110_ChannelA_ActivePower         = 0x0102,   /* Aé€šé“æœ‰åŠŸåŠŸç‡ */
-    Modbus_Register_Addr_HLW8110_ChannelA_ElecQuantity        = 0x0103,   /* Aé€šé“ç”µé‡ */
-    Modbus_Register_Addr_HLW8110_ChannelA_ElecQuantity_Backup = 0x0104,   /* Aé€šé“ç”µé‡å¤‡ä»½ */
-    Modbus_Register_Addr_HLW8110_PowerFactory                 = 0x0105,   /* åŠŸç‡å› æ•° */
-    Modbus_Register_Addr_HLW8110_PhaseAngle                   = 0x0106,   /* ç›¸è§’ */
-    Modbus_Register_Addr_HLW8110_ChannelB_Current             = 0x0107,   /* Bé€šé“ç”µæµ */
-    Modbus_Register_Addr_HLW8110_ChannelB_ActivePower         = 0x0108,   /* Bé€šé“æœ‰åŠŸåŠŸç‡ */
-    Modbus_Register_Addr_HLW8110_ChannelB_ElecQuantity        = 0x0109,   /* Bé€šé“ç”µé‡ */
-    Modbus_Register_Addr_HLW8110_ChannelB_ElecQuantity_Backup = 0x010A,   /* Bé€šé“ç”µé‡å¤‡ä»½ */
-    Modbus_Register_Addr_HLW8110_Frequency                    = 0x010B,   /* çº¿è·¯é¢‘ç‡ */
-    Modbus_Register_Addr_HLW8110_CurrentChannel               = 0x010C,   /* å½“å‰é€šé“ */
 } ModbusRegisterAddrEnum;
 
 int8_t cModbusSendDatas(uint32_t uiChannel, uint16_t usDeviceAddr, void *pvBuff, int32_t iLength, int32_t iFrontTime);

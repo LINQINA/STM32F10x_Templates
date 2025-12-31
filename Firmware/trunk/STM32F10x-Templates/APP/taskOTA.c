@@ -14,6 +14,8 @@
 #include "DriverOTA.h"
 
 #include "taskSensor.h"
+
+
 #include "taskOTA.h"
 
 TaskHandle_t g_TaskOTAHand = NULL;   /* Iot任务句柄 */
@@ -28,6 +30,7 @@ void vTaskOTA(void *pvParameters)
     {
         /* 等待任务消息 */
         ulTaskNotifyTake(pdTRUE, 50 / portTICK_RATE_MS);
+
 
         if(ptypeSensorInfo->ptypeOTAInfo->state == OTA_STATE_START && g_cOTAInitFlag)
         {

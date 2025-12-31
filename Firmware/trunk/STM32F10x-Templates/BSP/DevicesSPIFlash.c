@@ -6,6 +6,7 @@
 
 static uint16_t st_usSPIFlashID = 0;
 
+
 void vSPIFlashInit(void)
 {
     uint32_t uiTimes;
@@ -19,11 +20,12 @@ void vSPIFlashInit(void)
 
         if((st_usSPIFlashID != 0x0000) && (st_usSPIFlashID != 0xFFFF))
             break;
-
+        
         vDelayMs(10);
     }
 
     SPI_FLASH_CS_DISABLE();
+
 }
 
 static int8_t cSPIFlashLock(void)
@@ -64,7 +66,7 @@ static uint8_t ucSPIFlashReadStatus(uint8_t ucRegNo)
     uint32_t uiTimeout = 20000;
     uint8_t ucReadStatusCMD;
     uint8_t ucStatus;
-
+    
     switch(ucRegNo)
     {
         case 1 : ucReadStatusCMD = READ_STATUS_REG1_CMD;
@@ -73,24 +75,25 @@ static uint8_t ucSPIFlashReadStatus(uint8_t ucRegNo)
 
         default : ucReadStatusCMD = READ_STATUS_REG1_CMD;
     }
-
-    /* åˆ¤æ–­ SPI Flash æ˜¯å¦å¤„äºç©ºé—²çŠ¶æ€ */
+    
+    /* ÅĞ¶Ï SPI Flash ÊÇ·ñÁ¬½ÓÕı³£ */
     if((st_usSPIFlashID == 0x0000) || (st_usSPIFlashID == 0xFFFF))
         return 0xFF;
-
+    
     SPI_FLASH_CS_ENABLE();
-
+    
     ucSPIxWriteReadByte(ucReadStatusCMD);
-
-    /* ç­‰å¾… Flash è¯»å–å®Œæˆ */
+    
+    /* µÈ´ıFlash¶ÁÈ¡Íê±Ï */
     while(uiTimeout--)
     {
         ucStatus = ucSPIxWriteReadByte(0xFF);
-
+        
         if((ucStatus & 0x01) != 0x01)
             break;
-
+        
         vDelayUs(10);
+        
     }
 
     SPI_FLASH_CS_DISABLE();
@@ -119,7 +122,7 @@ int8_t cSPIFlashErases(uint32_t uiAddress)
 
     cSPIFlashLock();
 
-    /* ç­‰å¾… Flash é€€å‡ºå¿™çŠ¶æ€ */
+    /* µÈ´ıFlashÍË³öÃ¦×´Ì¬ */
     if(ucSPIStatusBusy())
     {
         cError = 1;
@@ -128,7 +131,7 @@ int8_t cSPIFlashErases(uint32_t uiAddress)
 
     uvSPIFlashEnableWrite();
 
-    /* ç­‰å¾… Flash é€€å‡ºå¿™çŠ¶æ€ */
+    /* µÈ´ıFlashÍË³öÃ¦×´Ì¬ */
     if(ucSPIStatusBusy())
     {
         cError = 2;
@@ -153,13 +156,13 @@ static int8_t cSPIFlashWritePage(uint32_t uiAddress, uint8_t *pucDatas, int32_t 
     uint8_t ucAddress[3] = {uiAddress >> 16, uiAddress >> 8, uiAddress};
     int8_t cError = 0;
 
-    /* ç­‰å¾… Flash é€€å‡ºå¿™çŠ¶æ€ */
+    /* µÈ´ıFlashÍË³öÃ¦×´Ì¬ */
     if(ucSPIStatusBusy())
         return 1;
 
     uvSPIFlashEnableWrite();
 
-    /* ç­‰å¾… Flash é€€å‡ºå¿™çŠ¶æ€ */
+    /* µÈ´ıFlashÍË³öÃ¦×´Ì¬ */
     if(ucSPIStatusBusy())
         return 2;
 
@@ -168,7 +171,7 @@ static int8_t cSPIFlashWritePage(uint32_t uiAddress, uint8_t *pucDatas, int32_t 
     ucSPIxWriteReadByte(PAGE_PROG_CMD);
     cError |= cSPIxWriteDatas(ucAddress, 3);
 
-    /* å†™å…¥æ•°æ® */
+    /* Ğ´ÈëÊı¾İ */
     cError |= cSPIxWriteDatas(pucDatas, iLength);
 
     SPI_FLASH_CS_DISABLE();
@@ -183,7 +186,7 @@ int8_t cSPIFlashReadDatas(uint32_t uiAddress, void *pvBuff, int32_t iLength)
 
     cSPIFlashLock();
 
-    /* ç­‰å¾… Flash é€€å‡ºå¿™çŠ¶æ€ */
+    /* µÈ´ıFlashÍË³öÃ¦×´Ì¬ */
     if(ucSPIStatusBusy())
     {
         cError = 1;
@@ -195,7 +198,7 @@ int8_t cSPIFlashReadDatas(uint32_t uiAddress, void *pvBuff, int32_t iLength)
     ucSPIxWriteReadByte(READ_CMD);
     cError = cSPIxWriteDatas(ucAddress, 3);
 
-    /* è¯»å–æ•°æ® */
+    /* ¶ÁÈ¡Êı¾İ */
     cError |= cSPIxReadDatas(pvBuff, iLength);
 
     SPI_FLASH_CS_DISABLE();
@@ -214,10 +217,10 @@ int8_t cSPIFlashWriteDatas(uint32_t uiAddress, const void *pvBuff, int32_t iLeng
 
     cSPIFlashLock();
 
-    /* å†™å…¥ Flash */
+    /* Write Flash */
     while(iLength > 0)
     {
-        /* å½“èµ·å§‹åœ°å€ä¸ºæ‰‡åŒºé¦–åœ°å€æ—¶ï¼Œéœ€å…ˆæ“¦é™¤è¯¥æ‰‡åŒº */
+        /* ¿éÆğÊ¼µØÖ·Ê±£¬ĞèÒªÏÈ²Á³ı¸ÃÒ³ */
         if((uiAddress % SPI_FLASH_SECTOR_SIZE) == 0)
         {
             if(cSPIFlashErases(uiAddress) != 0)
@@ -227,7 +230,7 @@ int8_t cSPIFlashWriteDatas(uint32_t uiAddress, const void *pvBuff, int32_t iLeng
             }
         }
 
-        /* è®¡ç®—é¡µå‰©ä½™ç©ºé—´å¤§å° */
+        /* Ò³¶ÔÆë */
         iLengthTemp = (iLength > (SPI_FLASH_PAGE_SIZE - (uiAddress % SPI_FLASH_PAGE_SIZE))) ? (SPI_FLASH_PAGE_SIZE - (uiAddress % SPI_FLASH_PAGE_SIZE)) : iLength;
 
         if(cSPIFlashWritePage(uiAddress, pucDatas, iLengthTemp) != 0)
@@ -246,14 +249,14 @@ int8_t cSPIFlashWriteDatas(uint32_t uiAddress, const void *pvBuff, int32_t iLeng
     return cError;
 }
 
-/* æ“¦é™¤æ•´ä¸ª SPI Flash */
+/* ²Á³ıÕû¸öSPIFlash */
 int8_t cSPIFlashErasesChip()
 {
     int8_t cError = 0;
 
     cSPIFlashLock();
 
-    /* ç­‰å¾… Flash é€€å‡ºå¿™çŠ¶æ€ */
+    /* µÈ´ıFlashÍË³öÃ¦×´Ì¬ */
     if(ucSPIStatusBusy())
     {
         cError = 1;
@@ -262,7 +265,7 @@ int8_t cSPIFlashErasesChip()
 
     uvSPIFlashEnableWrite();
 
-    /* ç­‰å¾… Flash é€€å‡ºå¿™çŠ¶æ€ */
+    /* µÈ´ıFlashÍË³öÃ¦×´Ì¬ */
     if(ucSPIStatusBusy())
     {
         cError = 2;
@@ -274,7 +277,7 @@ int8_t cSPIFlashErasesChip()
     ucSPIxWriteReadByte(SUBCHIP_ERASE_CMD);
 
     SPI_FLASH_CS_DISABLE();
-
+    
     while(ucSPIStatusBusy())
         vDelayMs(10);
 

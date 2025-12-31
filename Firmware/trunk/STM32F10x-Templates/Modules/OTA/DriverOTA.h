@@ -1,104 +1,110 @@
 #ifndef _DriverOTA_H_
 #define _DriverOTA_H_
 
-#include "DevicesModbus.h"
+#include "DevicesModbus.h" 
 
 #define FILE_MAX_COUNT          8
 
-#define OTA_Type_PD             0x00
+#define OTA_Type_PD                                     0x00
 
 extern int8_t g_cOTAInitFlag;
-extern uint16_t g_usOTAUpdatingFirmwareNo;      /* OTAçŠ¶æ€ å½“å‰æ­£åœ¨æ›´æ–°çš„å›ºä»¶ç¼–å·ï¼Œç”¨äºæ˜¾ç¤ºOTAè¿›åº¦æ—¶å³ä¸‹è§’çš„å›ºä»¶ç¼–å· */
-extern uint32_t g_uiFirmwareLengthNow;           /* OTAçŠ¶æ€ å›ºä»¶å½“å‰å†™å…¥çš„é•¿åº¦ */
+extern uint16_t g_usOTAUpdatingFirmwareNo;                  /* OTA±¾»ú µ±Ç°Éı¼¶µ½¹Ì¼şĞòºÅ,ÓÃÓÚÏÔÊ¾OTAÉı¼¶Ê±×óÏÂ½ÇµÄ¹Ì¼şĞòºÅ */
+extern uint32_t g_uiFirmwareLengthNow;                      /* OTA±¾»ú ¹Ì¼şµ±Ç°Ğ´ÈëµÄ³¤¶È */
 
-typedef enum 
-{
-    OTA_Error_NULL                      = 0,            /* æ— é”™è¯¯ */
-    OTA_Error_CrcTotalHeaderError       = 0x00000001,   /* æ€»å¤´CRCæ ¡éªŒé”™è¯¯ */
-    OTA_Error_OTADeinitError            = 0x00000002,   /* OTAåˆå§‹åŒ–å¤±è´¥ */
-    OTA_Error_CrcTotalFirmwareError     = 0x00000002,   /* æ€»å›ºä»¶CRCæ ¡éªŒé”™è¯¯ */
-    OTA_Error_CrcChildHeaderError       = 0x00000004,   /* å­åŒ…CRCæ ¡éªŒé”™è¯¯ */
-    OTA_Error_ReSendCountIsNull         = 0x00000008,   /* é‡ä¼ æ¬¡æ•°ä¸º0 */
-    OTA_Error_ChildUpdateFail           = 0x00000010,   /* å­å›ºä»¶æ›´æ–°å¤±è´¥ */
+typedef enum {
+    OTA_Error_NULL                      = 0,                /* ÎŞ´íÎó */
+    OTA_Error_CrcTotalHeaderError       = 0x00000001,       /* ×ÜÍ·¼ìÑé´íÎó */
+    OTA_Error_OTADeinitError            = 0x00000002,       /* OTA³õÊ¼»¯Ê§°Ü */
+    OTA_Error_CrcTotalFirmwareError     = 0x00000002,       /* Õû°üĞ£Ñé´íÎó */
+    OTA_Error_CrcChildHeaderError       = 0x00000004,       /* ×Ó°üĞ£Ñé´íÎó */
+    OTA_Error_ReSendCountIsNull         = 0x00000008,       /* Éı¼¶´ÎÊıÎª0 */
+    OTA_Error_ChildUpdateFail           = 0x00000010,       /* ×Ó¹Ì¼şÉı¼¶Ê§°Ü */
 } OTAErrorEnum;
 
-typedef enum 
+
+typedef enum
 {
-    OTA_STATE_DISABLE = 0,       /* å…³é—­ */
-    OTA_STATE_START,             /* å¼€å§‹æ›´æ–° */
-    OTA_STATE_READY,             /* æ›´æ–°å‡†å¤‡å°±ç»ª */
-    OTA_STATE_UPDATING,          /* æ›´æ–°ä¸­ */
-    OTA_STATE_SUCCESS,           /* æ›´æ–°æˆåŠŸ */
-    OTA_STATE_FAIL,              /* æ›´æ–°å¤±è´¥ */
-    OTA_STATE_CHECK_VERSION,     /* æ ¡éªŒç‰ˆæœ¬ */
+    OTA_STATE_DISABLE = 0,       /* ¹Ø±Õ */
+    OTA_STATE_START,             /* ¿ªÊ¼Éı¼¶ */
+    OTA_STATE_READY,             /* Éı¼¶¾ÍĞ÷ */
+    OTA_STATE_UPDATING,          /* Éı¼¶ÖĞ */
+    OTA_STATE_SUCCESS,           /* Éı¼¶³É¹¦ */
+    OTA_STATE_FAIL,              /* Éı¼¶Ê§°Ü */
+    OTA_STATE_CHECK_VERSION,     /* Ğ£Ñé°æ±¾ */
 } OTAStateEnum;
 
-/* å›ºä»¶çš„åœ°å€å’Œé•¿åº¦ */
-typedef struct 
+
+/* ¸÷¹Ì¼şµÄµØÖ·Óë³¤¶È */
+typedef struct
 {
-    uint32_t startAddr;          /* å›ºä»¶èµ·å§‹åœ°å€ */
-    uint32_t length;             /* å›ºä»¶é•¿åº¦ */
+    uint32_t startAddr;         /* ¹Ì¼şÆğÊ¼µØÖ· */
+    uint32_t length;            /* ¹Ì¼ş³¤¶È */
 } OTAFirmwarePortType;
 
-/* å›ºä»¶æ€»å¤´ä¿¡æ¯ */
-typedef struct 
+
+/* ¹Ì¼ş×ÜÍ·ĞÅÏ¢ */
+typedef struct
 {
-    uint8_t FileType[4];         /* å›ºå®šæ–‡ä»¶å¤´ä¿¡æ¯ï¼Œå¦‚ "DBS" */
+    uint8_t FileType[4];        /* Í·²¿¹Ì¶¨ĞÅÏ¢£º"DBS" */
 
-    uint32_t registers;          /* å¯„å­˜å™¨ä¿¡æ¯ */
-                                /* bit0-bit1ï¼šé¢„ç•™ */
-                                /* bit2ï¼š0-ä¸éœ€è¦æ›´æ–°ï¼Œ1-éœ€è¦æ›´æ–° */
-                                /* bit3-bit4ï¼šHashæ ¡éªŒæ–¹å¼ï¼ˆ0-æ— æ ¡éªŒï¼Œ1-CRC32ï¼Œ2-MD5ï¼Œ3-SHA1ï¼‰ */
+    uint32_t registers;         /* ¼Ä´æÆ÷£º */
+                                /* bit0-bit1£¨Ô¤Áô£©£© */
+                                /* bit2£¨0£¨²»ĞèÒª¸üĞÂ£©¡¢1£¨ĞèÒª¸üĞÂ£©£© */
+                                /* bit3-bit4£¨HasnĞ£ÑéÀàĞÍ£º0£¨ÎŞĞ£Ñé£©¡¢1£¨CRC32£©¡¢2£¨MD5£©¡¢3£¨SHA1£©£© */
 
-    uint32_t length;             /* å›ºä»¶é•¿åº¦ */
-    uint32_t crc32;              /* å›ºä»¶CRC32æ ¡éªŒå€¼ */
-    uint8_t hash[32];            /* Hashæ ¡éªŒå€¼ */
-    char versionSoft[16];        /* å›ºä»¶è½¯ä»¶ç‰ˆæœ¬ */
-    char versionHard[16];        /* å›ºä»¶ç¡¬ä»¶ç‰ˆæœ¬ */
-    uint8_t firmwareNumber;      /* å­å›ºä»¶æ•°é‡ */
-    uint8_t reSendCount;         /* é‡ä¼ æ¬¡æ•° */
-    uint8_t reserved[46];        /* é¢„ç•™ */
-    OTAFirmwarePortType FirmwareOTAPort[FILE_MAX_COUNT];  /* å›ºä»¶çš„åœ°å€å’Œé•¿åº¦ä¿¡æ¯ */
-    uint8_t usreserved[124 - sizeof(OTAFirmwarePortType) * FILE_MAX_COUNT]; /* é¢„ç•™ */
-    uint32_t crc32Head;          /* å‰252å­—èŠ‚çš„CRCæ ¡éªŒå€¼ */
+    uint32_t length;            /* ¹Ì¼ş³¤¶È */
+    uint32_t crc32;             /* ¹Ì¼şCRC32Ğ£ÑéÖµ */
+    uint8_t hash[32];           /* HashĞ£ÑéÖµ */
+    char versionSoft[16];       /* ¹Ì¼ş°ü°æ±¾ºÅ */
+    char versionHard[16];       /* Ó²¼ş°æ±¾ºÅ */
+    uint8_t firmwareNumber;     /* ×Ó¹Ì¼şÊıÁ¿ */
+    uint8_t reSendCount;        /* ÖØ´«´ÎÊı */
+    uint8_t reserved[46];       /* Ô¤Áô */
+    OTAFirmwarePortType FirmwareOTAPort[FILE_MAX_COUNT];                    /* ºó 128Byte´æ´¢¸÷ ×Ó¹Ì¼ş µÄµØÖ·¡¢³¤¶ÈĞÅÏ¢ */
+    uint8_t usreserved[124 - sizeof(OTAFirmwarePortType) * FILE_MAX_COUNT]; /* Ô¤Áô*/
+    uint32_t crc32Head;         /* ´æ´¢Ç°Ãæ252¸ö×Ö½ÚµÄĞ£ÑéÖµ */
 } OTAFirmwareTotalInfoType;
 
-/* OTAå­æ¨¡å—ä¿¡æ¯ */
-typedef struct 
+
+/* ×ÓÄ£¿éĞÅÏ¢ */
+typedef struct
 {
-    uint16_t type;               /* å­æ¨¡å—ç±»å‹ï¼ˆå¯¹åº”è®¾å¤‡ç±»å‹ï¼‰ */
-    uint16_t number;             /* å­æ¨¡å—å›ºä»¶ç¼–å· */
-    OTAStateEnum state;          /* å­æ¨¡å—OTAçŠ¶æ€ */
-    uint16_t ReSendCount;        /* å­æ¨¡å—å‰©ä½™é‡ä¼ æ¬¡æ•° */
-    uint32_t error;              /* å­æ¨¡å—é”™è¯¯ä¿¡æ¯ */
-    char OTAPortVersion[16];     /* å­æ¨¡å—ç‰ˆæœ¬ä¿¡æ¯ */
-    uint32_t address;            /* å­æ¨¡å—å›ºä»¶èµ·å§‹åœ°å€ */
-    uint32_t length;             /* å­æ¨¡å—å›ºä»¶é•¿åº¦ */
-    uint32_t writeLengthNow;     /* å­æ¨¡å—å›ºä»¶å·²å†™å…¥é•¿åº¦ */
-    uint32_t crcValue;           /* å­æ¨¡å—å›ºä»¶CRCæ ¡éªŒå€¼ */
+    uint16_t type;                                                      /* OTA×ÓÄ£¿é Éı¼¶ÀàĞÍ */
+    uint16_t number;                                                    /* OTA×ÓÄ£¿é ¹Ì¼şÄ£¿éĞòºÅ */
+    OTAStateEnum state;                                                 /* OTA×ÓÄ£¿é ×´Ì¬ */
+    uint16_t ReSendCount;                                               /* OTA×ÓÄ£¿é Éı¼¶´ÎÊı */
+    uint32_t error;                                                     /* OTA×ÓÄ£¿é ¹ÊÕÏĞÅÏ¢ */
+    char OTAPortVersion[16];                                            /* OTA×ÓÄ£¿é °æ±¾ĞÅÏ¢ */
+    uint32_t address;                                                   /* OTA×ÓÄ£¿é ¹Ì¼şÆğÊ¼µØÖ· */
+    uint32_t length;                                                    /* OTA×ÓÄ£¿é ¹Ì¼ş³¤¶È */
+    uint32_t writeLengthNow;                                            /* OTA×ÓÄ£¿é ¹Ì¼şÒÑ¾­Ğ´ÈëµÄ³¤¶È */
+    uint32_t crcValue;                                                  /* OTA×ÓÄ£¿é CRC¹Ì¼şĞ£ÑéÖµ */
+
 } OTAFirmwarePortInfoType;
 
-/* äº§å“OTAæ€»ä½“ä¿¡æ¯ */
-typedef struct 
+
+/* ²úÆ·OTAÏà¹ØĞÅÏ¢ */
+typedef struct
 {
-    OTAFirmwarePortInfoType Port[FILE_MAX_COUNT]; /* å­æ¨¡å—ä¿¡æ¯ */
-    uint8_t firmwareNumber;                       /* å›ºä»¶æ€»æ•°é‡ */
-    OTAStateEnum state;                           /* OTAæ€»ä½“çŠ¶æ€ */
-    uint32_t error;                               /* OTAæ€»ä½“é”™è¯¯ä¿¡æ¯ */
-    uint16_t OTARemainTime;                       /* OTAå‰©ä½™æ—¶é—´ */
-    char OTATuyaAppVersion[16];                   /* å½“å‰APPç«¯æ¶‚é¸¦ç‰ˆæœ¬ */
-    char OTATuyaFirmwareVersion[16];              /* è¦å†™å…¥çš„æ¶‚é¸¦ç‰ˆæœ¬ */
-    uint32_t FirmwareLengthTotal;                 /* æ€»å›ºä»¶é•¿åº¦ */
-    uint32_t OTATotalInfoCrc;                     /* OTAæ€»å¤´CRCä¿¡æ¯ */
+    OTAFirmwarePortInfoType Port[FILE_MAX_COUNT];                       /* OTA×ÓÄ£¿éĞÅÏ¢ */
+    uint8_t firmwareNumber;                                             /* OTA±¾»ú Éı¼¶ÊıÁ¿ */
+    OTAStateEnum  state;                                                /* OTA±¾»ú ×´Ì¬ */
+    uint32_t error;                                                     /* OTA±¾»ú ¹ÊÕÏĞÅÏ¢ */
+    uint16_t OTARemainTime;                                             /* OTA±¾»ú Éı¼¶Ê£ÓàÊ±¼ä */
+    char OTATuyaAppVersion[16];                                         /* OTA±¾»ú µ±Ç°APPµÄÍ¿Ñ»°æ±¾ */
+    char OTATuyaFirmwareVersion[16];                                    /* OTA±¾»ú ºóĞøÒªĞ´ÈëµÄÍ¿Ñ»°æ±¾ */
+    uint32_t FirmwareLengthTotal;                                       /* OTA±¾»ú ×Ü¹Ì¼ş³¤¶È */
+    uint32_t OTATotalInfoCrc;                                           /* OTA±¾»ú ×ÜÍ·CRCĞÅÏ¢ */
 } OTAInfoType;
 
+
 void vOTAInit(void);
-void vOTAStart(void);
+void vOTAStart();
 void vOTAFirmwareUpdateAll(void);
-void vCheckFirmwareVersion(void);
+void vCheckFirmwareVersion();
 int8_t cOTAStateSet(OTAStateEnum enumOTAState);
 int8_t cOTAIOTFrimwareDataRecever(uint8_t *pData, unsigned long position, unsigned short length);
-int8_t cOTAModbusPackAnalysis(ModBusRtuTypeDef *ptypeHandle);
+int8_t cOTAModbusPackAnalysis(ModBusRtuTypeDef* ptypeHandle);
 int8_t cOTAReafOTAInfoFromFlash(void);
 OTAInfoType *ptypeOTAInfoGet(void);
 

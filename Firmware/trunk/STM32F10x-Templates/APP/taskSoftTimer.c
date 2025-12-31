@@ -16,14 +16,15 @@ TimerHandle_t g_xTimersBeepHandle = NULL;
 TimerHandle_t g_xTimersKeyHandle = NULL;
 
 /*
-*   åŠŸ    èƒ½: vSoftTimerLedCallback
-*   æ    è¿°: å®šæ—¶å™¨LEDå›è°ƒå‡½æ•°
-*   å‚    æ•°: æ— 
-*   è¿” å› å€¼: æ— 
+*   º¯ Êı Ãû: vSoftTimerLedCallback
+*   ¹¦ÄÜËµÃ÷: ¶¨Ê±Æ÷led»Øµ÷º¯Êı
+*   ĞÎ    ²Î: ÎŞ
+*   ·µ »Ø Öµ: ÎŞ
 */
 static void vSoftTimerLedCallback(xTimerHandle pxTimer)
 {
     (void)pxTimer;
+
     vLedMachine();
 }
 
@@ -31,10 +32,10 @@ static void vSoftTimerKeyCallback(xTimerHandle pxTimer)
 {
     (void)pxTimer;
 
-    /* æ£€æµ‹æŒ‰é”®çŠ¶æ€å˜åŒ– */
+    /* ÓĞ´¥·¢ÁËĞÂ°´¼ü×´Ì¬ */
     if(enumKeyStateMachine(&g_typeKeyData) != keyNormal)
     {
-        /* æ‰§è¡ŒæŒ‰é”®ä»»åŠ¡ */
+        /* Ö´ĞĞ KeyÏûÏ¢ */
         vTaskKey(&g_typeKeyData);
     }
 }
@@ -42,21 +43,22 @@ static void vSoftTimerKeyCallback(xTimerHandle pxTimer)
 static void vSoftTimerBeepCallback(xTimerHandle pxTimer)
 {
     (void)pxTimer;
+
     vBeepMachine();
 }
 
 int8_t cSoftTimerInit(void)
 {
-    /* åˆ›å»ºLEDå®šæ—¶å™¨ */
-    g_xTimersLedHandle = xTimerCreate("Timer led", 20 / portTICK_RATE_MS, pdTRUE, (void*)NULL, vSoftTimerLedCallback);
+    /* ´´½¨LED¶¨Ê±Æ÷ */
+    g_xTimersLedHandle      = xTimerCreate("Timer led",     20 / portTICK_RATE_MS,   pdTRUE, (void*)NULL, vSoftTimerLedCallback);
     xTimerStart(g_xTimersLedHandle, 200);
     
-    /* åˆ›å»ºKEYå®šæ—¶å™¨ */
-    g_xTimersKeyHandle = xTimerCreate("Timer key", 20 / portTICK_RATE_MS, pdTRUE, (void*)NULL, vSoftTimerKeyCallback);
+    /* ´´½¨KEY¶¨Ê±Æ÷ */
+    g_xTimersKeyHandle      = xTimerCreate("Timer key",     20 / portTICK_RATE_MS,   pdTRUE, (void*)NULL, vSoftTimerKeyCallback);
     xTimerStart(g_xTimersKeyHandle, 200);
 
-    /* åˆ›å»ºBEEPå®šæ—¶å™¨ */
-    g_xTimersBeepHandle = xTimerCreate("Timer beep", 100 / portTICK_RATE_MS, pdTRUE, (void*)NULL, vSoftTimerBeepCallback);
+    /* ´´½¨BEEP¶¨Ê±Æ÷ */
+    g_xTimersBeepHandle     = xTimerCreate("Timer beep",   100 / portTICK_RATE_MS,   pdTRUE, (void*)NULL, vSoftTimerBeepCallback);
     xTimerStart(g_xTimersBeepHandle, 200);
 
     return 0;

@@ -6,20 +6,20 @@
 #include "queue.h"
 #include "semphr.h"
 
-/* ç³»ç»Ÿåˆå§‹åŒ–ä»»åŠ¡å¥æŸ„ */
+/* ÏµÍ³³õÊ¼»¯ÈÎÎñ¾ä±ú */
 extern TaskHandle_t g_TaskSystemInitHand;
 
-/* RS485 Bus æ€»çº¿äº’æ–¥ä¿¡å·é‡ */
+/* RS485 Bus ×ÜÏß»¥³âĞÅºÅÁ¿ */
 extern SemaphoreHandle_t g_xRS485BusSemaphore;
-/* UART Log æ€»çº¿äº’æ–¥ä¿¡å·é‡ */
+/* RS485 Bus ×ÜÏß»¥³âĞÅºÅÁ¿ */
 extern SemaphoreHandle_t g_xUartLogSemaphore;
-/* SPI Flash è¯»å†™äº’æ–¥ä¿¡å·é‡ */
+/* SPI Flash ¶Á¡¢Ğ´»¥³âĞÅºÅÁ¿ */
 extern SemaphoreHandle_t g_xSpiFlashSemaphore;
-/* IIC Flash è¯»å†™äº’æ–¥ä¿¡å·é‡ */
+/* IIC Flash ¶Á¡¢Ğ´»¥³âĞÅºÅÁ¿ */
 extern SemaphoreHandle_t g_xIICFlashSemaphore;
-/* èŠ¯ç‰‡å†…éƒ¨ Flash è¯»å†™äº’æ–¥ä¿¡å·é‡ */
+/* Ğ¾Æ¬ÄÚ²¿ Flash ¶Á¡¢Ğ´»¥³âĞÅºÅÁ¿ */
 extern SemaphoreHandle_t g_xChipFlashSemaphore;
-/* Can1 å‘é€æ¥æ”¶äº’æ–¥ä¿¡å·é‡ */
+/* Can1 ·¢ËÍÊı¾İ »¥³âĞÅºÅÁ¿ */
 extern SemaphoreHandle_t g_xCan1Semaphore;
 
 void vTaskSystemInit(void *pvParameters);

@@ -4,23 +4,34 @@
 #include "stdio.h"
 
 #include "DevicesFlash.h"
+
 #include "version.h"
+
 
 /* 产品型号 */
 static productType st_typeProduct = {
+    'P',
+    'M',
+    0,
+    0,
+    0,
+    'S',
+    'x'
 };
 
 /* 固件地址存储 APP 版本信息 */
 const char cVersionHardBuff[32] __attribute__ ((section(".ARM.__at_0x0801A800"))) = {0};
-const char cVersionSoftBuff[32] __attribute__ ((section(".ARM.__at_0x0801A820"))) = APP_FIRMWARE_VERSION;
+const char cVersionSoftBuff[32] __attribute__ ((section(".ARM.__at_0x0801A820"))) = PD_VERSION_APP_SOFTWARE;
 const char cVersionDateBuff[32] __attribute__ ((section(".ARM.__at_0x0801A840"))) = __DATE__" - "__TIME__;
 const char cVersionTypeBuff[32] __attribute__ ((section(".ARM.__at_0x0801A860"))) = "MySTM32";
 const static char st_cVersionBuff[] = "00.00.00";
 
+
+
 /* 获取 Boot 版本信息 */
 char *pcVersionBootHardGet(void)
 {
-    /* 防止字符串没有 '\0' 结尾 */
+    /* 防止没有字符串没有 '\0' 结尾 */
     return (*(char *)(FLASH_BOOT_ADDR + 0x800 + 31) == 0) ? (char *)(FLASH_BOOT_ADDR + 0x800) : (char *)st_cVersionBuff;
 }
 
@@ -38,6 +49,7 @@ char *pcVersionBootTypeGet(void)
 {
     return (*(char *)(FLASH_BOOT_ADDR + 0x860 + 31) == 0) ? (char *)(FLASH_BOOT_ADDR + 0x860) : (char *)st_cVersionBuff;
 }
+
 
 /* 获取 Bootloader 版本信息 */
 char *pcVersionBootloaderHardGet(void)
@@ -79,4 +91,33 @@ char *pcVersionAPPTypeGet(void)
 productType *ptypeProductGet(void)
 {
     return &st_typeProduct;
+}
+
+/* 产品型号信息更新 */
+int8_t cProductInfoUpdate(void)
+{
+    productType *ptypeProduct = ptypeProductGet();
+    static int8_t st_UpdateFlag = 0;
+
+    if(st_UpdateFlag != 0)
+        return 1;
+
+    strncpy(ptypeProduct->versionBuff, pcVersionAPPSoftGet(), 16);
+
+
+    ptypeProduct->series  = 'P';
+    ptypeProduct->modules = 'M'; 
+
+    ptypeProduct->headBuff[0] = ptypeProduct->series;
+    snprintf(&ptypeProduct->headBuff[1], 3, "%02d", ptypeProduct->power);
+    ptypeProduct->headBuff[3] = ptypeProduct->grade;
+    ptypeProduct->headBuff[4] = ptypeProduct->voltageLevel;
+    ptypeProduct->headBuff[5] = '-';
+    ptypeProduct->headBuff[6] = '\0';
+    ptypeProduct->headBuff[7] = 0;
+
+    /* 判断是否还需要更新 */
+    st_UpdateFlag = 1;
+
+    return 0;
 }
