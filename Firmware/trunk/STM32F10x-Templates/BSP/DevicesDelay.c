@@ -1,12 +1,8 @@
 #include "stm32f1xx_hal.h"
 #include "stdint.h"
-#include "stdio.h"
-#include "string.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
-#include "queue.h"
-#include "semphr.h"
 
 #include "DevicesTime.h"
 #include "DevicesDelay.h"
