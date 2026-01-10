@@ -1,1 +1,0 @@
-copy .\Objects\*.hex .\Bin

@@ -1,0 +1,19 @@
+--cpu Cortex-M3
+".\objects\devicesled.o"
+".\objects\stm32f1xx_hal.o"
+".\objects\stm32f1xx_hal_cortex.o"
+".\objects\stm32f1xx_hal_gpio.o"
+".\objects\stm32f1xx_hal_gpio_ex.o"
+".\objects\stm32f1xx_hal_uart.o"
+".\objects\stm32f1xx_hal_usart.o"
+".\objects\stm32f1xx_hal_dma.o"
+".\objects\stm32f1xx_hal_rcc.o"
+".\objects\stm32f1xx_hal_rcc_ex.o"
+".\objects\system_stm32f1xx.o"
+".\objects\startup_stm32f103xe.o"
+".\objects\main.o"
+".\objects\stm32f1xx_it.o"
+--library_type=microlib --strict --scatter ".\Objects\STM32F10x-Templates.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\STM32F10x-Templates.map" -o .\Objects\STM32F10x-Templates.axf
