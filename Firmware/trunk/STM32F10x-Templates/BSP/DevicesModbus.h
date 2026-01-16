@@ -2,9 +2,7 @@
 #define _DevicesModbus_H_
 
 
-#define MODBUS_ADDRESS_PD           0x10    /* 主机PD */
-#define MODBUS_ADDRESS_BMS          0x96    /* BMS */
-#define MODBUS_ADDRESS_INV0         0x01    /* 谐振INV */
+#define MODBUS_ADDRESS_PD           0x10    /* 主机 */
 
 
 typedef enum {

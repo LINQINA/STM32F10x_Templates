@@ -192,9 +192,7 @@ MODBUS_UNPACK_ADDRESS:
             ptypeData->slaveAddress = ucValue;
 
             /* 有效地址判断 */
-            if((ucValue == MODBUS_ADDRESS_PD)   ||
-               (ucValue == MODBUS_ADDRESS_BMS)  ||
-               (ucValue == MODBUS_ADDRESS_INV0) )
+            if(ucValue == MODBUS_ADDRESS_PD)
             {
                 ptypeData->state = MODBUS_UNPACK_FUNC;
             }
@@ -296,9 +294,7 @@ MODBUS_UNPACK_ADDRESS:
             ptypeData->slaveAddress = ucValue;
 
             /* 有效地址判断 */
-            if((ucValue == MODBUS_ADDRESS_PD)   ||
-               (ucValue == MODBUS_ADDRESS_BMS)  ||
-               (ucValue == MODBUS_ADDRESS_INV0))
+            if(ucValue == MODBUS_ADDRESS_PD)
             {
                 ptypeData->state = MODBUS_UNPACK_FUNC;
             }
