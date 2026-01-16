@@ -36,37 +36,6 @@ typedef enum {
     Modbus_Register_Addr_ChannelA_PhasePosition  = 0x008A,  /* 通道A相位 */
     Modbus_Register_Addr_ChannelA_Frequency      = 0x008B,  /* 通道A频率 */
     Modbus_Register_Addr_ChannelA_ElecQuantity   = 0x008C,  /* 通道A电量 */
-    
-    /* 通用参数B */
-    Modbus_Register_Addr_ChannelB_SystemStatus   = 0x0090,  /* 通道B系统状态 */
-    Modbus_Register_Addr_ChannelB_ErrorCode      = 0x0091,  /* 通道B错误码 */
-    Modbus_Register_Addr_ChannelB_Temperature    = 0x0092,  /* 通道B错误码 */
-    Modbus_Register_Addr_ChannelB_Switch         = 0x0093,  /* 通道B输出开关 */
-    Modbus_Register_Addr_ChannelB_Voltage        = 0x0094,  /* 通道B电压 */
-    Modbus_Register_Addr_ChannelB_Current        = 0x0095,  /* 通道B电流 */
-    Modbus_Register_Addr_ChannelB_ActivePower    = 0x0096,  /* 通道B有功功率 */
-    Modbus_Register_Addr_ChannelB_ReactivePower  = 0x0097,  /* 通道B无功功率 */
-    Modbus_Register_Addr_ChannelB_ApparentPower  = 0x0098,  /* 通道B视在功率 */
-    Modbus_Register_Addr_ChannelB_PowerFactor    = 0x0099,  /* 通道B功率因素 */
-    Modbus_Register_Addr_ChannelB_PhasePosition  = 0x009A,  /* 通道B相位 */
-    Modbus_Register_Addr_ChannelB_Frequency      = 0x009B,  /* 通道B频率 */
-    Modbus_Register_Addr_ChannelB_ElecQuantity   = 0x009C,  /* 通道B电量 */
-    
-    /* HLW8110芯片参数 */
-    Modbus_Register_Addr_HLW8110_Voltage                      = 0x0100,   /* 电压有效值 */
-    Modbus_Register_Addr_HLW8110_ChannelA_Current             = 0x0101,   /* A通道电流 */
-    Modbus_Register_Addr_HLW8110_ChannelA_ActivePower         = 0x0102,   /* A通道有功功率 */
-    Modbus_Register_Addr_HLW8110_ChannelA_ElecQuantity        = 0x0103,   /* A通道有功电量 */
-    Modbus_Register_Addr_HLW8110_ChannelA_ElecQuantity_Backup = 0x0104,   /* A通道电量备份 */
-    Modbus_Register_Addr_HLW8110_PowerFactory                 = 0x0105,   /* 功率因素 */
-    Modbus_Register_Addr_HLW8110_PhaseAngle                   = 0x0106,   /* 相角 */
-    Modbus_Register_Addr_HLW8110_ChannelB_Current             = 0x0107,   /* B通道电流 */
-    Modbus_Register_Addr_HLW8110_ChannelB_ActivePower         = 0x0108,   /* B通道有功功率 */
-    Modbus_Register_Addr_HLW8110_ChannelB_ElecQuantity        = 0x0109,   /* B通道有功电量 */
-    Modbus_Register_Addr_HLW8110_ChannelB_ElecQuantity_Backup = 0x010A,   /* B通道电量备份 */
-    Modbus_Register_Addr_HLW8110_Frequency                    = 0x010B,   /* 市电线性频率 */
-    Modbus_Register_Addr_HLW8110_CurrentChannel               = 0x010C,   /* 电量计当前通道 */
-
 } ModbusRegisterAddrEnum;
 
 int8_t cModbusSendDatas(uint32_t uiChannel, uint16_t usDeviceAddr, void *pvBuff, int32_t iLength, int32_t iFrontTime);

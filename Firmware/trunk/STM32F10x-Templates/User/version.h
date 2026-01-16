@@ -1,7 +1,7 @@
 #ifndef _VERSION_H_
 #define _VERSION_H_
 
-#define PD_VERSION_APP_SOFTWARE         "00.00.02"
+#define APP_SOFTWARE_VERSION         "00.00.01"
 
 typedef struct{
     char headBuff[16];

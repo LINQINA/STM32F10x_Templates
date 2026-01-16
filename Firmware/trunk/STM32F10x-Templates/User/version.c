@@ -14,7 +14,7 @@ static productType st_typeProduct = {
 
 /* 固件地址存储 APP 版本信息 */
 const char cVersionHardBuff[32] __attribute__ ((section(".ARM.__at_0x0801A800"))) = {0};
-const char cVersionSoftBuff[32] __attribute__ ((section(".ARM.__at_0x0801A820"))) = PD_VERSION_APP_SOFTWARE;
+const char cVersionSoftBuff[32] __attribute__ ((section(".ARM.__at_0x0801A820"))) = APP_SOFTWARE_VERSION;
 const char cVersionDateBuff[32] __attribute__ ((section(".ARM.__at_0x0801A840"))) = __DATE__" - "__TIME__;
 const char cVersionTypeBuff[32] __attribute__ ((section(".ARM.__at_0x0801A860"))) = "MySTM32";
 const static char st_cVersionBuff[] = "00.00.00";

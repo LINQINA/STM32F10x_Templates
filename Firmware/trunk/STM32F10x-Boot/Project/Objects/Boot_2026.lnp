@@ -39,7 +39,7 @@
 ".\objects\usersystem.o"
 ".\objects\system_stm32f1xx.o"
 ".\objects\version.o"
---strict --scatter ".\Objects\Boot_2025.sct"
+--strict --scatter ".\Objects\Boot_2026.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
---list ".\Listings\Boot_2025.map" -o .\Objects\Boot_2025.axf
+--list ".\Listings\Boot_2026.map" -o .\Objects\Boot_2026.axf

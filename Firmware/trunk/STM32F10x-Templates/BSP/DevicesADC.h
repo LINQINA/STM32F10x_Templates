@@ -27,4 +27,3 @@ void vADCxScanHigh(void);
 float fADCListValueGet(AdcListEnum enumChannel);
 
 #endif
-

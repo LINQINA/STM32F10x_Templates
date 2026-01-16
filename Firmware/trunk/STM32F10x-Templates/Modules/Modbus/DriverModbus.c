@@ -54,29 +54,6 @@ int8_t cModbusPDRegisterUpdate(void)
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_PhasePosition] = 4;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Frequency] = 5;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_ElecQuantity] = 6;
-    
-    /* 通道B参数 */
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelB_Voltage] = 1;
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelB_Current] = 2;
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelB_ActivePower] = 3;
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelB_PhasePosition] = 4;
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelB_Frequency] = 5;
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelB_ElecQuantity] = 6;
-    
-    /* HLW8110参数 */
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_Voltage] = 1;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelA_Current] = 2;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelA_ActivePower] = 3;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelA_ElecQuantity] = 4;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelA_ElecQuantity_Backup] = 5;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_PowerFactory] = 6;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_PhaseAngle] = 7;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelB_Current] = 8;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelB_ActivePower] = 9;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelB_ElecQuantity] = 10;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_ChannelB_ElecQuantity_Backup] = 11;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_Frequency] = 12;
-    st_usRegisterBuff[Modbus_Register_Addr_HLW8110_CurrentChannel] = 0; //0代表通道A
 
     return 0;
 }
