@@ -28,11 +28,11 @@ int8_t cTimer6Init(void)
     __HAL_RCC_TIM6_CLK_ENABLE();
 
     g_timer6_initpara.Instance = TIM6;
-    g_timer6_initpara.Init.Prescaler = (SystemCoreClock / 1000000) -1;
-    g_timer6_initpara.Init.CounterMode = TIM_COUNTERMODE_UP;
-    g_timer6_initpara.Init.Period = 65536 - 1;
-    g_timer6_initpara.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-    g_timer6_initpara.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+    g_timer6_initpara.Init.Prescaler = (SystemCoreClock / 1000000) -1;          /* 预分频系数 */
+    g_timer6_initpara.Init.CounterMode = TIM_COUNTERMODE_UP;                    /* 基本定时器只能向上计数 */
+    g_timer6_initpara.Init.Period = 65536 - 1;                                  /* 自动重载值 ARR */
+    g_timer6_initpara.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;              /* 时钟分频因子,基本定时器无此功能 */
+    g_timer6_initpara.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;   /* 自动重载预装载使能位,当为1的时候,ARR会进行缓冲 */
 
     HAL_TIM_Base_Init(&g_timer6_initpara);
 
