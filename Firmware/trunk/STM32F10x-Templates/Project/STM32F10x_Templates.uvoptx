@@ -234,8 +234,8 @@
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
-          <SubType>0</SubType>
-          <ItemText>0x20003770</ItemText>
+          <SubType>5</SubType>
+          <ItemText>0x20006C00</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>

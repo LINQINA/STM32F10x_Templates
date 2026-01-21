@@ -46,6 +46,14 @@ void vApplicationIdleHook(void)
     vWatchdogReload();
 }
 
+/* 不加入此程序,初始化的时候会进入HardFault,因为HAL_Init会使能SysTick */
+HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
+{
+    /* FreeRTOS 负责配置 SysTick，这里不做任何事 */
+    (void)TickPriority;
+    return HAL_OK;
+}
+
 uint32_t HAL_GetTick(void)
 {
     if(xTaskGetSchedulerState() == taskSCHEDULER_RUNNING)
