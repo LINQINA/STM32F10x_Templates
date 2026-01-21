@@ -161,13 +161,13 @@ void vUSART1ReceiveCallback(void)
         if(uiMDANdtrNow < uiMDANdtrOld)
         {
             /* 把数据读取到UART队列 */
-            enumQueuePushDatas(&g_TypeQueueUart1Read, &g_USART1ReadDMABuff[uiMDANdtrOld], USART1_DMA_READ_LENGTH - uiMDANdtrOld);
+            enumQueuePushDatas(&g_TypeQueueUart0Read, &g_USART1ReadDMABuff[uiMDANdtrOld], USART1_DMA_READ_LENGTH - uiMDANdtrOld);
 
             uiMDANdtrOld = 0;
         }
 
         /* 把数据读取到UART队列 */
-        enumQueuePushDatas(&g_TypeQueueUart1Read, &g_USART1ReadDMABuff[uiMDANdtrOld], uiMDANdtrNow - uiMDANdtrOld);
+        enumQueuePushDatas(&g_TypeQueueUart0Read, &g_USART1ReadDMABuff[uiMDANdtrOld], uiMDANdtrNow - uiMDANdtrOld);
 
         uiMDANdtrOld = uiMDANdtrNow;
     }

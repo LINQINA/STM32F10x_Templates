@@ -10,7 +10,7 @@
 #define USART2_DMA_SEND_LENGTH  (0)
 
 extern uint8_t g_USART1ReadDMABuff[USART1_DMA_READ_LENGTH]; 
-extern uint8_t g_USART2ReadDMABuff[USART1_DMA_READ_LENGTH];
+extern uint8_t g_USART2ReadDMABuff[USART2_DMA_READ_LENGTH];
 
 extern UART_HandleTypeDef g_uart1_handle;
 extern DMA_HandleTypeDef  g_dma_usart1_rx;

@@ -47,6 +47,8 @@ uint32_t uiSPIFlashReadID(void)
     uint16_t usID = 0xFFFF;
     uint8_t ucDatas[4] = {READ_ID_CMD,0x00,0x00,0x00};
 
+    cSPIFlashLock();
+
     SPI_FLASH_CS_ENABLE();
 
     cSPIxWriteDatas(ucDatas,4);
@@ -69,11 +71,11 @@ static uint8_t ucSPIFlashReadStatus(uint8_t ucRegNo)
     
     switch(ucRegNo)
     {
-        case 1 : ucReadStatusCMD = READ_STATUS_REG1_CMD;
-        case 2 : ucReadStatusCMD = READ_STATUS_REG2_CMD;
-        case 3 : ucReadStatusCMD = READ_STATUS_REG3_CMD;
+        case 1 : ucReadStatusCMD = READ_STATUS_REG1_CMD; break;
+        case 2 : ucReadStatusCMD = READ_STATUS_REG2_CMD; break;
+        case 3 : ucReadStatusCMD = READ_STATUS_REG3_CMD; break;
 
-        default : ucReadStatusCMD = READ_STATUS_REG1_CMD;
+        default : ucReadStatusCMD = READ_STATUS_REG1_CMD; break;
     }
     
     /* 判断 SPI Flash 是否连接正常 */

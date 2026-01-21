@@ -42,19 +42,12 @@ typedef struct{
 }QueueType;
 
 
-/* USART0 */
+/* USART0 - LOG */
 extern QueueType g_TypeQueueUart0Read;
-/* USART1 */
+/* USART1 - BUS */
 extern QueueType g_TypeQueueUart1Read;
-/* USART2 */
-extern QueueType g_TypeQueueUart2Read;
-/* USART3 */
-extern QueueType g_TypeQueueUart3Read;
 /* Can */ 
-extern QueueType g_TypeQueueCanHostRead; 
-
-/* 透传 */
-extern QueueType g_TypeQueueSeriaNet;
+extern QueueType g_TypeQueueCanHostRead;
 
 
 enumQueueState enumQueueInit(void);

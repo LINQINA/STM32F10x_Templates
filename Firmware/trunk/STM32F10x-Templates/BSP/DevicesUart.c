@@ -187,7 +187,7 @@ void vUart2DMAInit(void)
 
 void vUartBaudrateSet(uint32_t uiUsartPeriph, int32_t iBaudrate)
 {
-    UART_HandleTypeDef *huart;
+    UART_HandleTypeDef *huart = NULL;
     
     if(iBaudrate < 1)
         return;
@@ -198,12 +198,11 @@ void vUartBaudrateSet(uint32_t uiUsartPeriph, int32_t iBaudrate)
         case (uint32_t)UART_BUS: huart = &g_uart2_handle; break;
 
         default:
-            break;
+            return;
     }
 
     __HAL_UART_DISABLE(huart);
 
-    huart = (UART_HandleTypeDef *)uiUsartPeriph;
     huart->Init.BaudRate = iBaudrate;
 
     __HAL_UART_ENABLE(huart);
@@ -213,7 +212,7 @@ void vUartSendDatas(uint32_t uiUsartPeriph, void *pvDatas, int32_t iLength)
 {
     uint32_t uiTime = 0;
     uint8_t *pucDatas = pvDatas;
-    UART_HandleTypeDef* huart;
+    UART_HandleTypeDef* huart = NULL;
 
     switch (uiUsartPeriph)
     {
@@ -221,7 +220,7 @@ void vUartSendDatas(uint32_t uiUsartPeriph, void *pvDatas, int32_t iLength)
         case (uint32_t)UART_BUS: huart = &g_uart2_handle; break;
 
         default:
-            break;
+            return;
     }
 
     while((iLength--) > 0)
@@ -242,17 +241,18 @@ void vUartSendStrings(uint32_t uiUsartPeriph, char *pcStrings)
 
 void vUartDMASendDatas(uint32_t uiUsartPeriph, void *pvDatas, int32_t iLength)
 {
-    UART_HandleTypeDef *huart;
-    DMA_HandleTypeDef *dmaTxHandle;
+    UART_HandleTypeDef *huart = NULL;
+    DMA_HandleTypeDef *dmaTxHandle = NULL;
+    uint32_t uiDmaFlag = 0;
     uint32_t uiTime;
     
     switch (uiUsartPeriph)
     {
-        case (uint32_t)UART_LOG: huart = &g_uart1_handle; dmaTxHandle = &g_dma_usart1_tx; break;
-        case (uint32_t)UART_BUS: huart = &g_uart2_handle; dmaTxHandle = &g_dma_usart2_tx; break;
+        case (uint32_t)UART_LOG: huart = &g_uart1_handle; dmaTxHandle = &g_dma_usart1_tx; uiDmaFlag = DMA_FLAG_TC4; break;
+        case (uint32_t)UART_BUS: huart = &g_uart2_handle; dmaTxHandle = &g_dma_usart2_tx; uiDmaFlag = DMA_FLAG_TC7; break;
 
         default:
-            break;
+            return;
     }
     
     HAL_UART_Transmit_DMA(huart, pvDatas, iLength);
@@ -264,7 +264,7 @@ void vUartDMASendDatas(uint32_t uiUsartPeriph, void *pvDatas, int32_t iLength)
     }
 
     /* 等待本次DMA传输完成 */
-    while ((__HAL_DMA_GET_FLAG(dmaTxHandle, DMA_FLAG_TC7) == RESET) &&
+    while ((__HAL_DMA_GET_FLAG(dmaTxHandle, uiDmaFlag) == RESET) &&
            (__HAL_DMA_GET_COUNTER(dmaTxHandle) != 0) &&
            ((iLength--) > 0))
     {

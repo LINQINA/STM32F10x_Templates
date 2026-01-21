@@ -86,8 +86,7 @@ void vCan1Init(void)
 int8_t cCanSendDatas(uint32_t can_periph, uint32_t uiID, void *pvDatas, int32_t iLength)
 {
     uint32_t uiTxMail  = 0;
-    int32_t iTimeOut;
-    int8_t cError;
+    int8_t cError = 0;
 
     if(pvDatas == NULL)
         return 1;
