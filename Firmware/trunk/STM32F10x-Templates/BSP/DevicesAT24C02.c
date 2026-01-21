@@ -35,7 +35,7 @@ int8_t cAT24C02WriteDatas(uint8_t ucAddress,uint8_t *pucDatas,uint16_t usLength)
         usLengthTemp = usLength > (PAGE_SIZE - ucAddress % PAGE_SIZE) ? (PAGE_SIZE - ucAddress % PAGE_SIZE) : usLength;
 
         cError = iI2CWriteDatas(AT24C02_WRITE_ADDRESS, ucAddress, pucDatas, usLengthTemp);
-        
+
         if(cError != 0)
             break;
 
