@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\STM32F10x_Templates.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\STM32F10x_Templates.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6160001: Last Updated: Thu Jan 22 14:58:31 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6160001: Last Updated: Thu Jan 22 15:25:18 2026
 <BR><P>
 <H3>Maximum Stack Usage =        424 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1737,7 +1737,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cModbusSeriaNet
 </UL>
 
-<P><STRONG><a name="[129]"></a>fADCxChannelValueGet</STRONG> (Thumb, 168 bytes, Stack size 40 bytes, devicesadc.o(.text.fADCxChannelValueGet))
+<P><STRONG><a name="[129]"></a>fADCxChannelValueGet</STRONG> (Thumb, 172 bytes, Stack size 40 bytes, devicesadc.o(.text.fADCxChannelValueGet))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = fADCxChannelValueGet &rArr; HAL_ADC_PollForConversion &rArr; HAL_RCCEx_GetPeriphCLKFreq &rArr; HAL_RCC_GetPCLK2Freq
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2f
@@ -2055,7 +2055,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM7_IRQHandler
 </UL>
 
-<P><STRONG><a name="[170]"></a>vADCxScanLow</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, devicesadc.o(.text.vADCxScanLow))
+<P><STRONG><a name="[170]"></a>vADCxScanLow</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, devicesadc.o(.text.vADCxScanLow))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = vADCxScanLow &rArr; fADCxChannelValueGet &rArr; HAL_ADC_PollForConversion &rArr; HAL_RCCEx_GetPeriphCLKFreq &rArr; HAL_RCC_GetPCLK2Freq
 </UL>
 <BR>[Calls]<UL><LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fADCxChannelValueGet

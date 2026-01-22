@@ -114,7 +114,7 @@ void vADC1DMA1Enable(uint16_t cndtr)
     HAL_ADC_Start_DMA(&g_typeADC1Handle, (uint32_t*)st_usADC1DmaDatas, cndtr);
 }
 
-float fADCxChannelValueGet(ADC_HandleTypeDef *adc_periph,uint32_t rank, uint32_t channel, uint32_t uiCnt)
+float fADCxChannelValueGet(ADC_HandleTypeDef *adc_periph, uint32_t channel, uint32_t uiCnt)
 {
     ADC_ChannelConfTypeDef adc_Channel_Config = {0};
     uint32_t uiValueSum = 0;
@@ -127,7 +127,7 @@ float fADCxChannelValueGet(ADC_HandleTypeDef *adc_periph,uint32_t rank, uint32_t
         return 0.0f;
 
     /* 通道初始化 (必须先赋值，再调用 ConfigChannel) */
-    adc_Channel_Config.Rank = rank;
+    adc_Channel_Config.Rank = 1;
     adc_Channel_Config.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
     adc_Channel_Config.Channel = channel;
     HAL_ADC_ConfigChannel(adc_periph, &adc_Channel_Config);
@@ -163,7 +163,7 @@ float fADCxDmaValueGet(uint16_t *pDatasHand, uint16_t enumChannel, uint16_t usCh
 
 void vADCxScanLow(void)
 {
-    g_fADCxListValues[ADC_LIST_DC_MINI_IN_VOLTAGE] = fADCxChannelValueGet(&g_typeADC2Handle, 1, ADC_SAMPLE_DC_MINI_VOLTAGE, ADC2_SAMPLING_NUMBER);
+    g_fADCxListValues[ADC_LIST_DC_MINI_IN_VOLTAGE] = fADCxChannelValueGet(&g_typeADC2Handle, ADC_SAMPLE_DC_MINI_VOLTAGE, ADC2_SAMPLING_NUMBER);
 }
 
 void vADCxScanHigh(void)
