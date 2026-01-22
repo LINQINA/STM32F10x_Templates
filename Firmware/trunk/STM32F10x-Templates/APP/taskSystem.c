@@ -80,7 +80,7 @@ void vUserSystemInit(void)
 
     vLedInit();
 
-    vBeepInit();
+    //vBeepInit();
 
     vKeyInit();
 

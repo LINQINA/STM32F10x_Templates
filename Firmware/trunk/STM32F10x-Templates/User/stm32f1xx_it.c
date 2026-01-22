@@ -237,14 +237,6 @@ void DMA1_Channel5_IRQHandler(void)
     }
 }
 
-void DMA1_Channel1_IRQHandler(void)
-{
-    if(DMA1->ISR & (1 << 1))
-    {
-        do{ DMA1->IFCR |= 1 << 1; }while(0);
-    }
-}
-
 void CAN1_RX0_IRQHandler(void)
 {
     CAN_RxHeaderTypeDef can1_rxheader;    /* CAN接收结构体 */

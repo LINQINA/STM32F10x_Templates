@@ -149,6 +149,13 @@
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
+      <WatchWindow1>
+        <Ww>
+          <count>0</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_fADCxListValues</ItemText>
+        </Ww>
+      </WatchWindow1>
       <WatchWindow2>
         <Ww>
           <count>0</count>
@@ -229,6 +236,11 @@
           <count>15</count>
           <WinNumber>2</WinNumber>
           <ItemText>readdatas</ItemText>
+        </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>g_fADCxListValues</ItemText>
         </Ww>
       </WatchWindow2>
       <MemoryWindow1>

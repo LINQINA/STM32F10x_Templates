@@ -9,6 +9,8 @@ static uint16_t st_usADC1DmaDatas[ADC1_SAMPLING_CHANNEL];
 
 /* ADC1 句柄 */
 ADC_HandleTypeDef g_typeADC1Handle;
+/* ADC2 句柄 */
+ADC_HandleTypeDef g_typeADC2Handle;
 
 void vADC1DMAInit(uint32_t uiAdcxMemAddr, uint16_t usAdcxDmaLength);
 void vADC1DMA1Enable(uint16_t cndtr);
@@ -20,6 +22,7 @@ void vADCInit(void)
 
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_ADC1_CLK_ENABLE();
+    __HAL_RCC_ADC2_CLK_ENABLE();
 
    /* ADC外设时钟 */
     adc_clk_init.PeriphClockSelection = RCC_PERIPHCLK_ADC;
@@ -28,75 +31,87 @@ void vADCInit(void)
     /* 设置ADC时钟 */
     HAL_RCCEx_PeriphCLKConfig(&adc_clk_init);
 
+    /* PA1 初始化 (ADC1) */
     GPIO_InitStruct.Pin = GPIO_PIN_1;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    /* ADC1 初始化 */
+    /* PA5 初始化 (ADC2) */
+    GPIO_InitStruct.Pin = GPIO_PIN_5;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    /* ADC1 初始化 (DMA快速模式) */
     g_typeADC1Handle.Instance = ADC1;                            /* ADC1 */
     g_typeADC1Handle.Init.DataAlign = ADC_DATAALIGN_RIGHT;       /* 数据对齐方式：右对齐 */
-    g_typeADC1Handle.Init.ScanConvMode = ADC_SCAN_DISABLE;       /* 非扫描模式，仅用到一个通道 */
+    g_typeADC1Handle.Init.ScanConvMode = ADC_SCAN_ENABLE;        /* 连续扫描模式开启 */
     g_typeADC1Handle.Init.ContinuousConvMode = ENABLE;           /* 开启连续转换模式 */
     g_typeADC1Handle.Init.NbrOfConversion = 1;                   /* 赋值范围是1~16，本实验用到1个规则通道序列 */
     g_typeADC1Handle.Init.DiscontinuousConvMode = DISABLE;       /* 禁止规则通道组间断模式 */
     g_typeADC1Handle.Init.NbrOfDiscConversion = 0;               /* 配置间断模式的规则通道个数，禁止规则通道组间断模式后，此参数忽略 */
     g_typeADC1Handle.Init.ExternalTrigConv = ADC_SOFTWARE_START; /* 触发转换方式：软件触发 */
+
     HAL_ADC_Init(&g_typeADC1Handle);                             /* 初始化 */
     HAL_ADCEx_Calibration_Start(&g_typeADC1Handle);              /* 校准ADC */
 
     vADC1DMAInit((uint32_t)&st_usADC1DmaDatas,ADC1_SAMPLING_CHANNEL);
 
     HAL_ADC_Start(&g_typeADC1Handle);
+
+    /* ADC2 初始化 */
+    g_typeADC2Handle.Instance = ADC2;                            /* ADC2 */
+    g_typeADC2Handle.Init.DataAlign = ADC_DATAALIGN_RIGHT;       /* 数据对齐方式：右对齐 */
+    g_typeADC2Handle.Init.ScanConvMode = ADC_SCAN_DISABLE;       /* 非扫描模式 */
+    g_typeADC2Handle.Init.ContinuousConvMode = DISABLE;          /* 关闭连续转换 (轮询是按需采样的) */
+    g_typeADC2Handle.Init.NbrOfConversion = 1;                   /* 赋值范围是1~16，本实验用到1个规则通道序列 */
+    g_typeADC2Handle.Init.DiscontinuousConvMode = DISABLE;       /* 禁止规则通道组间断模式 */
+    g_typeADC2Handle.Init.NbrOfDiscConversion = 0;               /* 配置间断模式的规则通道个数，禁止规则通道组间断模式后，此参数忽略 */
+    g_typeADC2Handle.Init.ExternalTrigConv = ADC_SOFTWARE_START; /* 软件触发 */
+
+    HAL_ADC_Init(&g_typeADC2Handle);                             /* 初始化 */
+    HAL_ADCEx_Calibration_Start(&g_typeADC2Handle);              /* 校准ADC */
 }
 
 void vADC1DMAInit(uint32_t uiAdcxMemAddr, uint16_t usAdcxDmaLength)
 {
-    DMA_HandleTypeDef typeDMAADC_handle = {0};
+    static DMA_HandleTypeDef st_typeDMAADC_handle = {0};
     
     ADC_ChannelConfTypeDef adc_Channel_Config = {0};
 
     __HAL_RCC_DMA1_CLK_ENABLE();
-    
-    typeDMAADC_handle.Instance = DMA1_Channel1;
-    typeDMAADC_handle.Init.Direction = DMA_PERIPH_TO_MEMORY;                 /* 从外设到存储器模式 */
-    typeDMAADC_handle.Init.PeriphInc = DMA_PINC_DISABLE;                     /* 外设非增量模式 */
-    typeDMAADC_handle.Init.MemInc = DMA_MINC_ENABLE;                         /* 存储器增量模式 */
-    typeDMAADC_handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;    /* 外设数据长度:16位 */
-    typeDMAADC_handle.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;       /* 存储器数据长度:16位 */
-    typeDMAADC_handle.Init.Mode = DMA_CIRCULAR;                              /* 外设流控模式 */
-    typeDMAADC_handle.Init.Priority = DMA_PRIORITY_MEDIUM;                   /* 中等优先级 */
-    HAL_DMA_Init(&typeDMAADC_handle);
 
-    __HAL_LINKDMA(&g_typeADC1Handle, DMA_Handle, typeDMAADC_handle);         /* 将DMA与adc联系起来 */
+    st_typeDMAADC_handle.Instance = DMA1_Channel1;
+    st_typeDMAADC_handle.Init.Direction = DMA_PERIPH_TO_MEMORY;                 /* 从外设到存储器模式 */
+    st_typeDMAADC_handle.Init.PeriphInc = DMA_PINC_DISABLE;                     /* 外设非增量模式 */
+    st_typeDMAADC_handle.Init.MemInc = DMA_MINC_ENABLE;                         /* 存储器增量模式 */
+    st_typeDMAADC_handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;    /* 外设数据长度:16位 */
+    st_typeDMAADC_handle.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;       /* 存储器数据长度:16位 */
+    st_typeDMAADC_handle.Init.Mode = DMA_CIRCULAR;                              /* 外设流控模式 */
+    st_typeDMAADC_handle.Init.Priority = DMA_PRIORITY_MEDIUM;                   /* 中等优先级 */
+    HAL_DMA_Init(&st_typeDMAADC_handle);
+
+    __HAL_LINKDMA(&g_typeADC1Handle, DMA_Handle, st_typeDMAADC_handle);         /* 将DMA与adc联系起来 */
 
     /* 通道初始化 */
     adc_Channel_Config.Rank = ADC_REGULAR_RANK_1;
     adc_Channel_Config.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
     adc_Channel_Config.Channel = ADC_CHANNEL_1;
     HAL_ADC_ConfigChannel(&g_typeADC1Handle, &adc_Channel_Config);
-    
-    /* 配置DMA数据流请求中断优先级 */
-    HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 3, 3);
-    HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 
-    HAL_DMA_Start_IT(&typeDMAADC_handle, (uint32_t)&ADC1->DR, uiAdcxMemAddr, 0);         /* 启动DMA，并开启中断 */
-    HAL_ADC_Start_DMA(&g_typeADC1Handle, &uiAdcxMemAddr, 0);                             /* 开启ADC，通过DMA传输结果 */
+    HAL_ADC_Start_DMA(&g_typeADC1Handle, (uint32_t*)st_usADC1DmaDatas, usAdcxDmaLength);/* 开启ADC，通过DMA传输结果 */
 
     vADC1DMA1Enable(usAdcxDmaLength);
 }
 
 void vADC1DMA1Enable(uint16_t cndtr)
 {
-    ADC1->CR2 &= ~(1 << 0);                    /* 先关闭ADC */
+    /* 1.关闭 DMA 转换 */
+    HAL_ADC_Stop_DMA(&g_typeADC1Handle);
 
-    DMA1_Channel1->CCR &= ~(1 << 0);           /* 关闭DMA传输 */
-    while (DMA1_Channel1->CCR & (1 << 0));     /* 确保DMA可以被设置 */
-    DMA1_Channel1->CNDTR = cndtr;              /* DMA传输数据量 */
-    DMA1_Channel1->CCR |= 1 << 0;              /* 开启DMA传输 */
-
-    ADC1->CR2 |= 1 << 0;                       /* 重新启动ADC */
-    ADC1->CR2 |= 1 << 22;                      /* 启动规则转换通道 */
+    /* 2.重新启动DMA转换 */
+    HAL_ADC_Start_DMA(&g_typeADC1Handle, (uint32_t*)st_usADC1DmaDatas, cndtr);
 }
 
 float fADCxChannelValueGet(ADC_HandleTypeDef *adc_periph,uint32_t rank, uint32_t channel, uint32_t uiCnt)
@@ -108,17 +123,20 @@ float fADCxChannelValueGet(ADC_HandleTypeDef *adc_periph,uint32_t rank, uint32_t
     if(adc_periph->Instance == NULL)
         return 0.0f;
 
-    /* 通道初始化 */
+    if(uiCnt < 3)
+        return 0.0f;
+
+    /* 通道初始化 (必须先赋值，再调用 ConfigChannel) */
     adc_Channel_Config.Rank = rank;
     adc_Channel_Config.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
     adc_Channel_Config.Channel = channel;
-    HAL_ADC_ConfigChannel(&g_typeADC1Handle, &adc_Channel_Config);
+    HAL_ADC_ConfigChannel(adc_periph, &adc_Channel_Config);
 
     /* 切换通道后，丢弃第一次转换的数据 */
     HAL_ADC_Start(adc_periph);
     HAL_ADC_PollForConversion(adc_periph, 10);
     HAL_ADC_GetValue(adc_periph);
-    
+
     for(uint32_t i = 0; i < uiCnt; ++i)
     {
         HAL_ADC_Start(adc_periph);
@@ -145,12 +163,12 @@ float fADCxDmaValueGet(uint16_t *pDatasHand, uint16_t enumChannel, uint16_t usCh
 
 void vADCxScanLow(void)
 {
-    g_fADCxListValues[ADC_LIST_DC_IN_VOLTAGE] = fADCxChannelValueGet(&g_typeADC1Handle,1,ADC_SAMPLE_DC_VOLTAGE,ADC1_SAMPLING_NUMBER);
+    g_fADCxListValues[ADC_LIST_DC_MINI_IN_VOLTAGE] = fADCxChannelValueGet(&g_typeADC2Handle, 1, ADC_SAMPLE_DC_MINI_VOLTAGE, ADC2_SAMPLING_NUMBER);
 }
 
 void vADCxScanHigh(void)
 {
-    g_fADCxListValues[ADC_LIST_DC_IN_VOLTAGE] = fADCxDmaValueGet(st_usADC1DmaDatas,ADC_LIST_DC_IN_VOLTAGE,ADC1_SAMPLING_DMA_NUMBER);
+    g_fADCxListValues[ADC_LIST_DC_IN_VOLTAGE] = fADCxDmaValueGet(st_usADC1DmaDatas, ADC_DMA_SCAN_DC_IN_VOLTAGE, ADC1_DMA_SCAN_MAX);
 }
 
 /*!

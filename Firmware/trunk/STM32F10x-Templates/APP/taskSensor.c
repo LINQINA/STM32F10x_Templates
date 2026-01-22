@@ -27,7 +27,7 @@ void vTaskSensor(void *pvParameters)
         vTaskDelayUntil(&rtosTypeTickNow, 5 / portTICK_RATE_MS);
 
         /* ADC信息更新 */
-        //vADCxScanLow();
+        vADCxScanLow();
 
         /* 产品信息更新 */
         cProductInfoUpdate();
