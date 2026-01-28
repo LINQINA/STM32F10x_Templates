@@ -13,7 +13,7 @@ int64_t lTimeGetStamp(void)
 {
     int64_t iTimeBaseNow = 0;
     uint32_t now = 0;
-    
+
     do
     {
         iTimeBaseNow = g_iTimeBase;
@@ -24,3 +24,6 @@ int64_t lTimeGetStamp(void)
     
     return iTimeBaseNow + now;
 }
+
+
+

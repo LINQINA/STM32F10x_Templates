@@ -528,6 +528,16 @@
               <FileType>1</FileType>
               <FilePath>..\Firmware\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f1xx_hal_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Firmware\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_rtc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Firmware\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rtc_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -559,9 +569,14 @@
               <FilePath>..\BSP\DevicesLed.c</FilePath>
             </File>
             <File>
-              <FileName>DevicesTimer.c</FileName>
+              <FileName>DevicesKey.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\BSP\DevicesTimer.c</FilePath>
+              <FilePath>..\BSP\DevicesKey.c</FilePath>
+            </File>
+            <File>
+              <FileName>DevicesRTC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\DevicesRTC.c</FilePath>
             </File>
             <File>
               <FileName>DevicesTime.c</FileName>
@@ -569,9 +584,9 @@
               <FilePath>..\BSP\DevicesTime.c</FilePath>
             </File>
             <File>
-              <FileName>DevicesKey.c</FileName>
+              <FileName>DevicesTimer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\BSP\DevicesKey.c</FilePath>
+              <FilePath>..\BSP\DevicesTimer.c</FilePath>
             </File>
             <File>
               <FileName>DevicesSoftTimer.c</FileName>
@@ -579,19 +594,24 @@
               <FilePath>..\BSP\DevicesSoftTimer.c</FilePath>
             </File>
             <File>
+              <FileName>DevicesDelay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\DevicesDelay.c</FilePath>
+            </File>
+            <File>
               <FileName>DevicesUart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\DevicesUart.c</FilePath>
             </File>
             <File>
+              <FileName>DevicesRS485.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\DevicesRS485.c</FilePath>
+            </File>
+            <File>
               <FileName>DevicesQueue.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\DevicesQueue.c</FilePath>
-            </File>
-            <File>
-              <FileName>DevicesDelay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\BSP\DevicesDelay.c</FilePath>
             </File>
             <File>
               <FileName>DevicesModbus.c</FileName>
@@ -602,11 +622,6 @@
               <FileName>DevicesCRC.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\DevicesCRC.c</FilePath>
-            </File>
-            <File>
-              <FileName>DevicesRS485.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\BSP\DevicesRS485.c</FilePath>
             </File>
             <File>
               <FileName>DevicesIIC.c</FileName>

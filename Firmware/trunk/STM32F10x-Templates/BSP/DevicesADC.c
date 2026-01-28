@@ -126,7 +126,7 @@ float fADCxChannelValueGet(ADC_HandleTypeDef *adc_periph, uint32_t channel, uint
     if(uiCnt < 3)
         return 0.0f;
 
-    /* 通道初始化 (必须先赋值，再调用 ConfigChannel) */
+    /* 通道初始化  */
     adc_Channel_Config.Rank = 1;
     adc_Channel_Config.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
     adc_Channel_Config.Channel = channel;
