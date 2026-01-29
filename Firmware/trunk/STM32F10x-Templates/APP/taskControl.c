@@ -8,6 +8,9 @@
 
 TaskHandle_t g_TaskControlHand;   /* 逻辑、交互处理任务句柄 */
 
+/* 需要设定的系统外设信息 */
+ControlInfoType g_typeControlInfo;
+
 static int8_t cControlMode(void);
 
 void vTaskControl(void *pvParameters)
@@ -22,6 +25,11 @@ void vTaskControl(void *pvParameters)
 
         cControlMode();
     }
+}
+
+ControlInfoType *ptypeControlInfoGet(void)
+{
+    return &g_typeControlInfo;
 }
 
 static int8_t cControlMode(void)

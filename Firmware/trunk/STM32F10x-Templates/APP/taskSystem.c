@@ -13,6 +13,8 @@
 #include "DevicesSPIFlash.h"
 #include "DevicesWatchDog.h"
 #include "DevicesIIC.h"
+#include "DevicesTime.h"
+#include "DevicesRTC.h"
 
 #include "DriverBootloader.h"
 
@@ -78,9 +80,11 @@ void vUserSystemInit(void)
     cTimer3Init();
     cTimer7Init();
 
+    vRTCInit();
+
     vLedInit();
 
-    vBeepInit();
+    //vBeepInit();
 
     vKeyInit();
 
@@ -91,7 +95,7 @@ void vUserSystemInit(void)
 
     cSoftTimerInit();
 
-    vWatchdogInit();
+    //vWatchdogInit();
 }
 
 void vTaskSystemInit(void *pvParameters)

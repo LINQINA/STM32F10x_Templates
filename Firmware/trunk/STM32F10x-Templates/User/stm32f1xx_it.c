@@ -27,11 +27,12 @@
 #include "DevicesUart.h"
 #include "DevicesQueue.h"
 #include "DevicesTimer.h"
+#include "DevicesTime.h"
 #include "DevicesADC.h"
 #include "DevicesCAN.h"
 
 
-extern volatile int64_t g_iTimeBase;
+
 
 /** @addtogroup STM32F1xx_HAL_Examples
   * @{
@@ -137,7 +138,7 @@ void TIM6_IRQHandler(void)
     {
         __HAL_TIM_CLEAR_FLAG(&g_timer6_initpara,TIM_FLAG_UPDATE);
         
-        g_iTimeBase += 63356;
+        g_iTimeBase += 65536;
     }
 }
 

@@ -28,6 +28,7 @@
 ".\objects\stm32f1xx_hal_adc_ex.o"
 ".\objects\stm32f1xx_hal_rtc.o"
 ".\objects\stm32f1xx_hal_rtc_ex.o"
+".\objects\stm32f1xx_hal_pwr.o"
 ".\objects\startup_stm32f103xe.o"
 ".\objects\devicesadc.o"
 ".\objects\devicesbeep.o"

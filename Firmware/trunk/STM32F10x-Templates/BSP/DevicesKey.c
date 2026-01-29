@@ -17,7 +17,7 @@ void vKeyInit(void)
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOE_CLK_ENABLE();
-    
+
     /* KEY_0 Òý½Å */
     GPIO_InitStruct.Pin   = KEY_0_Pin;
     GPIO_InitStruct.Mode  = GPIO_MODE_INPUT;
@@ -31,7 +31,7 @@ void vKeyInit(void)
     GPIO_InitStruct.Pull  = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(KEY_1_GPIO_Port,&GPIO_InitStruct);
-    
+
     /* KEY_UP Òý½Å */
     GPIO_InitStruct.Pin   = KEY_UP_Pin;
     GPIO_InitStruct.Mode  = GPIO_MODE_INPUT;
