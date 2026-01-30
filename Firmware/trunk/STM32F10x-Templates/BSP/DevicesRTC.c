@@ -20,7 +20,7 @@ void vRTCInit(void)
     
     /* 初始化 RTC（会自动调用 HAL_RTC_MspInit 配置时钟） */
     hrtc.Instance = RTC;
-    hrtc.Init.AsynchPrediv = 32767;
+    hrtc.Init.AsynchPrediv = RTC_AUTO_1_SECOND;
     hrtc.Init.OutPut = RTC_OUTPUTSOURCE_NONE;
     HAL_RTC_Init(&hrtc);
     
