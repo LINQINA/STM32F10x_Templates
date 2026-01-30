@@ -30,6 +30,7 @@
 #include "DevicesTime.h"
 #include "DevicesADC.h"
 #include "DevicesCAN.h"
+#include "DevicesRTC.h"
 
 
 
@@ -255,6 +256,17 @@ void CAN1_RX0_IRQHandler(void)
                 enumQueuePushDatas(&g_TypeQueueCanHostRead, rxData, can1_rxheader.DLC);
             }
         }
+    }
+}
+
+void RTC_IRQHandler(void)
+{
+    /* 闹钟中断 */
+    if(__HAL_RTC_ALARM_GET_FLAG(&hrtc, RTC_FLAG_ALRAF) != RESET)
+    {
+        __HAL_RTC_ALARM_CLEAR_FLAG(&hrtc, RTC_FLAG_ALRAF);
+        
+        /* TODO: 在这里写闹钟触发后要做的事情 */
     }
 }
 

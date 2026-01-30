@@ -34,11 +34,14 @@ void vRTCInit(void)
         typeTimeInfo.minute = 0;
         typeTimeInfo.second = 0;
         typeTimeInfo.UTC    = 8.0f;
-        
-        vRTCSetTimeByStruct(&typeTimeInfo);
         /* 首次上电，设置默认时间 */
+        vRTCSetTimeByStruct(&typeTimeInfo);
+        /* 写入标志位 */
         HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR1, RTC_INIT_FLAG);
     }
+    
+    HAL_NVIC_SetPriority(RTC_IRQn,2,0);
+    HAL_NVIC_EnableIRQ(RTC_IRQn);
 }
 
 /* HAL_RTC_MspInit 回调（时钟配置） */
@@ -46,20 +49,20 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
 {
     RCC_OscInitTypeDef rcc_oscinitstruct = {0};
     RCC_PeriphCLKInitTypeDef rcc_periphclkinitstruct = {0};
-    
-    /* 使能 RTC 时钟 */
-    __HAL_RCC_RTC_ENABLE();
-    
+
     /* 配置 LSE */
     rcc_oscinitstruct.OscillatorType = RCC_OSCILLATORTYPE_LSE;
     rcc_oscinitstruct.LSEState = RCC_LSE_ON;
     rcc_oscinitstruct.PLL.PLLState = RCC_PLL_NONE;
     HAL_RCC_OscConfig(&rcc_oscinitstruct);
-    
+
     /* 选择 LSE 作为 RTC 时钟源 */
     rcc_periphclkinitstruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
     rcc_periphclkinitstruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
     HAL_RCCEx_PeriphCLKConfig(&rcc_periphclkinitstruct);
+
+    /* 使能 RTC 时钟 */
+    __HAL_RCC_RTC_ENABLE();
 }
 
 /* 设置 RTC 时间（UNIX 时间戳，单位秒） */
@@ -118,4 +121,60 @@ void vRTCGetTimeByStruct(TimeInfoType *ptypeTime, float fUTC)
     
     lStamp = lRTCGetTime();
     vStampToTime(lStamp, ptypeTime, fUTC);
+}
+
+/* 设置 RTC 闹钟 (UNIX 时间戳，单位秒) */
+void vRTCSetAlarm(int64_t lAlarmTime)
+{
+    uint32_t uiAlarmCounter = (uint32_t)lAlarmTime;
+    
+    HAL_RTC_WaitForSynchro(&hrtc);
+    
+    /* 进入配置模式 */
+    while((hrtc.Instance->CRL & RTC_CRL_RTOFF) == 0);
+    hrtc.Instance->CRL |= RTC_CRL_CNF;
+    
+    /* 设置闹钟寄存器 */
+    hrtc.Instance->ALRH = (uiAlarmCounter >> 16) & 0xFFFF;
+    hrtc.Instance->ALRL = uiAlarmCounter & 0xFFFF;
+    
+    /* 退出配置模式 */
+    hrtc.Instance->CRL &= ~RTC_CRL_CNF;
+    while((hrtc.Instance->CRL & RTC_CRL_RTOFF) == 0);
+    
+    /* 清除闹钟标志 */
+    __HAL_RTC_ALARM_CLEAR_FLAG(&hrtc, RTC_FLAG_ALRAF);
+    
+    /* 使能闹钟中断 */
+    __HAL_RTC_ALARM_ENABLE_IT(&hrtc, RTC_IT_ALRA);
+}
+
+/* 设置 RTC 闹钟 (通过时间结构体) */
+void vRTCSetAlarmByStruct(TimeInfoType *ptypeTime)
+{
+    int64_t lStamp;
+    
+    if(ptypeTime == NULL)
+        return;
+    
+    lStamp = lTimeToStamp(ptypeTime);
+    vRTCSetAlarm(lStamp);
+}
+
+/* 获取 RTC 闹钟设置 (UNIX 时间戳，单位秒) */
+int64_t lRTCGetAlarm(void)
+{
+    uint32_t uiHigh, uiLow;
+    
+    uiHigh = hrtc.Instance->ALRH;
+    uiLow = hrtc.Instance->ALRL;
+    
+    return (int64_t)((uiHigh << 16) | uiLow);
+}
+
+/* 取消 RTC 闹钟 */
+void vRTCCancelAlarm(void)
+{
+    __HAL_RTC_ALARM_DISABLE_IT(&hrtc, RTC_IT_ALRA);
+    __HAL_RTC_ALARM_CLEAR_FLAG(&hrtc, RTC_FLAG_ALRAF);
 }

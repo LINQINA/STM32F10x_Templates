@@ -1679,9 +1679,9 @@ I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pcd_ex.h)(0x696451A5)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_hcd.h)(0x696451A5)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_mmc.h)(0x696451A5)
 I (D:\MDK5.36\ARM\ARMCLANG\include\stdio.h)(0x603507D4)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\BSP\DevicesKey.h)(0x696451A5)
-F (..\BSP\DevicesRTC.c)(0x697C1879)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/devicesrtc.o -MD)
+F (..\BSP\DevicesRTC.c)(0x697C2619)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/devicesrtc.o -MD)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f1xx.h)(0x696451A5)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f103xe.h)(0x696451A5)
 I (..\Firmware\CMSIS\Include\core_cm3.h)(0x696451A5)
@@ -1741,8 +1741,8 @@ I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_usb.h)(0x696451A5)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pcd_ex.h)(0x696451A5)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_hcd.h)(0x696451A5)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_mmc.h)(0x696451A5)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
-I (..\BSP\DevicesRTC.h)(0x697B3783)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
+I (..\BSP\DevicesRTC.h)(0x697C25F7)
 F (..\BSP\DevicesTime.c)(0x697B2BF0)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/devicestime.o -MD)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f1xx.h)(0x696451A5)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f103xe.h)(0x696451A5)
@@ -1804,7 +1804,7 @@ I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pcd_ex.h)(0x696451A5)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_hcd.h)(0x696451A5)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_mmc.h)(0x696451A5)
 I (D:\MDK5.36\ARM\ARMCLANG\include\stdio.h)(0x603507D4)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 F (..\BSP\DevicesTimer.c)(0x696DDAF1)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/devicestimer.o -MD)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f1xx.h)(0x696451A5)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f103xe.h)(0x696451A5)
@@ -1869,7 +1869,7 @@ I (..\BSP\DevicesTimer.h)(0x696451A5)
 F (..\BSP\DevicesSoftTimer.c)(0x6972F0AD)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/devicessofttimer.o -MD)
 I (D:\MDK5.36\ARM\ARMCLANG\include\stdint.h)(0x603507D0)
 I (D:\MDK5.36\ARM\ARMCLANG\include\stdio.h)(0x603507D4)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\BSP\DevicesSoftTimer.h)(0x696451A5)
 F (..\BSP\DevicesDelay.c)(0x696451A5)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/devicesdelay.o -MD)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h)(0x696451A5)
@@ -1940,7 +1940,7 @@ I (..\Middlewares\FreeRTOS\Kernel\portable\GCC\ARM_CM3\portmacro.h)(0x696451A5)
 I (..\Middlewares\FreeRTOS\Kernel\include\mpu_wrappers.h)(0x696451A5)
 I (..\Middlewares\FreeRTOS\Kernel\include\task.h)(0x696451A5)
 I (..\Middlewares\FreeRTOS\Kernel\include\list.h)(0x696451A5)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\BSP\DevicesDelay.h)(0x696451A5)
 F (..\BSP\DevicesUart.c)(0x6972F0E7)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/devicesuart.o -MD)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h)(0x696451A5)
@@ -2008,7 +2008,7 @@ I (..\BSP\DevicesDelay.h)(0x696451A5)
 I (..\BSP\DevicesUart.h)(0x69709489)
 I (..\BSP\DevicesQueue.h)(0x69717BA9)
 I (..\Modules\Log\DriverLogPrintf.h)(0x696451A6)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 F (..\BSP\DevicesRS485.c)(0x696451A5)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/devicesrs485.o -MD)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h)(0x696451A5)
 I (..\User\stm32f1xx_hal_conf.h)(0x696451A6)
@@ -2079,7 +2079,7 @@ F (..\BSP\DevicesQueue.c)(0x696451A5)(-xc -std=c99 --target=arm-arm-none-eabi -m
 I (D:\MDK5.36\ARM\ARMCLANG\include\stdint.h)(0x603507D0)
 I (D:\MDK5.36\ARM\ARMCLANG\include\string.h)(0x603507D0)
 I (..\Modules\Log\DriverLogPrintf.h)(0x696451A6)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\BSP\DevicesQueue.h)(0x69717BA9)
 F (..\BSP\DevicesModbus.c)(0x6969B2F3)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/devicesmodbus.o -MD)
 I (D:\MDK5.36\ARM\ARMCLANG\include\stdint.h)(0x603507D0)
@@ -2508,7 +2508,7 @@ I (D:\MDK5.36\ARM\ARMCLANG\include\stdio.h)(0x603507D4)
 I (D:\MDK5.36\ARM\ARMCLANG\include\string.h)(0x603507D0)
 I (..\BSP\DevicesFlash.h)(0x696451A5)
 I (..\Modules\Log\DriverLogPrintf.h)(0x696451A6)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\APP\taskSystem.h)(0x696451A5)
 I (..\Middlewares\FreeRTOS\Kernel\include\FreeRTOS.h)(0x696451A5)
 I (..\Middlewares\FreeRTOS\Kernel\include\FreeRTOSConfig.h)(0x696451A5)
@@ -2647,7 +2647,7 @@ I (D:\MDK5.36\ARM\ARMCLANG\include\string.h)(0x603507D0)
 I (D:\MDK5.36\ARM\ARMCLANG\include\stdarg.h)(0x603507D4)
 I (..\BSP\DevicesUart.h)(0x69709489)
 I (..\Modules\Log\DriverLogPrintf.h)(0x696451A6)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 F (..\Modules\Modbus\DriverModbus.c)(0x6969B34B)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/drivermodbus.o -MD)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f1xx.h)(0x696451A5)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f103xe.h)(0x696451A5)
@@ -2726,7 +2726,7 @@ I (..\User\version.h)(0x6968AC65)
 I (..\Modules\OTA\DriverOTA.h)(0x696451A6)
 I (..\BSP\DevicesModbus.h)(0x6969B2E3)
 I (..\APP\taskControl.h)(0x697B338F)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\APP\taskSystem.h)(0x696451A5)
 I (..\APP\taskMonitor.h)(0x696451A5)
 I (..\BSP\DevicesDelay.h)(0x696451A5)
@@ -2800,7 +2800,7 @@ I (..\BSP\DevicesFlash.h)(0x696451A5)
 I (..\BSP\DevicesSPIFlash.h)(0x696451A5)
 I (..\BSP\DevicesCRC.h)(0x696451A5)
 I (..\Modules\Log\DriverLogPrintf.h)(0x696451A6)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\Modules\Bootloader\DriverBootloader.h)(0x696451A6)
 F (..\Modules\OTA\DriverOTA.c)(0x696451A6)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/driverota.o -MD)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f1xx.h)(0x696451A5)
@@ -2876,7 +2876,7 @@ I (..\Modules\Modbus\DriverModbus.h)(0x6969B1AF)
 I (..\BSP\DevicesModbus.h)(0x6969B2E3)
 I (..\Modules\Bootloader\DriverBootloader.h)(0x696451A6)
 I (..\Modules\Log\DriverLogPrintf.h)(0x696451A6)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\Modules\OTA\DriverOTA.h)(0x696451A6)
 I (..\Modules\OTA\DriverUpgradePD.h)(0x696451A6)
 I (..\APP\taskSensor.h)(0x696451A5)
@@ -3046,8 +3046,8 @@ I (..\BSP\DevicesSPI.h)(0x696451A5)
 I (..\BSP\DevicesSPIFlash.h)(0x696451A5)
 I (..\BSP\DevicesWatchDog.h)(0x696451A5)
 I (..\BSP\DevicesIIC.h)(0x69717BA9)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
-I (..\BSP\DevicesRTC.h)(0x697B3783)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
+I (..\BSP\DevicesRTC.h)(0x697C25F7)
 I (..\Modules\Bootloader\DriverBootloader.h)(0x696451A6)
 I (..\APP\taskMonitor.h)(0x696451A5)
 I (..\APP\taskSensor.h)(0x696451A5)
@@ -3111,7 +3111,7 @@ I (..\Middlewares\FreeRTOS\Kernel\include\list.h)(0x696451A5)
 I (..\Middlewares\FreeRTOS\Kernel\include\queue.h)(0x696451A5)
 I (..\Middlewares\FreeRTOS\Kernel\include\semphr.h)(0x696451A5)
 I (..\APP\taskControl.h)(0x697B338F)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 F (..\APP\taskSoftTimer.c)(0x696451A5)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/tasksofttimer.o -MD)
 I (..\Middlewares\FreeRTOS\Kernel\include\FreeRTOS.h)(0x696451A5)
 I (D:\MDK5.36\ARM\ARMCLANG\include\stddef.h)(0x603507D0)
@@ -3189,7 +3189,7 @@ I (..\BSP\DevicesBeep.h)(0x696451A5)
 I (..\BSP\DevicesKey.h)(0x696451A5)
 I (..\APP\taskSoftTimer.h)(0x696451A5)
 I (..\APP\taskKey.h)(0x696451A5)
-F (..\APP\taskKey.c)(0x697B37EA)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/taskkey.o -MD)
+F (..\APP\taskKey.c)(0x697C2721)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/taskkey.o -MD)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f1xx.h)(0x696451A5)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f103xe.h)(0x696451A5)
 I (..\Firmware\CMSIS\Include\core_cm3.h)(0x696451A5)
@@ -3256,8 +3256,8 @@ I (..\BSP\DevicesKey.h)(0x696451A5)
 I (..\BSP\DevicesFlash.h)(0x696451A5)
 I (..\BSP\DevicesSPIFlash.h)(0x696451A5)
 I (..\BSP\DevicesAT24C02.h)(0x696451A5)
-I (..\BSP\DevicesRTC.h)(0x697B3783)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesRTC.h)(0x697C25F7)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\Modules\Log\DriverLogPrintf.h)(0x696451A6)
 I (..\APP\taskKey.h)(0x696451A5)
 I (..\APP\taskControl.h)(0x697B338F)
@@ -3448,11 +3448,11 @@ I (..\BSP\DevicesFlash.h)(0x696451A5)
 I (..\BSP\DevicesUart.h)(0x69709489)
 I (..\BSP\DevicesTimer.h)(0x696451A5)
 I (..\Modules\Log\DriverLogPrintf.h)(0x696451A6)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\APP\taskSystem.h)(0x696451A5)
 I (..\User\userSystem.h)(0x6968AA00)
 I (..\User\version.h)(0x6968AC65)
-F (..\User\stm32f1xx_it.c)(0x697B34A3)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/stm32f1xx_it.o -MD)
+F (..\User\stm32f1xx_it.c)(0x697C21F8)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/stm32f1xx_it.o -MD)
 I (..\User\stm32f1xx_it.h)(0x696451A6)
 I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h)(0x696451A5)
 I (..\User\stm32f1xx_hal_conf.h)(0x696451A6)
@@ -3516,9 +3516,10 @@ I (..\Firmware\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_mmc.h)(0x696451A5)
 I (..\BSP\DevicesUart.h)(0x69709489)
 I (..\BSP\DevicesQueue.h)(0x69717BA9)
 I (..\BSP\DevicesTimer.h)(0x696451A5)
-I (..\BSP\DevicesTime.h)(0x697B2B7A)
+I (..\BSP\DevicesTime.h)(0x697C1A2C)
 I (..\BSP\DevicesADC.h)(0x6971CE07)
 I (..\BSP\DevicesCAN.h)(0x696451A5)
+I (..\BSP\DevicesRTC.h)(0x697C25F7)
 F (..\User\userSystem.c)(0x6968AA81)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Firmware/CMSIS/Device/ST/STM32F1xx/Include -I ../Firmware/STM32F1xx_HAL_Driver/Inc -I ../Firmware/CMSIS/Include -I ../APP -I ../BSP -I ../User -I ../Middlewares/FreeRTOS/Kernel/include -I ../Middlewares/FreeRTOS/Kernel/portable/GCC/ARM_CM3 -I ../Modules/Log -I ../Modules/Modbus -I ../Modules/Bootloader -I ../Modules/OTA -Wno-invalid-source-encoding-ID:/MDK5.36/Packs/Keil/STM32F1xx_DFP/2.3.0/Device/Include-D__UVISION_VERSION="536" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ./objects/usersystem.o -MD)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f1xx.h)(0x696451A5)
 I (..\Firmware\CMSIS\Device\ST\STM32F1xx\Include\stm32f103xe.h)(0x696451A5)
