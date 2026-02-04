@@ -15,7 +15,7 @@
 
 #include "DevicesDelay.h"
 #include "DevicesUart.h"
-#include "DevicesModbus.h"
+#include "DevicesModbus.h"                                                                                      
 #include "DevicesRS485.h"
 #include "DevicesSoftTimer.h"
 #include "DevicesTime.h"
@@ -44,16 +44,16 @@ int8_t cModbusPDRegisterUpdate(void)
     memcpy(&st_usRegisterBuff[Modbus_Register_Addr_Software], ptypeProduct->versionBuff, 8);
     memcpy(&st_usRegisterBuff[Modbus_Register_Addr_Hardware], ucHardware, 16);
     /* UID */
-    memcpy(&st_usRegisterBuff[Modbus_Register_Addr_UID], ucUid, 32);
+    memcpy(&st_usRegisterBuff[Modbus_Register_Addr_UID], ucUid, 16);
 
 
     /* 通道A参数 */
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Voltage] = 1;
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Current] = 2;
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_ActivePower] = 3;
+    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Voltage] = 3.3 * 10.0f;
+    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Current] = 2.0 * 10.0f;
+    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_ActivePower] = 300;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_PhasePosition] = 4;
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Frequency] = 5;
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_ElecQuantity] = 6;
+    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Frequency] = 50;
+    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_ElecQuantity] = 69;
 
     return 0;
 }
@@ -505,7 +505,7 @@ int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
 /* 解包收到的 Modbus 数据 */
 int8_t cModbusUnpack(uint32_t uiChannel, uint8_t *pucBuff, int32_t iLength)
 {
-//    SensorInfoType *ptypeSensorInfo = ptypeSensorInfoGet();
+    SensorInfoType *ptypeSensorInfo = ptypeSensorInfoGet();
     uint32_t uiTime = (uint32_t)(lTimeGetStamp() / 1000ll);
     int8_t cError = 1;
 
@@ -530,16 +530,9 @@ int8_t cModbusUnpack(uint32_t uiChannel, uint8_t *pucBuff, int32_t iLength)
             /* 发给 其它设备 的数据（透传） */
             else
             {
-//                /* OTA时，不进行数据透传 */
-//                if((ptypeSensorInfo->ptypeSystemInfo->state & SYSTEM_ACTION_OTA) != 0)
-//                    break;
-
-//                /* 跟逆变器通信时，必须要先开启逆变器的使能 */
-//                if((st_typeModBusRtuHandle.slaveAddress == MODBUS_ADDRESS_INV0) )
-//                {
-//                    /* 通信空闲超时、重新计时 */
-//                    cSoftTimerReset(&g_typeSoftTimerINVNetworkIdle);
-//                }
+                /* OTA时，不进行数据透传 */
+                if(ptypeSensorInfo->ptypeOTAInfo->state != OTA_STATE_DISABLE)
+                    break;
 
                 /* 透传至其它的Modbus设备，走标准Modbus协议就行 */
                 cError = cModbusSeriaNet(uiChannel, &st_typeModBusRtuHandle);

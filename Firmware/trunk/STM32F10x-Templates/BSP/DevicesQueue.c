@@ -28,7 +28,7 @@ enumQueueState enumQueueInit(void)
     if(enumQueueCreate(&g_TypeQueueUart1Read, "Uart 1 Read", st_ucQueueUart1ReadBuff, QUEUE_UART1_READ_LENGTH, queueModeLock) != queueNormal)
         enumState = queueError;
 
-    if(enumQueueCreate(&g_TypeQueueCanHostRead, "Can Host Read",    st_ucQueueCanHostReadBuff,  QUEUE_CAN_HOST_READ_LENGTH,queueModeLock) != queueNormal)
+    if(enumQueueCreate(&g_TypeQueueCanHostRead, "Can Host Read", st_ucQueueCanHostReadBuff,  QUEUE_CAN_HOST_READ_LENGTH,queueModeLock) != queueNormal)
         enumState = queueError; 
 
     if(enumState != queueNormal)
@@ -155,7 +155,7 @@ int32_t iQueueGetLengthOfOccupy(QueueType *pTypeQueue)
  * Parameters:  *pTypeQueue: 队列结构体指针; ucByte: 指定的有效字节
  * Description: 获取队列缓存中有效数据长度，需要有指定的有效字节
  */
- int32_t iQueueGetLengthOfOccupyNeed(QueueType *pTypeQueue, uint8_t ucByte)
+int32_t iQueueGetLengthOfOccupyNeed(QueueType *pTypeQueue, uint8_t ucByte)
 {
     uint8_t *pucHead = NULL;
     int32_t iLength = 0;

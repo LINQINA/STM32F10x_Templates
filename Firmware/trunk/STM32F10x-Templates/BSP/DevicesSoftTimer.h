@@ -6,10 +6,10 @@
 
 
 typedef enum {
-    softTimerClose = 0x00,    /* 定时器已关闭 */
-    softTimerOpen = 0x01,     /* 正常计时当中 */
-    softTimerOver = 0x02,     /* 定时器溢出 */
-    softTimerError = 0x08,    /* 定时器错误 */
+    softTimerClose = 0x00,     /* 定时器已关闭 */
+    softTimerOpen  = 0x01,     /* 正常计时当中 */
+    softTimerOver  = 0x02,     /* 定时器溢出 */
+    softTimerError = 0x08,     /* 定时器错误 */
 }SoftTimerStateEnum;
 
 
