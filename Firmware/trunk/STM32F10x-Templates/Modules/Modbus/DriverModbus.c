@@ -15,7 +15,7 @@
 
 #include "DevicesDelay.h"
 #include "DevicesUart.h"
-#include "DevicesModbus.h"                                                                                      
+#include "DevicesModbus.h"
 #include "DevicesRS485.h"
 #include "DevicesSoftTimer.h"
 #include "DevicesTime.h"
@@ -387,7 +387,6 @@ int8_t cModbusSeriaNet(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
 /* 解析给 本机 的数据 */
 int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
 {
-//    LogConfigType *ptypeLogConfigInfo = ptypeLogConfigInfoGet();
     int32_t iLength = 0, i = 0;
     uint16_t usAddr = 0, usValue = 0, usAddrRelative = 0, usAddrStop = 0;
     uint8_t *pucBuff = NULL;
@@ -414,18 +413,8 @@ int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
         switch(ptypeHandle->func)
         {
             case MODBUS_CODE_0x03:
-//                /* log路径、数据帧寄存器，需要特殊处理 */
-//                if((usAddr == Modbus_Register_Addr_File_Size)   ||
-//                   (usAddr == Modbus_Register_Addr_File_Path)   ||
-//                   (usAddr == Modbus_Register_Addr_File_Data))
-//                {
-//                    cModbusLogRegisterRead(usAddr, usValue);
-//                }
-//                /* 普通寄存器 */
-//                else
-                {
-                    cModbusPDRegisterUpdate();
-                }
+
+                cModbusPDRegisterUpdate();
 
                 cModbusPackReplyRTU_03(ptypeHandle->slaveAddress, usValue, &st_usRegisterBuff[usAddrRelative], ptypeHandle);
 
@@ -448,12 +437,6 @@ int8_t cModbusMessageAnalysis(uint32_t uiChannel, ModBusRtuTypeDef *ptypeHandle)
                 {
                     cError = cOTAModbusPackAnalysis(ptypeHandle);
                 }
-//                /* Log 帧，需要特殊处理 */
-//                else if(usAddr == Modbus_Register_Addr_File_Path)
-//                {
-//                    cError = cModbusLogRegisterWrite(usAddr, &ptypeHandle->data[5], usValue);
-//                }
-//                /* 标准帧 */
                 else
                 {
                     pucBuff = &ptypeHandle->data[5];

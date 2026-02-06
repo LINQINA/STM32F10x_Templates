@@ -21,7 +21,6 @@ enumQueueState enumQueueInit(void)
 {
     enumQueueState enumState = queueNormal;
 
-
     if(enumQueueCreate(&g_TypeQueueUart0Read, "Uart 0 Read", st_ucQueueUart0ReadBuff, QUEUE_UART0_READ_LENGTH, queueModeLock) != queueNormal)
         enumState = queueError;
 

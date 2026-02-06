@@ -201,7 +201,7 @@ void vUartBaudrateSet(uint32_t uiUsartPeriph, int32_t iBaudrate)
             return;
     }
 
-    __HAL_UART_DISABLE(huart);
+    __HAL_UART_DISABLE(huart);                  
 
     huart->Init.BaudRate = iBaudrate;
 
