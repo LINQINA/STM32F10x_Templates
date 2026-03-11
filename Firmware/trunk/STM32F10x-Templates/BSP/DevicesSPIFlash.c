@@ -68,7 +68,7 @@ static uint8_t ucSPIFlashReadStatus(uint8_t ucRegNo)
     uint32_t uiTimeout = 20000;
     uint8_t ucReadStatusCMD;
     uint8_t ucStatus;
-    
+
     switch(ucRegNo)
     {
         case 1 : ucReadStatusCMD = READ_STATUS_REG1_CMD; break;
@@ -77,25 +77,24 @@ static uint8_t ucSPIFlashReadStatus(uint8_t ucRegNo)
 
         default : ucReadStatusCMD = READ_STATUS_REG1_CMD; break;
     }
-    
+
     /* 判断 SPI Flash 是否连接正常 */
     if((st_usSPIFlashID == 0x0000) || (st_usSPIFlashID == 0xFFFF))
         return 0xFF;
-    
+
     SPI_FLASH_CS_ENABLE();
-    
+
     ucSPIxWriteReadByte(ucReadStatusCMD);
-    
+
     /* 等待Flash读取完毕 */
     while(uiTimeout--)
     {
         ucStatus = ucSPIxWriteReadByte(0xFF);
-        
+
         if((ucStatus & 0x01) != 0x01)
             break;
-        
+
         vDelayUs(10);
-        
     }
 
     SPI_FLASH_CS_DISABLE();
@@ -222,7 +221,7 @@ int8_t cSPIFlashWriteDatas(uint32_t uiAddress, const void *pvBuff, int32_t iLeng
     /* Write Flash */
     while(iLength > 0)
     {
-        /* 块起始地址时，需要先擦除该页 */
+        /* 扇区起始地址时，需要先擦除该扇区 */
         if((uiAddress % SPI_FLASH_SECTOR_SIZE) == 0)
         {
             if(cSPIFlashErases(uiAddress) != 0)

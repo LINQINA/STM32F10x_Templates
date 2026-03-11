@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Total Flow Rate</title>
+    <script src="ECharts/echarts.min.js"></script>
+</head>
+<body>
+    <div id="totalFlowRate" style="width: 800px; height: 364px;"></div>
+
+    <script type="text/javascript">
+        const MAX_DATA_POINTS = 86400;
+        const DISPLAY_COUNT = 32;
+
+        let isPaused = false;
+
+        const xAxisData = [];
+        const voltageData = [];
+        const currentData = [];
+        const voltageOutputData = [];
+        const currentOutputData = [];
+
+        var chart = echarts.init(document.getElementById('totalFlowRate'));
+
+        function resizeECharts(width, height) {
+            // 设置ECharts图表容器的新大小
+            var doc = document.getElementById('totalFlowRate');
+            doc.style.width = width + 'px';
+            doc.style.height = height + 'px';
+            chart.resize();
+        }
+
+        function limitArray(arr) {
+            while (arr.length > MAX_DATA_POINTS) {
+                arr.shift();
+            }
+        }
+
+        function updateToolboxButtons() {
+            chart.setOption({
+                toolbox: {
+                    feature: {
+                        myPauseResume: {
+                            title: isPaused ? '继续' : '停止',
+                            icon: isPaused
+                                ? 'path://M8 5v14l11-7z'
+                                : 'path://M6 19h4V5H6v14zm8-14v14h4V5h-4z'
+                        }
+                    }
+                }
+            });
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            if (!isPaused) {
+                refreshChart(); // 继续时立即刷新
+            }
+            updateToolboxButtons();
+        }
+
+        function exportCSV() {
+            const MAX_ROWS = 65535;
+            const headers = ['时间', '输入电压(V)', '输出电压(V)', '输入电流(A)', '输出电流(A)'];
+            const totalRows = xAxisData.length;
+            const totalParts = Math.ceil(totalRows / MAX_ROWS);
+
+            for (let part = 0; part < totalParts; part++) {
+                const start = part * MAX_ROWS;
+                const end = Math.min(start + MAX_ROWS, totalRows);
+                let csvContent = headers.join(',') + '\n';
+
+                for (let i = start; i < end; i++) {
+                    const row = [
+                        xAxisData[i],
+                        voltageData[i],
+                        voltageOutputData[i],
+                        currentData[i],
+                        currentOutputData[i]
+                    ];
+                    csvContent += row.join(',') + '\n';
+                }
+
+                const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `CarCharge_Data_${part + 1}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        function generateOption() {
+            const maxVoltage = Math.max(...voltageData, ...voltageOutputData, 0);
+            const maxCurrent = Math.max(...currentData, ...currentOutputData, 0);
+            const totalPoints = xAxisData.length;
+            const startPercent = totalPoints > DISPLAY_COUNT ? (100 - (DISPLAY_COUNT / totalPoints) * 100) : 0;
+
+            return {
+                animation: false,
+                toolbox: {
+                    feature: {
+                        saveAsImage: {
+                            title: '保存为图片',
+                            pixelRatio: 2
+                        },
+                        myPauseResume: {
+                            show: true,
+                            title: isPaused ? '继续' : '停止',
+                            icon: isPaused
+                                ? 'path://M8 5v14l11-7z'
+                                : 'path://M6 19h4V5H6v14zm8-14v14h4V5h-4z',
+                            onclick: togglePause
+                        },
+                        myExportCSV: {
+                            show: true,
+                            title: '导出 CSV',
+                            icon: 'path://M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10'
+                                + ' 10-4.48 10-10S17.52 2 12 2zm-1 5h2v6h3l-4 4-4-4h3V7z',
+                            onclick: exportCSV
+                        }
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'cross' },
+                    formatter: function (params) {
+                        let tooltipContent = params[0].name + '<br>';
+                        params.forEach(function (item) {
+                            const unit = item.seriesName.includes('电压') ? 'V' : 'A';
+                            tooltipContent += `${item.seriesName}: ${item.value}${unit}<br>`;
+                        });
+                        return tooltipContent;
+                    }
+                },
+                legend: {
+                    data: ['输入电压', '输出电压', '输入电流', '输出电流'],
+                    textStyle: { color: "#66b3ff" }
+                },
+                grid: { left: 50, right: 50 },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        start: startPercent,
+                        end: 100,
+                        xAxisIndex: 0,
+                        handleSize: '80%'
+                    },
+                    {
+                        type: 'inside',
+                        start: startPercent,
+                        end: 100,
+                        xAxisIndex: 0
+                    }
+                ],
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: true,
+                    data: xAxisData,
+                    splitLine: { show: true }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '电压（V）',
+                        position: 'left',
+                        min: 0,
+                        max: Math.ceil(maxVoltage) < 16 ? 16 : Math.ceil(maxVoltage / 16) * 16,
+                        interval: Math.ceil(maxVoltage) < 16 ? 1 : (Math.ceil(maxVoltage / 16) * 16) / 16,
+                        splitLine: { show: true },
+                        axisLabel: { formatter: val => val + ' V' }
+                    },
+                    {
+                        type: 'value',
+                        name: '电流（A）',
+                        position: 'right',
+                        min: 0,
+                        max: Math.ceil(maxCurrent) < 4 ? 4 : Math.ceil(maxCurrent / 4) * 4,
+                        interval: Math.ceil(maxCurrent) < 4 ? 1 : (Math.ceil(maxCurrent / 4) * 4) / 4,
+                        splitLine: { show: true },
+                        axisLabel: { formatter: val => val + ' A' }
+                    }
+                ],
+                series: [
+                    {
+                        name: '输入电压',
+                        type: 'line',
+                        yAxisIndex: 0,
+                        data: voltageData,
+                        smooth: true,
+                        itemStyle: { color: 'red' }
+                    },
+                    {
+                        name: '输出电压',
+                        type: 'line',
+                        yAxisIndex: 0,
+                        data: voltageOutputData,
+                        smooth: true,
+                        itemStyle: { color: 'orange' }
+                    },
+                    {
+                        name: '输入电流',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: currentData,
+                        smooth: true,
+                        lineStyle: { type: 'dotted' },
+                        itemStyle: { color: 'blue' }
+                    },
+                    {
+                        name: '输出电流',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: currentOutputData,
+                        smooth: true,
+                        lineStyle: { type: 'dotted' },
+                        itemStyle: { color: 'green' }
+                    }
+                ]
+            };
+        }
+
+        // 外部调用此函数，每次传入新数据
+        function updateChart(data) {
+            xAxisData.push(data.xAxis);
+            voltageData.push(data.inputVoltage);
+            currentData.push(data.inputCurrent);
+            voltageOutputData.push(data.outputVoltage);
+            currentOutputData.push(data.outputCurrent);
+
+            limitArray(xAxisData);
+            limitArray(voltageData);
+            limitArray(currentData);
+            limitArray(voltageOutputData);
+            limitArray(currentOutputData);
+
+            if (!isPaused) {
+                chart.setOption(generateOption());
+            }
+        }
+    </script>
+</body>
+</html>

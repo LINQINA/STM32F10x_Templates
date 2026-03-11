@@ -35,21 +35,22 @@ uint16_t st_usRegisterBuff[MODBUS_PD_REGISTER_TOTAL_NUMBER] = {0};
 int8_t cModbusPDRegisterUpdate(void)
 {
     productType *ptypeProduct = ptypeProductGet();
-    
+
+    char ucOTASoftware[16] = "00.00.01";
     char ucSoftware[16] = "00.00.01";
-    char ucHardware[16] = "00.00.01";
     char ucUid[16] = "00.00.01";
     
     /* Version */
-    memcpy(&st_usRegisterBuff[Modbus_Register_Addr_Software], ptypeProduct->versionBuff, 8);
-    memcpy(&st_usRegisterBuff[Modbus_Register_Addr_Hardware], ucHardware, 16);
+    memcpy(&st_usRegisterBuff[Modbus_Register_Addr_OTASoftware], ucOTASoftware, 16);
+    memcpy(&st_usRegisterBuff[Modbus_Register_Addr_Software], ptypeProduct->versionBuff, 16);
+
     /* UID */
     memcpy(&st_usRegisterBuff[Modbus_Register_Addr_UID], ucUid, 16);
 
 
     /* 通道A参数 */
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Voltage] = 3.3 * 10.0f;
-    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Current] = 2.0 * 10.0f;
+    st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Current] = 2.0 * 100.0f;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_ActivePower] = 300;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_PhasePosition] = 4;
     st_usRegisterBuff[Modbus_Register_Addr_ChannelA_Frequency] = 50;
@@ -205,7 +206,6 @@ int8_t cModbusDatasSet(uint32_t uiChannel, uint16_t usDeviceAddr, uint16_t usReg
 
     /* 有些从设备回复数据后，会继续占用总线一段时间 */
     vRtosDelayMs(iBehindTime);
-
 
     /* 设定时间内，收到预期长度的数据 */
     if(cError == 0)

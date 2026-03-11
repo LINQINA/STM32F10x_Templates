@@ -9,10 +9,10 @@
 #include "DevicesModbus.h"
 
 typedef enum {
-       /* 系统信息 */
-    Modbus_Register_Addr_Software   = 0x0000,   /* 软件版本 */
-    Modbus_Register_Addr_Hardware   = 0x0008,   /* 硬件版本 */
-    Modbus_Register_Addr_UID        = 0x0010,   /* 设备UID */
+    /* 系统信息 */
+    Modbus_Register_Addr_OTASoftware   = 0x0000,   /* OTA版本 */
+    Modbus_Register_Addr_Software      = 0x0008,   /* 软件版本 */
+    Modbus_Register_Addr_UID           = 0x0010,   /* 设备UID */
 
     /* 升级 */
     Modbus_Register_Addr_Firmware_Software          = 0x0040,   /* 升级固件的软件版本 */

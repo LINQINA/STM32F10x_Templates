@@ -37,7 +37,7 @@ void vCan1Init(void)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     g_can1_handler.Instance  = CAN1;
-    g_can1_handler.Init.Mode = CAN_MODE_NORMAL;        /* 工作模式设置 正常 */
+    g_can1_handler.Init.Mode = CAN_MODE_NORMAL;          /* 工作模式设置 正常 */
 
     /* 波特率相关,公式: 36M / 4 * (9 + 8 + 1) = 500K */
     g_can1_handler.Init.Prescaler        = 4;            /* 分频系数 */

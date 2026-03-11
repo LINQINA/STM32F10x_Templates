@@ -7,8 +7,7 @@ SPI_HandleTypeDef spi2_init_struct;
 
 void vSPI2Init(void)
 {
-   GPIO_InitTypeDef GPIO_InitStruct = {0};
-
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
 
     /* ´ò¿ªÊ±ÖÓ */
     __HAL_RCC_GPIOB_CLK_ENABLE();
@@ -53,9 +52,9 @@ void vSPI2Init(void)
 uint8_t ucSPIWriteReadByte(SPI_HandleTypeDef *hspi, uint8_t ucByte)
 {
     uint8_t ucReadByte = 0;
-    
+
     HAL_SPI_TransmitReceive(hspi, &ucByte, &ucReadByte, 1, HAL_MAX_DELAY);
-    
+
     return ucReadByte;
 }
 

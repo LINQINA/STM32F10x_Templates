@@ -33,11 +33,11 @@ void vTaskMessageSlave(void *pvParameters)
         xTaskNotifyWait(0x00000000, 0xFFFFFFFF, &uiNotifiedValue, 20 / portTICK_RATE_MS);
 
         /* 读取并解析 上位机 发送过来的数据 */
-        while((iLength = iQueueGetLengthOfOccupy(&g_TypeQueueUart1Read)) != 0)
+        while((iLength = iQueueGetLengthOfOccupy(&g_TypeQueueUart0Read)) != 0)
         {
             iLength = (iLength > sizeof(st_ucMessageAnalysisBuff)) ? sizeof(st_ucMessageAnalysisBuff) : iLength;
 
-            enumQueuePopDatas(&g_TypeQueueUart1Read, st_ucMessageAnalysisBuff, iLength);
+            enumQueuePopDatas(&g_TypeQueueUart0Read, st_ucMessageAnalysisBuff, iLength);
 
             cModbusUnpack((uint32_t)UART_LOG, st_ucMessageAnalysisBuff, iLength);
         }

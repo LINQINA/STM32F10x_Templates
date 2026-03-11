@@ -1,0 +1,17 @@
+未能加载文件或程序集“DevComponents.DotNetBar2, Version=7.0.0.4, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。系统找不到指定的文件。   在 DPSTools.FrmMain.InitializeComponent()
+   在 DPSTools.FrmMain..ctor() 位置 D:\Tools\dbstools\DPSTools\Form(视图层)\1.主页\FrmMain.cs:行号 35
+   在 DPSTools.FrmHome.UiInit(Object sender, EventArgs e) 位置 D:\Tools\dbstools\DPSTools\Form(视图层)\FrmHome.cs:行号 82
+   在 DPSTools.FrmHome.FrmHome_Load(Object sender, EventArgs e) 位置 D:\Tools\dbstools\DPSTools\Form(视图层)\FrmHome.cs:行号 64
+   在 System.Windows.Forms.Form.OnLoad(EventArgs e)
+   在 System.Windows.Forms.Form.OnCreateControl()
+   在 System.Windows.Forms.Control.CreateControl(Boolean fIgnoreVisible)
+   在 System.Windows.Forms.Control.CreateControl()
+   在 System.Windows.Forms.Control.WmShowWindow(Message& m)
+   在 System.Windows.Forms.Control.WndProc(Message& m)
+   在 System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   在 System.Windows.Forms.ContainerControl.WndProc(Message& m)
+   在 System.Windows.Forms.Form.WmShowWindow(Message& m)
+   在 System.Windows.Forms.Form.WndProc(Message& m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   在 System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
