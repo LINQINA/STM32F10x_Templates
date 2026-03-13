@@ -365,9 +365,9 @@ g_uart1_handle.Init.HwFlowCtl  = UART_HWCONTROL_NONE; // 无流控
 | 中断 | 中文名称 | 宏定义 | 触发条件 | 典型用途 |
 | :--- | :--- | :--- | :--- | :--- |
 | **RXNE** | 接收非空中断 | `UART_IT_RXNE` | 收到一个字节，DR 非空 | 逐字节中断接收 |
-| **IDLE** | 串口空闲中断 | `UART_IT_IDLE` | 一帧结束，总线空闲 | 不定长帧接收 (配合DMA) ⭐ |
+| **IDLE** | 串口空闲中断 | `UART_IT_IDLE` | 一帧结束，总线空闲 | 不定长帧接收 (配合DMA) [常用] |
 | **TXE** | 发送寄存器空中断 | `UART_IT_TXE` | DR 空，可写下一字节 | 连续发送多字节 |
-| **TC** | 发送完成中断 | `UART_IT_TC` | 最后字节完全发出 | RS485 方向切换 ⭐ |
+| **TC** | 发送完成中断 | `UART_IT_TC` | 最后字节完全发出 | RS485 方向切换 [常用] |
 | **PE** | 校验错误中断 | `UART_IT_PE` | 校验错误 | 错误检测 |
 | **ERR** | 错误中断 | `UART_IT_ERR` | ORE/NE/FE 错误 | 错误检测 |
 | **CTS** | CTS变化中断 | `UART_IT_CTS` | CTS 引脚电平变化 | 硬件流控 |
@@ -702,7 +702,7 @@ void vUart1DMAInit(void)
     /* RX DMA: Circular 模式 */
     g_dma_usart1_rx.Instance = DMA1_Channel5;
     g_dma_usart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    g_dma_usart1_rx.Init.Mode = DMA_CIRCULAR;       // 循环模式 ⭐
+    g_dma_usart1_rx.Init.Mode = DMA_CIRCULAR;       // 循环模式
     g_dma_usart1_rx.Init.Priority = DMA_PRIORITY_HIGH;
     // ... 其他配置
     
@@ -926,14 +926,14 @@ DMA 发送需要等待 **两个阶段** 才能确保数据真正发送出去：
   - 标志：DMA_FLAG_TCx (Transfer Complete)
   - 计数器：__HAL_DMA_GET_COUNTER() == 0
   
-  ⚠️ 此时数据只是到达了 DR 寄存器，还没有真正发送到物理线路上！
+  注意：此时数据只是到达了 DR 寄存器，还没有真正发送到物理线路上！
 
   【阶段2】等待串口发送完成 (USART_FLAG_TC)
   ──────────────────────────────────────────
   - 含义：数据从「DR 寄存器」通过移位寄存器发送到「物理 TX 线路」完成
   - 标志：USART_FLAG_TC (Transmission Complete)
   
-  ✅ 此时数据才真正发送到了物理线路上！
+  此时数据才真正发送到了物理线路上。
 ```
 
 **为什么必须等待两个阶段？**

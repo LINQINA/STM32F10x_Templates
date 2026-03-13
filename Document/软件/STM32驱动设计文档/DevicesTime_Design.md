@@ -224,13 +224,13 @@ uint8_t cTimeToWeek(int32_t iYear, uint8_t ucMonth, uint8_t ucDay)
 
 | 功能 | DevicesRTC | DevicesTime |
 | :--- | :--- | :--- |
-| 硬件时钟访问 | ✅ | ❌ |
-| 掉电保持 | ✅ | ❌ |
-| 闹钟功能 | ✅ | ❌ |
-| 时间格式转换 | ❌ (调用 DevicesTime) | ✅ |
-| 时区处理 | ❌ (调用 DevicesTime) | ✅ |
-| 微秒级计时 | ❌ | ✅ |
-| 星期计算 | ❌ (调用 DevicesTime) | ✅ |
+| 硬件时钟访问 | 是 | 否 |
+| 掉电保持 | 是 | 否 |
+| 闹钟功能 | 是 | 否 |
+| 时间格式转换 | 否 (调用 DevicesTime) | 是 |
+| 时区处理 | 否 (调用 DevicesTime) | 是 |
+| 微秒级计时 | 否 | 是 |
+| 星期计算 | 否 (调用 DevicesTime) | 是 |
 
 ### 5.2 典型调用流程
 
