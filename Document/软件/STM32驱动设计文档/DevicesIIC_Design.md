@@ -570,7 +570,135 @@ if(ret != 0)
 
 ---
 
-## 8. 常见问题与调试 (Troubleshooting)
+## 8. I2C 总线死锁原因及解决办法
+
+### 8.1 什么是 I2C 死锁
+
+I2C 死锁是指主机和从机互相等待对方动作，导致总线永久卡死的状态。表现为 SDA 被从机拉低不释放，主机检测到总线忙（BUSY），无法发起任何新的通讯。
+
+这不是 STM32F1 特有的问题，而是 I2C 协议层面的通病，任何平台、任何 I2C 实现（硬件或软件）都可能遇到。
+
+### 8.2 死锁是怎么发生的
+
+典型触发场景：主机在从机正在发送数据的过程中发生了复位。
+
+```
+正常通讯中，主机正在读取从机数据（从机正在驱动 SDA）：
+
+SCL: ──┐  ┌──┐  ┌──┐  ┌──┐  ┌──
+       └──┘  └──┘  └──┘  └──┘
+SDA:       [D7] [D6] [D5] [D4] ...
+                       ↑
+                  从机正在发送 bit5 = 0（SDA 拉低）
+                  此时主机突然复位
+```
+
+复位后的状态：
+
+```
+1. 主机复位 → I2C 外设重新初始化 → SCL/SDA 配置为空闲态
+2. 从机不知道主机复位了 → 还停在上一次传输的中间
+3. 从机继续持有 SDA = 低 → 等待主机给下一个 SCL 脉冲来移出下一位数据
+4. 主机想发起新的 START 条件 → 需要 SDA 从高到低的跳变
+5. 但 SDA 被从机拉着 = 低 → 主机检测到总线忙 → 拒绝发起通讯
+
+从机等主机给时钟 → 主机等从机释放 SDA → 死锁
+```
+
+可能触发复位的原因：
+
+- 看门狗超时复位
+- 软件调用 `NVIC_SystemReset()`
+- 电源瞬间波动导致 MCU 复位
+- 调试器断点/重新烧录
+
+### 8.3 解决方法一：SCL 模拟 9 个时钟脉冲
+
+在 I2C 初始化之前，先检查 SDA 状态。如果 SDA 被拉低，用 GPIO 模式手动给 SCL 发脉冲，把从机状态机"走完"，让它释放 SDA。
+
+**原理**：最坏情况下从机正好在发一个字节的第 1 位，还剩 7 位数据 + 1 位 ACK = 8 个脉冲才能走完，加 1 个留余量，共 9 个脉冲。每给一个时钟沿，从机的状态机就往前推进一步，走完后从机释放 SDA。
+
+```c
+void vI2CBusRelease(void)
+{
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+
+    /* 将 SCL 配置为普通推挽输出，SDA 配置为浮空输入 */
+    GPIO_InitStruct.Pin = GPIO_PIN_6;           /* SCL = PB6 */
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_7;           /* SDA = PB7 */
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    /* 发送最多 9 个时钟脉冲，直到 SDA 释放 */
+    for(uint8_t i = 0; i < 9; i++)
+    {
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+        vDelayUs(5);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+        vDelayUs(5);
+
+        /* SDA 已经恢复高电平，从机释放了总线 */
+        if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_7) == GPIO_PIN_SET)
+            break;
+    }
+
+    /* 发送 STOP 条件：SCL 高时，SDA 从低到高 */
+    GPIO_InitStruct.Pin = GPIO_PIN_7;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_RESET);  /* SDA = 低 */
+    vDelayUs(5);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);    /* SCL = 高 */
+    vDelayUs(5);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_SET);    /* SDA = 高 → STOP */
+    vDelayUs(5);
+
+    /* 随后在 vIICInit() 中将 PB6/PB7 重新配置为 I2C 复用开漏模式 */
+}
+```
+
+调用位置：在 `vIICInit()` 的最前面，配置 I2C 外设之前调用。
+
+```c
+void vIICInit(void)
+{
+    vI2CBusRelease();   /* 先释放可能死锁的总线 */
+
+    /* 然后正常初始化 I2C 外设 ... */
+}
+```
+
+### 8.4 解决方法二：从机硬件下电
+
+如果方法一无效（从机状态机彻底跑飞，不再响应时钟脉冲），只能通过硬件手段强制复位从机。
+
+| 方案 | 实现方式 | 前提条件 |
+| :--- | :--- | :--- |
+| GPIO 控制从机电源 | 用一个 GPIO 控制从机的供电使能脚，拉低断电，延时后重新上电 | 硬件设计时预留电源控制 |
+| 总线隔离芯片 | 使用带使能脚的电平转换芯片（如 TCA9406），关闭后从机断开总线 | 需要额外芯片 |
+
+这要求在硬件设计阶段就考虑到 I2C 死锁的恢复需求，纯软件无法实现。
+
+### 8.5 实际建议
+
+| 场景 | 建议 |
+| :--- | :--- |
+| 常规项目 | `vIICInit()` 前加 9 脉冲恢复，基本够用 |
+| 看门狗频繁复位的场景 | 必须加 9 脉冲恢复，否则复位后大概率死锁 |
+| 高可靠性产品 | 硬件上预留从机电源控制，软硬件双保险 |
+| 软件 I2C | 同样需要 9 脉冲恢复，死锁与硬件/软件 I2C 实现方式无关 |
+
+---
+
+## 9. 常见问题与调试 (Troubleshooting)
 
 ### Q1: HAL_I2C_Mem_Write 返回 HAL_ERROR
 
@@ -587,24 +715,15 @@ if(ret != 0)
 2. 写入后未等待足够时间 (< 5ms)
 3. 缺少互斥保护，多任务同时写入
 
-### Q3: STM32F1 硬件 I2C 卡死 (BUSY 标志无法清除)
-
-**原因：** STM32F1 系列的 I2C 外设存在已知设计缺陷 (参考 Errata)
-
-**解决方案：**
-1. 复位 I2C 外设 (`__HAL_RCC_I2C1_FORCE_RESET()` + `__HAL_RCC_I2C1_RELEASE_RESET()`)
-2. 手动产生 9 个 SCL 脉冲释放总线
-3. 严重时考虑切换为软件 I2C
-
-### Q4: 在 RTOS 中通信偶发失败
+### Q3: 在 RTOS 中通信偶发失败
 
 **可能原因：**
 1. 信号量未创建就使用 I2C
-2. 中断优先级配置不当 (I2C 中断优先级必须 ≥ `configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY`)
+2. 中断优先级配置不当 (I2C 中断优先级必须 >= `configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY`)
 
 ---
 
-## 9. 版本变更记录 (Changelog)
+## 10. 版本变更记录 (Changelog)
 
 | 版本 | 日期 | 变更内容 |
 | :--- | :--- | :--- |

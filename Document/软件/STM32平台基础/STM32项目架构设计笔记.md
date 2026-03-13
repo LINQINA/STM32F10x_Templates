@@ -217,11 +217,4 @@ void UART_SendBuffer(uint8_t *data, uint16_t len) {
 
 ---
 
-## 八、参考项目
-
-- `reference/` - 组长的参考代码
-- `trunk/` - 自己的实现代码
-
----
-
 *文档结束*

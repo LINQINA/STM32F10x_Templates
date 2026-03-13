@@ -122,8 +122,8 @@ STM32F10x_Templates/
 | 任务 | 功能 | 优先级 |
 |:---|:---|:---|
 | taskSystem | 系统初始化与状态管理 | 高 |
-| taskMonitor | 运行状态监控、看门狗喂狗 | 高 |
-| taskSensor | 传感器数据采集与处理 | 中 |
+| taskMonitor | 运行状态监控 | 高 |
+| taskSensor | 传感器数据采集与处理、看门狗喂狗 | 中 |
 | taskControl | 控制逻辑执行 | 中 |
 | taskKey | 按键扫描与事件处理 | 低 |
 | taskMessageSlave | RS485/Modbus 从机通信 | 中 |
