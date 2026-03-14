@@ -95,7 +95,7 @@ void vUserSystemInit(void)
 
     cSoftTimerInit();
 
-    //vWatchdogInit();
+    vWatchdogInit();
 }
 
 void vTaskSystemInit(void *pvParameters)
