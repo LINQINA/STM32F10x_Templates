@@ -126,7 +126,7 @@ float fADCxChannelValueGet(ADC_HandleTypeDef *adc_periph, uint32_t channel, uint
     if(uiCnt < 3)
         return 0.0f;
 
-    /* 通道初始化  */
+    /* 通道初始化,rank=1代表这个通道在规则组转换里面排在第一位  */
     adc_Channel_Config.Rank = 1;
     adc_Channel_Config.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
     adc_Channel_Config.Channel = channel;
